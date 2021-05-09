@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Use the title variable to set the title of the page-->
+    <title>{{ .title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <script defer src="/static/bundle.js"></script>
+    <script>
+      window.BASE_URL = {{ .base_url }}
+    </script>
+  </head>
+  <body>
+      
