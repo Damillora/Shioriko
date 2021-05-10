@@ -14,7 +14,7 @@ func InitializeFrontendRoutes(g *gin.Engine) {
 func frontendHome(c *gin.Context) {
 	baseURL := config.CurrentConfig.BaseURL
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"title":    "Home",
+		"title":    "Shioriko",
 		"base_url": baseURL,
 	})
 }

@@ -9,12 +9,10 @@
 	import Login from "./routes/Login.svelte";
 	import Logout from "./routes/Logout.svelte";
 	import Tag from "./routes/Tag.svelte";
-
-	
+	import Upload from "./routes/Upload.svelte";
 
 	export let url = "";
 	let baseURL = window.BASE_URL;
-
 </script>
 
 <Router {url}>
@@ -26,5 +24,25 @@
 		<Route path="/post/:id" component={Post} />
 		<Route path="/auth/login" component={Login} />
 		<Route path="/auth/logout" component={Logout} />
+		<Route path="/upload" component={Upload} />
 	</div>
 </Router>
+
+<style global lang="scss">
+	@import "./main.scss";
+
+	#tags .svelte-tags-input-tag {
+		background: $primary;
+		color: $text-invert;
+	}
+
+	#tags .svelte-tags-input-layout {
+		@extend .input;
+		height: inherit;
+
+		& .svelte-tags-input {
+			margin-top: 0 !important;
+			font-size: 13.3333px;
+		}
+	}
+</style>

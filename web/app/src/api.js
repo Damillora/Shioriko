@@ -1,41 +1,78 @@
 import { token } from "./stores.js"
+import axios from "axios";
 
 let url = window.BASE_URL;
 let current_token;
-const unsub_token = token.subscribe(value => {
-    current_token = token;
+token.subscribe(value => {
+    current_token = value;
 })
+
 export async function login({ username, password }) {
     const endpoint = url + "/api/auth/login";
-    const response = await fetch(endpoint, {
+    const response = await axios({
+        url: endpoint,
         method: "POST",
-        body: JSON.stringify({
+        data: JSON.stringify({
             username,
             password,
         }),
     })
-    const data = await response.json();
-    token.set(data.token);
-    return data;
+    token.set(response.data.token);
+    return response.data;
 }
 
 export async function getPosts({ page }) {
     const endpoint = url + "/api/post?page=" + page;
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    return data;
+    const response = await axios.get(endpoint);
+    return response.data;
 }
 
 export async function getPostsTag({ page, tag }) {
     const endpoint = url + "/api/post/tag/" + tag + "?page=" + page;
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    return data;
+    const response = await axios(endpoint);
+    return response.data;
 }
 
 export async function getPost({ id }) {
     const endpoint = url + "/api/post/" + id;
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    return data;
+    const response = await axios(endpoint);
+    return response.data;
+}
+
+export async function uploadBlob({ file, onProgress }) {
+    var formData = new FormData();
+    formData.append("file", file);
+    const endpoint = url + "/api/blob/upload";
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+            'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: formData,
+        onUploadProgress: e => {
+            if (onProgress) {
+                onProgress(e)
+            }
+        }
+    })
+    return response.data;
+}
+
+export async function postCreate({ blob_id, source_url, tags }) {
+    const endpoint = url + "/api/post/create";
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            blob_id, source_url, tags
+        }
+    })
+    return response.data;
 }

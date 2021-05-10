@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import sveltePreprocess from 'svelte-preprocess'
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -34,18 +35,30 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: '../static/bundle.js'
+		dir: "../static",
+        assetFileNames: 'bundle.css',
+        entryFileNames: 'bundle.js'
 	},
 	plugins: [
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production
-			}
+			},
+
+			preprocess: sveltePreprocess({
+				sourceMap: !production,
+				scss: {
+					includePaths: [
+						'node_modules',
+						'src'
+					]
+				},
+			}),       
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: '../static/bundle.css' }),
+		css({ name: "bundle" }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
