@@ -22,6 +22,7 @@
       queryParams = queryString.parse(location.search);
       if(queryParams.page) {
           page = queryParams.page;
+        totalPages = data.totalPage;
       }
         getData();
      })

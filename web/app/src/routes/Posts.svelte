@@ -13,6 +13,7 @@
         const data = await getPosts({page});
         if(Array.isArray(data.posts)) {
             posts = data.posts;
+            totalPages = data.totalPage;
         }
     }
     onMount(() => { 
