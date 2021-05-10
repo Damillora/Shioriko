@@ -4,13 +4,21 @@ WORKDIR /go/src/shioriko
 COPY . .
 
 RUN go get -d -v ./...
-RUN CGO_ENABLED=0 GOOS=linux go build -o /shioriko
+RUN go build -o /shioriko
 RUN mkdir -p /web && cp -r web/static web/template /web
 
-FROM scratch AS runtime
+FROM node:14-alpine AS node_build
+WORKDIR /src
+COPY . .
+WORKDIR /src/web/app
+RUN yarn install && yarn build
 
-WORKDIR /
-COPY --from=build /shioriko /
-COPY --from=build /web /web
+FROM alpine AS runtime
 
-ENTRYPOINT ["/shioriko"]
+RUN mkdir -p /app/web
+WORKDIR /app
+COPY --from=build /shioriko /app
+COPY --from=node_build /src/web/static /app/web/static
+COPY --from=node_build /src/web/template /app/web/template
+
+ENTRYPOINT ["/app/shioriko"]

@@ -78,6 +78,16 @@ func CountPostPages() int {
 	database.DB.Model(&database.Post{}).Count(&count)
 	return int(count/perPage) + 1
 }
+func CountPostPagesTag(tagSyntax string) int {
+	tag, err := GetTag(tagSyntax)
+	if err != nil {
+		return 0
+	}
+
+	var count int64
+	count = database.DB.Model(&tag).Joins("Blob").Preload("Tags").Preload("Tags.TagType").Association("Posts").Count()
+	return int(count/perPage) + 1
+}
 
 func DeletePost(id string) error {
 

@@ -72,7 +72,7 @@ func postGetTag(c *gin.Context) {
 			Tags:      tagStrings,
 		})
 	}
-	postPages := services.CountPostPages()
+	postPages := services.CountPostPagesTag(tag)
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
 		TotalPage:   postPages,

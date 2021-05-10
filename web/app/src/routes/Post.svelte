@@ -50,7 +50,7 @@
             </div>
             <div class="column">
                 <figure class="image">
-                    <img src="{post.image_path}">
+                    <img alt="{post.id}" src="{post.image_path}">
                 </figure>
             </div>
         </div>
