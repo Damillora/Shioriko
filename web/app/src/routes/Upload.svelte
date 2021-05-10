@@ -88,7 +88,7 @@
             <div class="field">
                 <label for="tags" class="label">Tags</label>
                 <div class="control" id="tags">
-                    <Tags on:tags={onTagChange} />
+                    <Tags addKeys={[9,32]} on:tags={onTagChange} />
                 </div>
             </div>
             <div class="control">

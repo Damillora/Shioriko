@@ -3,7 +3,9 @@ package app
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/Damillora/Shioriko/pkg/database"
 	"github.com/Damillora/Shioriko/pkg/middleware"
 	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/Damillora/Shioriko/pkg/services"
@@ -16,7 +18,6 @@ func InitializePostRoutes(g *gin.Engine) {
 	{
 		unprotected.GET("/", postGet)
 		unprotected.GET("/:id", postGetOne)
-		unprotected.GET("/tag/:id", postGetTag)
 	}
 	protected := g.Group("/api/post").Use(middleware.AuthMiddleware())
 	{
@@ -30,7 +31,22 @@ func InitializePostRoutes(g *gin.Engine) {
 func postGet(c *gin.Context) {
 	pageParam := c.Query("page")
 	page, _ := strconv.Atoi(pageParam)
-	posts := services.GetPostAll(page)
+
+	tag := c.Query("tags")
+
+	tags := strings.Split(tag, " ")
+
+	var posts []database.Post
+	var postPages int
+
+	if tag != "" {
+		posts = services.GetPostTags(page, tags)
+		postPages = services.CountPostPagesTag(tags)
+	} else {
+		posts = services.GetPostAll(page)
+		postPages = services.CountPostPages()
+	}
+
 	var postResult []models.PostListItem
 	for _, post := range posts {
 		var tagStrings []string
@@ -44,35 +60,6 @@ func postGet(c *gin.Context) {
 			Tags:      tagStrings,
 		})
 	}
-	postPages := services.CountPostPages()
-	c.JSON(http.StatusOK, models.PostPaginationResponse{
-		CurrentPage: page,
-		TotalPage:   postPages,
-		Posts:       postResult,
-	})
-}
-
-func postGetTag(c *gin.Context) {
-	pageParam := c.Query("page")
-	page, _ := strconv.Atoi(pageParam)
-
-	tag := c.Param("id")
-
-	posts := services.GetPostTag(page, tag)
-	var postResult []models.PostListItem
-	for _, post := range posts {
-		var tagStrings []string
-		for _, tag := range post.Tags {
-			tagStrings = append(tagStrings, tag.TagType.Name+":"+tag.Name)
-		}
-
-		postResult = append(postResult, models.PostListItem{
-			ID:        post.ID,
-			ImagePath: "/data/" + post.Blob.FilePath,
-			Tags:      tagStrings,
-		})
-	}
-	postPages := services.CountPostPagesTag(tag)
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
 		TotalPage:   postPages,

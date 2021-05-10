@@ -14,27 +14,15 @@ func GetTagAll() []database.Tag {
 	return tags
 }
 
-func CreateOrUpdateTagGeneric(tagName string) (*database.Tag, error) {
+func FindTagGeneric(tagName string) (*database.Tag, error) {
 	var tag database.Tag
 	result := database.DB.Where("name = ?", tagName).First(&tag)
 	if result.Error != nil {
-		var tagType database.TagType
-		database.DB.Where("name = ?", "general").First(&tagType)
-
-		tag = database.Tag{
-			ID:        uuid.NewString(),
-			Name:      tagName,
-			TagTypeID: tagType.ID,
-		}
-		result = database.DB.Create(&tag)
-		if result.Error != nil {
-			return nil, result.Error
-		}
-
+		return nil, result.Error
 	}
 	return &tag, nil
 }
-func CreateOrUpdateTagComplex(tagName string, tagTypeString string) (*database.Tag, error) {
+func FindTagComplex(tagName string, tagTypeString string) (*database.Tag, error) {
 	var tag database.Tag
 	var tagType database.TagType
 	result := database.DB.Where("name = ?", tagTypeString).First(&tagType)
@@ -45,7 +33,40 @@ func CreateOrUpdateTagComplex(tagName string, tagTypeString string) (*database.T
 	result = database.DB.Where("name = ? AND tag_type_id = ? ", tagName, tagType.ID).First(&tag)
 
 	if result.Error != nil {
-		tag = database.Tag{
+		return nil, result.Error
+	}
+	return &tag, nil
+}
+
+func CreateOrUpdateTagGeneric(tagName string) (*database.Tag, error) {
+	tag, err := FindTagGeneric(tagName)
+	if err != nil {
+		var tagType database.TagType
+		database.DB.Where("name = ?", "general").First(&tagType)
+
+		tag = &database.Tag{
+			ID:        uuid.NewString(),
+			Name:      tagName,
+			TagTypeID: tagType.ID,
+		}
+		result := database.DB.Create(&tag)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+	}
+	return tag, nil
+}
+func CreateOrUpdateTagComplex(tagName string, tagTypeString string) (*database.Tag, error) {
+	tag, err := FindTagComplex(tagName, tagTypeString)
+
+	if err != nil {
+		var tagType database.TagType
+		result := database.DB.Where("name = ?", tagTypeString).First(&tagType)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+		tag = &database.Tag{
 			ID:        uuid.NewString(),
 			Name:      tagName,
 			TagTypeID: tagType.ID,
@@ -56,7 +77,7 @@ func CreateOrUpdateTagComplex(tagName string, tagTypeString string) (*database.T
 		}
 
 	}
-	return &tag, nil
+	return tag, nil
 }
 func CreateOrUpdateTag(tagSyntax string) (*database.Tag, error) {
 	tagFields := strings.Split(tagSyntax, ":")
@@ -73,36 +94,38 @@ func CreateOrUpdateTag(tagSyntax string) (*database.Tag, error) {
 		return nil, errors.New("Malformed tag syntax")
 	}
 }
-
-func GetTag(tagSyntax string) (*database.Tag, error) {
+func FindTag(tagSyntax string) (*database.Tag, error) {
 	tagFields := strings.Split(tagSyntax, ":")
 	var tagName string
-	var tagType database.TagType
+	var tagType string
 	if len(tagFields) == 1 {
 		tagName = tagFields[0]
-		database.DB.Where("name = ?", "general").First(&tagType)
+		return FindTagGeneric(tagName)
 	} else if len(tagFields) == 2 {
+		tagType = tagFields[0]
 		tagName = tagFields[1]
-		result := database.DB.Where("name = ?", tagFields[0]).First(&tagType)
-		if result.Error != nil {
-			return nil, result.Error
-		}
+		return FindTagComplex(tagName, tagType)
 	} else {
 		return nil, errors.New("Malformed tag syntax")
 	}
-	var tag database.Tag
-	result := database.DB.Preload("Posts").Where("name = ? AND tag_type_id = ? ", tagName, tagType.ID).First(&tag)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &tag, nil
 }
 
 func ParseTags(tags []string) ([]database.Tag, error) {
 	var result []database.Tag
 	for _, tagSyntax := range tags {
 		tag, err := CreateOrUpdateTag(tagSyntax)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *tag)
+	}
+	return result, nil
+}
+
+func ParseReadTags(tags []string) ([]database.Tag, error) {
+	var result []database.Tag
+	for _, tagSyntax := range tags {
+		tag, err := FindTag(tagSyntax)
 		if err != nil {
 			return nil, err
 		}

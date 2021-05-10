@@ -8,8 +8,8 @@
 	import Post from "./routes/Post.svelte";
 	import Login from "./routes/Login.svelte";
 	import Logout from "./routes/Logout.svelte";
-	import Tag from "./routes/Tag.svelte";
 	import Upload from "./routes/Upload.svelte";
+	import Edit from "./routes/Edit.svelte";
 
 	export let url = "";
 	let baseURL = window.BASE_URL;
@@ -20,8 +20,8 @@
 	<div>
 		<Route path="/" component={Home} />
 		<Route path="/posts" component={Posts} />
-		<Route path="/tag/:id" component={Tag} />
 		<Route path="/post/:id" component={Post} />
+		<Route path="/post/edit/:id" component={Edit} />
 		<Route path="/auth/login" component={Login} />
 		<Route path="/auth/logout" component={Logout} />
 		<Route path="/upload" component={Upload} />

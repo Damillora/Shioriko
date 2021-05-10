@@ -27,10 +27,16 @@ export async function getPosts({ page }) {
     return response.data;
 }
 
-export async function getPostsTag({ page, tag }) {
-    const endpoint = url + "/api/post/tag/" + tag + "?page=" + page;
-    const response = await axios(endpoint);
-    return response.data;
+export async function getPostSearchTag({ page, q }) {
+    if (q) {
+        const endpoint = url + "/api/post?tags=" + q + "&page=" + page;
+        const response = await axios(endpoint);
+        return response.data;
+    } else {
+        const endpoint = url + "/api/post?page=" + page;
+        const response = await axios(endpoint);
+        return response.data;
+    }
 }
 
 export async function getPost({ id }) {
@@ -72,6 +78,22 @@ export async function postCreate({ blob_id, source_url, tags }) {
         withCredentials: true,
         data: {
             blob_id, source_url, tags
+        }
+    })
+    return response.data;
+}
+
+export async function postUpdate(id, { source_url, tags }) {
+    const endpoint = url + "/api/post/"+id;
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            source_url, tags
         }
     })
     return response.data;
