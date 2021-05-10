@@ -11,6 +11,12 @@
     };
 </script>
 
+<section class="hero is-primary">
+    <div class="hero-body">
+        <p class="title">Login</p>
+    </div>
+</section>
+
 <div class="container">
     <form on:submit|preventDefault={doLogin}>
         <div class="field">

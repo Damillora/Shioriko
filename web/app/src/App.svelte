@@ -10,6 +10,7 @@
 	import Logout from "./routes/Logout.svelte";
 	import Upload from "./routes/Upload.svelte";
 	import Edit from "./routes/Edit.svelte";
+	import Tags from "./routes/Tags.svelte";
 
 	export let url = "";
 	let baseURL = window.BASE_URL;
@@ -25,6 +26,7 @@
 		<Route path="/auth/login" component={Login} />
 		<Route path="/auth/logout" component={Logout} />
 		<Route path="/upload" component={Upload} />
+		<Route path="/tags" component={Tags} />
 	</div>
 </Router>
 

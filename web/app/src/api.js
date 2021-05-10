@@ -21,6 +21,11 @@ export async function login({ username, password }) {
     return response.data;
 }
 
+export async function getTags() {
+    const endpoint = url + "/api/tag";
+    const response = await axios.get(endpoint);
+    return response.data;
+}
 export async function getPosts({ page }) {
     const endpoint = url + "/api/post?page=" + page;
     const response = await axios.get(endpoint);
