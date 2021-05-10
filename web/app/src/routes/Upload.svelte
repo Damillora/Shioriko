@@ -2,6 +2,7 @@
     import { uploadBlob, postCreate } from "../api.js";
     import { navigate } from "svelte-routing";
     import Tags from "svelte-tags-input";
+    import AuthRequired from "../AuthRequired.svelte";
 
     let currentProgress = 0;
 
@@ -37,6 +38,8 @@
         navigate(`/post/${response.id}`);
     };
 </script>
+
+<AuthRequired />
 
 <section class="hero is-primary">
     <div class="hero-body">

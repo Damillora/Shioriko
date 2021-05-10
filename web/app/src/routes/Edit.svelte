@@ -4,6 +4,7 @@
     import Tags from "svelte-tags-input";
     import { onMount } from "svelte";
     import { Link } from "svelte-routing";
+    import AuthRequired from "../AuthRequired.svelte";
 
     export let id;
 
@@ -35,6 +36,8 @@
     });
 </script>
 
+<AuthRequired />
+
 <section class="hero is-primary">
     <div class="hero-body">
         <p class="title">Edit Post: {id}</p>
@@ -46,9 +49,7 @@
         <div class="columns">
             <div class="column is-one-third box">
                 <p>
-                    <Link class="button is-primary" to="/post/{id}"
-                        >Back</Link
-                    >
+                    <Link class="button is-primary" to="/post/{id}">Back</Link>
                 </p>
                 <form on:submit|preventDefault={onSubmit}>
                     <div class="field">
@@ -68,7 +69,7 @@
                         <div class="control" id="tags">
                             <Tags
                                 tags={form.tags}
-                                addKeys={[9,32]}
+                                addKeys={[9, 32]}
                                 on:tags={onTagChange}
                             />
                         </div>
