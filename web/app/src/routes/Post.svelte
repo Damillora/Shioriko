@@ -9,6 +9,13 @@
         post = data;
     }
 
+    const trimUrl = (str) => {
+        if(str.length > 30) {  
+            return str.substring(0,30) + "...";
+        }
+        return str;
+    }
+
     onMount(() => {getData()});
 </script>
 
@@ -25,19 +32,23 @@
 {#if post}
 <div class="container">
     <section class="section">
-        <div class="tile is-ancestor">
-            <div class="tile is-child is-4 box">
+        <div class="columns">
+            <div class="column is-one-third box">
                     <p>
-                        Source URL: <a href="//{post.source_url}">{post.source_url}</a>
+                        Source URL: <a href="{post.source_url}">{trimUrl(post.source_url)}</a>
                     </p>
                     <p>
                         Tags: 
                         {#each post.tags as tag (tag)}
-                        <Link to="/tag/{tag}">{tag}</Link>
+                        <ul>
+                            <li>
+                                <Link to="/tag/{tag}">{tag}</Link>
+                            </li>
+                        </ul>
                         {/each}
                     </p>
             </div>
-            <div class="tile is-child">
+            <div class="column">
                 <figure class="image">
                     <img src="{post.image_path}">
                 </figure>

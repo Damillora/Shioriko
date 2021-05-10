@@ -8,7 +8,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /shioriko
 RUN mkdir -p /web && cp -r web/static web/template /web
 
 FROM scratch AS runtime
+
+WORKDIR /
 COPY --from=build /shioriko /
-COPY --from=build /web /
+COPY --from=build /web /web
 
 ENTRYPOINT ["/shioriko"]

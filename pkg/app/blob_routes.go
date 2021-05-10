@@ -2,6 +2,7 @@ package app
 
 import (
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/Damillora/Shioriko/pkg/config"
@@ -32,9 +33,18 @@ func uploadBlob(c *gin.Context) {
 		})
 	}
 	id := uuid.NewString()
+	folder1 := id[0:2]
+	if _, err := os.Stat(filepath.Join(dataDir, folder1)); os.IsNotExist(err) {
+		os.Mkdir(filepath.Join(dataDir, folder1), 0755)
+	}
+	folder2 := id[2:4]
+	if _, err := os.Stat(filepath.Join(dataDir, folder1, folder2)); os.IsNotExist(err) {
+		os.Mkdir(filepath.Join(dataDir, folder1, folder2), 0755)
+	}
+
 	filename := id + filepath.Ext(file.Filename)
 
-	err = c.SaveUploadedFile(file, filepath.Join(dataDir, filename))
+	err = c.SaveUploadedFile(file, filepath.Join(dataDir, folder1, folder2, filename))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Code:    http.StatusBadRequest,
@@ -44,7 +54,7 @@ func uploadBlob(c *gin.Context) {
 
 	blob := database.Blob{
 		ID:       id,
-		FilePath: filename,
+		FilePath: filepath.Join(folder1, folder2, filename),
 	}
 	database.DB.Create(&blob)
 
