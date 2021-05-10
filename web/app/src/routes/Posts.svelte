@@ -20,14 +20,14 @@
       let queryParams;
       $: queryParams = queryString.parse(location.search);
       if(queryParams.page) {
-          page = queryParams.page;
+          page = parseInt(queryParams.page);
       }
         getData();
      })
     
     const handlePage = (i) => {
         return () => {
-            page = 1;
+            page = i;
             getData();
         }
     }
@@ -51,7 +51,7 @@
             <a class="pagination-next">Next page</a>
             {/if}
             <ul class="pagination-list">
-            {#if page > 2}
+            {#if page > 3}
             <li>
                 <Link on:click="{handlePage(1)}" to="/posts?page={1}" class="pagination-link" aria-label="Goto page 1">1</Link>
             </li>
@@ -72,7 +72,7 @@
                 {/if}
               {/if}
               {/each}
-              {#if (totalPages - page) > 2}
+              {#if (totalPages - page) > 3}
               <li>
                   <span class="pagination-ellipsis">&hellip;</span>
               </li>
