@@ -44,9 +44,15 @@
                             >
                         </p>
                         <p>
+                            Uploader: {post.uploader}
+                        </p>
+                        <p>
                             Source URL: <a href={post.source_url}
                                 >{trimUrl(post.source_url)}</a
                             >
+                        </p>
+                        <p>
+                            Dimensions: {post.width}x{post.height}
                         </p>
                         <p>
                             Tags:<br />

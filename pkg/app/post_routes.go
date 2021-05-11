@@ -88,12 +88,13 @@ func postGetOne(c *gin.Context) {
 		Tags:      tagStrings,
 		Width:     post.Blob.Width,
 		Height:    post.Blob.Height,
+		Uploader:  post.User.Username,
 	})
 }
 
 func postCreate(c *gin.Context) {
 	var model models.PostCreateModel
-	err := c.ShouldBindJSON(&model)
+	err := c.BindJSON(&model)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Code:    http.StatusBadRequest,
@@ -113,8 +114,17 @@ func postCreate(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	user, ok := c.Get("user")
+	if !ok {
+		c.JSON(http.StatusForbidden, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "User don't exist",
+		})
+		c.Abort()
+	}
+	userObj := user.(*database.User)
 
-	post, err := services.CreatePost(model)
+	post, err := services.CreatePost(userObj.ID, model)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{

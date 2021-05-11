@@ -18,8 +18,12 @@
 
     const splitToChunks = (array, parts) => {
         let result = [];
-        for (let i = parts; i > 0; i--) {
-            result.push(array.slice(i * parts, i * parts + parts + 1));
+        for (let i = 0; i < parts; i++) {
+            let currentColumn = [];
+            for (let j = i; j < array.length; j += parts) {
+                currentColumn.push(array[j]);
+            }
+            result.push(currentColumn);
         }
         return result;
     };
@@ -27,11 +31,10 @@
     let postChunks = [];
     // split posts into 4 columns
     $: {
-        postChunks = splitToChunks(posts, 4);
+        postChunks = splitToChunks(posts, 5);
     }
 
     const getData = async () => {
-        console.log("page " + page);
         const data = await getPostSearchTag({ page, q: searchTerms.join("+") });
         if (data.posts) {
             newBatch = data.posts;
@@ -98,7 +101,7 @@
         <div class="block">
             <div class="columns">
                 {#each postChunks as postChunk}
-                    <div class="column is-3">
+                    <div class="column is-one-fifth">
                         {#each postChunk as post, i (post.id)}
                             <div class="block">
                                 <div class="card">
@@ -130,7 +133,6 @@
             <InfiniteScroll
                 hasMore={newBatch.length}
                 elementScroll={document}
-                threshold={0}
                 on:loadMore={() => {
                     page++;
                     getData();
@@ -138,9 +140,9 @@
             />
         </div>
         {#if newBatch.length == 0}
-        <div class="notification is-primary">
-            <p class="has-text-centered">End of posts</p>
-        </div>
+            <div class="notification is-primary">
+                <p class="has-text-centered">End of posts</p>
+            </div>
         {/if}
     </div>
 </section>

@@ -29,14 +29,14 @@ func GetPostTags(page int, tagSyntax []string) []database.Post {
 
 func GetPost(id string) (*database.Post, error) {
 	var post database.Post
-	result := database.DB.Joins("Blob").Preload("Tags").Preload("Tags.TagType").Where("posts.id = ?", id).First(&post)
+	result := database.DB.Joins("User").Joins("Blob").Preload("Tags").Preload("Tags.TagType").Where("posts.id = ?", id).First(&post)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
 	return &post, nil
 }
-func CreatePost(model models.PostCreateModel) (*database.Post, error) {
+func CreatePost(userID string, model models.PostCreateModel) (*database.Post, error) {
 	tags, err := ParseTags(model.Tags)
 	if err != nil {
 		return nil, err
@@ -44,6 +44,7 @@ func CreatePost(model models.PostCreateModel) (*database.Post, error) {
 
 	post := database.Post{
 		ID:        uuid.NewString(),
+		UserID:    userID,
 		BlobID:    model.BlobID,
 		SourceURL: model.SourceURL,
 		Tags:      tags,

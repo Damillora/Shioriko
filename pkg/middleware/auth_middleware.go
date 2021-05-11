@@ -43,6 +43,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		user := services.GetUser(claims["sub"].(string))
+
 		c.Set("user", user)
 
 		c.Next()

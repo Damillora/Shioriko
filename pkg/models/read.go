@@ -7,4 +7,5 @@ type PostReadModel struct {
 	Tags      []string `json:"tags"`
 	Width     int      `json:"width"`
 	Height    int      `json:"height"`
+	Uploader  string   `json:"uploader"`
 }
