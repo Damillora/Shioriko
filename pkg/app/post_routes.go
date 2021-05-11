@@ -170,6 +170,7 @@ func postUpdate(c *gin.Context) {
 			Code:    http.StatusBadRequest,
 			Message: err.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, models.PostListItem{

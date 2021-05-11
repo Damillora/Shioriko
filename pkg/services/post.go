@@ -72,9 +72,6 @@ func UpdatePost(id string, model models.PostUpdateModel) (*database.Post, error)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
-	database.DB.Model(&post).Association("Tags").Replace(tags)
-
 	post.SourceURL = model.SourceURL
 
 	result = database.DB.Save(&post)
@@ -82,6 +79,10 @@ func UpdatePost(id string, model models.PostUpdateModel) (*database.Post, error)
 		return nil, result.Error
 	}
 
+	err = database.DB.Model(&post).Association("Tags").Replace(tags)
+	if err != nil {
+		return nil, err
+	}
 	return &post, nil
 
 }

@@ -51,15 +51,16 @@
         searchTerms = value.detail.tags;
     };
 
-    onMount(() => {
+    $: {
         queryParams = queryString.parse(location.search);
         if (queryParams.tags) {
             searchTerms = queryParams.tags.split(" ");
         } else {
             searchTerms = [];
         }
+        posts = [];
         getData();
-    });
+    }
 
     const onSearch = (i) => {
         if (searchTerms.length > 0) {
@@ -115,15 +116,15 @@
                                             </Link>
                                         </figure>
                                     </div>
-                                        <div class="card-content">
-                                            {#if post.tags}
+                                    <div class="card-content">
+                                        {#if post.tags}
                                             {#each post.tags as tag (tag)}
                                                 <TagLink {tag} />
                                             {/each}
-                                            {:else}
-                                                <TagLink tag="tagme" />
-                                            {/if}
-                                        </div>
+                                        {:else}
+                                            <TagLink tag="tagme" />
+                                        {/if}
+                                    </div>
                                 </div>
                             </div>
                         {/each}
