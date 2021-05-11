@@ -62,8 +62,6 @@
                                 {#each post.tags as tag (tag)}
                                     <TagLink {tag} />
                                 {/each}
-                            {:else}
-                                None
                             {/if}
                         </p>
                     </div>

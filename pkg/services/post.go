@@ -41,7 +41,9 @@ func CreatePost(userID string, model models.PostCreateModel) (*database.Post, er
 	if err != nil {
 		return nil, err
 	}
-
+	if len(tags) == 0 {
+		database.DB.Where("name = ?", "tagme").Find(&tags)
+	}
 	post := database.Post{
 		ID:        uuid.NewString(),
 		UserID:    userID,
@@ -60,6 +62,9 @@ func UpdatePost(id string, model models.PostUpdateModel) (*database.Post, error)
 	tags, err := ParseTags(model.Tags)
 	if err != nil {
 		return nil, err
+	}
+	if len(tags) == 0 {
+		database.DB.Where("name = ?", "tagme").Find(&tags)
 	}
 
 	var post database.Post

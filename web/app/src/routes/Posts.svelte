@@ -115,15 +115,15 @@
                                             </Link>
                                         </figure>
                                     </div>
-                                    <div class="card-content">
-                                        {#if post.tags}
+                                        <div class="card-content">
+                                            {#if post.tags}
                                             {#each post.tags as tag (tag)}
                                                 <TagLink {tag} />
                                             {/each}
-                                        {:else}
-                                            None
-                                        {/if}
-                                    </div>
+                                            {:else}
+                                                <TagLink tag="tagme" />
+                                            {/if}
+                                        </div>
                                 </div>
                             </div>
                         {/each}

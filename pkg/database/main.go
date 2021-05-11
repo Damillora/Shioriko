@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Damillora/Shioriko/pkg/config"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 
 	"gorm.io/driver/postgres"
@@ -26,6 +27,16 @@ func Initialize() {
 	if result.Error != nil {
 		db.Create(&TagType{
 			Name: "general",
+		})
+	}
+
+	var tagme Tag
+	result = db.Where("name = ?", "tagme").First(&tagme)
+	if result.Error != nil {
+		db.Create(&Tag{
+			ID:      uuid.NewString(),
+			Name:    "tagme",
+			TagType: general,
 		})
 	}
 

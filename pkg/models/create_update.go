@@ -29,10 +29,10 @@ type TagUpdateModel struct {
 type PostCreateModel struct {
 	BlobID    string   `json:"blob_id" validate:"required"`
 	SourceURL string   `json:"source_url"`
-	Tags      []string `json:"tags" validate:"required"`
+	Tags      []string `json:"tags"`
 }
 
 type PostUpdateModel struct {
 	SourceURL string   `json:"source_url"`
-	Tags      []string `json:"tags" validate:"required"`
+	Tags      []string `json:"tags"`
 }
