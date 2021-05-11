@@ -3,7 +3,7 @@ FROM golang:1.16-alpine AS build
 WORKDIR /go/src/shioriko
 COPY . .
 
-RUN apk add vips-dev pkgconfig
+RUN apk add vips-dev pkgconfig gcc musl-dev
 RUN go get -d -v ./...
 RUN go build -o /shioriko
 RUN mkdir -p /web && cp -r web/static web/template /web
