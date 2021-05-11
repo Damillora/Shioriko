@@ -52,6 +52,9 @@
                             >
                         </p>
                         <p>
+                            Original: <a href={post.image_path}>Image</a>
+                        </p>
+                        <p>
                             Dimensions: {post.width}x{post.height}
                         </p>
                         <p>
@@ -66,10 +69,20 @@
                         </p>
                     </div>
                 </div>
-                <div class="column">
-                    <figure class="image">
-                        <img alt={post.id} src={post.image_path} />
-                    </figure>
+                <div class="column box">
+                    {#if post.width > 1000}
+                        <div class="notification is-info">
+                            The image has been resized due to size. The original
+                            image link is in the sidebar
+                        </div>
+                        <figure class="image">
+                            <img alt={post.id} src={post.preview_path} />
+                        </figure>
+                    {:else}
+                        <figure class="image">
+                            <img alt={post.id} src={post.image_path} />
+                        </figure>
+                    {/if}
                 </div>
             </div>
         </section>

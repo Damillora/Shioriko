@@ -111,7 +111,7 @@
                                             <Link to="/post/{post.id}">
                                                 <img
                                                     alt={post.id}
-                                                    src={post.image_path}
+                                                    src={post.thumbnail_path}
                                                 />
                                             </Link>
                                         </figure>

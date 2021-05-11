@@ -55,9 +55,10 @@ func postGet(c *gin.Context) {
 		}
 
 		postResult = append(postResult, models.PostListItem{
-			ID:        post.ID,
-			ImagePath: "/data/" + post.Blob.FilePath,
-			Tags:      tagStrings,
+			ID:                 post.ID,
+			ImageThumbnailPath: "/data/" + post.Blob.ThumbnailFilePath,
+			ImagePath:          "/data/" + post.Blob.FilePath,
+			Tags:               tagStrings,
 		})
 	}
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
@@ -82,13 +83,14 @@ func postGetOne(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, models.PostReadModel{
-		ID:        post.ID,
-		ImagePath: "/data/" + post.Blob.FilePath,
-		SourceURL: post.SourceURL,
-		Tags:      tagStrings,
-		Width:     post.Blob.Width,
-		Height:    post.Blob.Height,
-		Uploader:  post.User.Username,
+		ID:               post.ID,
+		ImagePreviewPath: "/data/" + post.Blob.PreviewFilePath,
+		ImagePath:        "/data/" + post.Blob.FilePath,
+		SourceURL:        post.SourceURL,
+		Tags:             tagStrings,
+		Width:            post.Blob.Width,
+		Height:           post.Blob.Height,
+		Uploader:         post.User.Username,
 	})
 }
 

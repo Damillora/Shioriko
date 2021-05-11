@@ -3,6 +3,7 @@ package app
 import (
 	"embed"
 	"net/http"
+	"os"
 
 	"github.com/Damillora/Shioriko/pkg/config"
 	"github.com/Damillora/Shioriko/pkg/database"
@@ -31,6 +32,17 @@ func EmbedFolder(fsEmbed embed.FS) static.ServeFileSystem {
 
 func Initialize() {
 	config.InitializeConfig()
+
+	previewDir := config.CurrentConfig.DataDirectory + "/preview"
+	thumbnailDir := config.CurrentConfig.DataDirectory + "/thumbnail"
+
+	if _, err := os.Stat(previewDir); os.IsNotExist(err) {
+		os.Mkdir(previewDir, 0755)
+	}
+	if _, err := os.Stat(thumbnailDir); os.IsNotExist(err) {
+		os.Mkdir(thumbnailDir, 0755)
+	}
+
 	database.Initialize()
 }
 

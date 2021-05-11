@@ -12,7 +12,8 @@ type TagListItem struct {
 }
 
 type PostListItem struct {
-	ID        string   `json:"id"`
-	ImagePath string   `json:"image_path"`
-	Tags      []string `json:"tags"`
+	ID                 string   `json:"id"`
+	ImagePath          string   `json:"image_path"`
+	ImageThumbnailPath string   `json:"thumbnail_path"`
+	Tags               []string `json:"tags"`
 }
