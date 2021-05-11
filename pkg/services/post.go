@@ -1,8 +1,6 @@
 package services
 
 import (
-	"log"
-
 	"github.com/Damillora/Shioriko/pkg/database"
 	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/google/uuid"
@@ -18,7 +16,7 @@ func GetPostAll(page int) []database.Post {
 
 func GetPostTags(page int, tagSyntax []string) []database.Post {
 	tags, err := ParseReadTags(tagSyntax)
-	log.Println(tags)
+
 	if err != nil {
 		return []database.Post{}
 	}

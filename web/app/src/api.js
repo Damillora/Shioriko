@@ -103,3 +103,15 @@ export async function postUpdate(id, { source_url, tags }) {
     })
     return response.data;
 }
+export async function postDelete({id}) {
+    const endpoint = url + "/api/post/"+id;
+    const response = await axios({
+        url: endpoint,
+        method: "DELETE",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+    })
+    return response.status == 200;
+}

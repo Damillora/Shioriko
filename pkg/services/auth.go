@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"log"
 	"time"
 
 	"github.com/Damillora/Shioriko/pkg/config"
@@ -13,7 +12,7 @@ import (
 
 func Login(username string, password string) *database.User {
 	user := GetUserFromUsername(username)
-	log.Println(user.Username)
+
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return nil

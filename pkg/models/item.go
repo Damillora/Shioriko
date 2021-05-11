@@ -17,3 +17,8 @@ type PostListItem struct {
 	ImageThumbnailPath string   `json:"thumbnail_path"`
 	Tags               []string `json:"tags"`
 }
+
+type PostSimilarityListItem struct {
+	ID       string `json:"id"`
+	Distance int    `json:"distance"`
+}

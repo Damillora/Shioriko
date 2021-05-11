@@ -1,12 +1,13 @@
 <script>
     import { uploadBlob, postCreate } from "../api.js";
-    import { navigate } from "svelte-routing";
+    import { navigate, Link } from "svelte-routing";
     import Tags from "svelte-tags-input";
     import AuthRequired from "../AuthRequired.svelte";
 
     let currentProgress = 0;
 
     let fileName = "";
+    let similar = [];
 
     let form = {
         blob_id: "",
@@ -21,9 +22,13 @@
 
     const onFileChange = async (e) => {
         fileName = "";
+        similar = [];
         var file = e.target.files[0];
         if (file) {
             var response = await uploadBlob({ file, onProgress });
+            if (response.similar) {
+                similar = response.similar;
+            }
             form.blob_id = response.id;
             fileName = file.name;
         }
@@ -31,7 +36,7 @@
 
     const onTagChange = (value) => {
         form.tags = value.detail.tags;
-    }
+    };
 
     const onSubmit = async () => {
         const response = await postCreate(form);
@@ -75,6 +80,17 @@
                 {#if fileName !== ""}
                     <p class="help">{fileName} uploaded</p>
                 {/if}
+                {#if similar.length > 0}
+                    <p class="help">
+                        Similar posts:
+                        {#each similar as post, i}
+                            <Link to="/post/{post.id}">{post.id}</Link>
+                            {#if i < similar.length - 1}
+                                ,
+                            {/if}
+                        {/each}
+                    </p>
+                {/if}
             </div>
             <div class="field">
                 <label for="source" class="label">Source URL</label>
@@ -91,7 +107,7 @@
             <div class="field">
                 <label for="tags" class="label">Tags</label>
                 <div class="control" id="tags">
-                    <Tags addKeys={[9,32]} on:tags={onTagChange} />
+                    <Tags addKeys={[9, 32]} on:tags={onTagChange} />
                 </div>
             </div>
             <div class="control">

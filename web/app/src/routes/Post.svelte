@@ -1,8 +1,8 @@
 <script>
     import { onMount } from "svelte";
     import TagLink from "../TagLink.svelte";
-    import { getPost, postCreate } from "../api.js";
-    import { Link } from "svelte-routing";
+    import { getPost, postCreate, postDelete } from "../api.js";
+    import { Link, navigate } from "svelte-routing";
     export let id;
     let post;
     const getData = async () => {
@@ -20,6 +20,19 @@
     onMount(() => {
         getData();
     });
+
+    let modal_shown = false;
+
+    const deletePost = async () => {
+        toggleModal();
+        const success = await postDelete({ id });
+        if (success) {
+            navigate("/posts");
+        }
+    };
+    const toggleModal = () => {
+        modal_shown = !modal_shown;
+    };
 </script>
 
 <section class="hero is-primary">
@@ -41,6 +54,10 @@
                             <Link
                                 class="button is-primary"
                                 to="/post/edit/{post.id}">Edit</Link
+                            >
+                            <button
+                                on:click|preventDefault={toggleModal}
+                                class="button is-danger">Delete</button
                             >
                         </p>
                         <p>
@@ -86,5 +103,28 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal" class:is-active={modal_shown}>
+        <div class="modal-background" />
+        <div class="modal-content">
+            Are you sure to delete post {post.id}?
+        </div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Delete post?</p>
+                <button class="delete" aria-label="close" />
+            </header>
+            <section class="modal-card-body" />
+            <footer class="modal-card-foot">
+                <button
+                    on:click|preventDefault={deletePost}
+                    class="button is-danger">Delete</button
+                >
+                <button class="button" on:click|preventDefault={toggleModal}
+                    >Cancel</button
+                >
+            </footer>
+        </div>
     </div>
 {/if}
