@@ -20,6 +20,6 @@ type BlobResponse struct {
 
 type PostPaginationResponse struct {
 	CurrentPage int            `json:"currentPage"`
-	TotalPage   int            `json:"totalPage"`
+	PostCount   int            `json:"postCount"`
 	Posts       []PostListItem `json:"posts"`
 }

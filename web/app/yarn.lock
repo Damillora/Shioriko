@@ -1759,6 +1759,11 @@ supports-color@^7.0.0:
   dependencies:
     has-flag "^4.0.0"
 
+svelte-infinite-scroll@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/svelte-infinite-scroll/-/svelte-infinite-scroll-1.5.2.tgz#7563002645ae177d979ba0d5eee396ff3d924a6c"
+  integrity sha512-He1fly37Z0/4+oJZFnljTX1+TIUkjggvCWjNwBLtsWj2oiC8CIjcYT1FwJH5IoCZHVoBW+fdknxvG0xwad4MyQ==
+
 svelte-preprocess@^4.7.3:
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.7.3.tgz#454fa059c2400b15e7a3caeca18993cff9df0e96"

@@ -2,7 +2,6 @@ package services
 
 import (
 	"log"
-	"math"
 
 	"github.com/Damillora/Shioriko/pkg/database"
 	"github.com/Damillora/Shioriko/pkg/models"
@@ -83,7 +82,7 @@ func UpdatePost(id string, model models.PostUpdateModel) (*database.Post, error)
 func CountPostPages() int {
 	var count int64
 	database.DB.Model(&database.Post{}).Count(&count)
-	return int(math.Abs(float64(count-1))/perPage) + 1
+	return int(count)
 }
 func CountPostPagesTag(tagSyntax []string) int {
 	tags, err := ParseReadTags(tagSyntax)
@@ -93,8 +92,7 @@ func CountPostPagesTag(tagSyntax []string) int {
 
 	var count int64
 	count = database.DB.Model(&tags).Distinct().Joins("Blob").Preload("Tags").Preload("Tags.TagType").Association("Posts").Count()
-
-	return int(math.Abs(float64(count-1))/perPage) + 1
+	return int(count)
 }
 
 func DeletePost(id string) error {

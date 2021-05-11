@@ -62,7 +62,7 @@ func postGet(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
-		TotalPage:   postPages,
+		PostCount:   postPages,
 		Posts:       postResult,
 	})
 }
