@@ -86,6 +86,8 @@ func postGetOne(c *gin.Context) {
 		ImagePath: "/data/" + post.Blob.FilePath,
 		SourceURL: post.SourceURL,
 		Tags:      tagStrings,
+		Width:     post.Blob.Width,
+		Height:    post.Blob.Height,
 	})
 }
 

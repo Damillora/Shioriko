@@ -15,7 +15,9 @@ type UserProfileResponse struct {
 }
 
 type BlobResponse struct {
-	ID string `json:"id"`
+	ID     string `json:"id"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
 }
 
 type PostPaginationResponse struct {
