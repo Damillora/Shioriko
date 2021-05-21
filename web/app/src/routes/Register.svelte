@@ -5,10 +5,15 @@
     let username = "";
     let password = "";
     let email = "";
+    let error = "";
 
     const doRegister = async () => {
-        const tokenData = await register({ email, username, password });
-        navigate("/");
+        try {
+            const tokenData = await register({ email, username, password });
+            navigate("/");
+        } catch (error) {
+            error = "We had trouble registering you";
+        }
     };
 </script>
 

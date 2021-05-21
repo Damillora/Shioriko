@@ -4,10 +4,17 @@
 
     let username = "";
     let password = "";
-
+    let error = "";
+    
     const doLogin = async () => {
-        const tokenData = await login({ username, password });
-        navigate("/");
+        error = "";
+        try {
+            const tokenData = await login({ username, password });
+            navigate("/");
+        } catch (e) {
+            error = "We had trouble logging you in";
+            return;
+        }
     };
 </script>
 
@@ -45,6 +52,11 @@
                 />
             </div>
         </div>
+        {#if error}
+            <div class="field">
+                <p class="has-text-danger">{error}</p>
+            </div>
+        {/if}
         <div class="field">
             <div class="control">
                 <button class="button is-link">Login</button>
