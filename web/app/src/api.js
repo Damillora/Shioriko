@@ -21,6 +21,21 @@ export async function login({ username, password }) {
     return response.data;
 }
 
+export async function register({ email, username, password }) {
+    const endpoint = url + "/api/user/register";
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        data: JSON.stringify({
+            email,
+            username,
+            password,
+        }),
+    })
+    token.set(response.data.token);
+    return response.data;
+}
+
 export async function getTags() {
     const endpoint = url + "/api/tag";
     const response = await axios.get(endpoint);
@@ -89,7 +104,7 @@ export async function postCreate({ blob_id, source_url, tags }) {
 }
 
 export async function postUpdate(id, { source_url, tags }) {
-    const endpoint = url + "/api/post/"+id;
+    const endpoint = url + "/api/post/" + id;
     const response = await axios({
         url: endpoint,
         method: "POST",
@@ -103,8 +118,8 @@ export async function postUpdate(id, { source_url, tags }) {
     })
     return response.data;
 }
-export async function postDelete({id}) {
-    const endpoint = url + "/api/post/"+id;
+export async function postDelete({ id }) {
+    const endpoint = url + "/api/post/" + id;
     const response = await axios({
         url: endpoint,
         method: "DELETE",

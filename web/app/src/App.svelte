@@ -11,6 +11,7 @@
 	import Upload from "./routes/Upload.svelte";
 	import Edit from "./routes/Edit.svelte";
 	import Tags from "./routes/Tags.svelte";
+	import Register from "./routes/Register.svelte";
 
 	export let url = "";
 	let baseURL = window.BASE_URL;
@@ -27,6 +28,7 @@
 		<Route path="/auth/logout" component={Logout} />
 		<Route path="/upload" component={Upload} />
 		<Route path="/tags" component={Tags} />
+		<Route path="/auth/register" component={Register} />
 	</div>
 </Router>
 

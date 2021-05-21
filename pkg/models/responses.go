@@ -11,7 +11,7 @@ type ErrorResponse struct {
 
 type UserProfileResponse struct {
 	Email    string `json:"email"`
-	Username string `json:"password"`
+	Username string `json:"username"`
 }
 
 type BlobResponse struct {
