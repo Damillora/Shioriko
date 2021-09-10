@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { getPostSearchTag } from "../api.js";
+    import { getPostSearchTag, getTagAutocomplete } from "../api.js";
     import { Link, navigate } from "svelte-routing";
     import InfiniteScroll from "svelte-infinite-scroll";
     import TagLink from "../TagLink.svelte";
