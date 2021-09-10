@@ -94,7 +94,6 @@
                                 addKeys={[9, 32]}
                                 on:tags={onTagChange}
                                 autoComplete={onAutocomplete}
-                                autoCompleteKey={"name"}
                             />
                         </div>
                     </div>
