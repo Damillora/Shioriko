@@ -10,4 +10,7 @@
 .tile.is-multiline {
     flex-wrap: wrap;
   }
-  
+
+.svelte-tags-input-matchs-parent {
+  z-index: 200;
+}

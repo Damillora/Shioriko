@@ -1,5 +1,5 @@
 <script>
-    import { uploadBlob, postCreate } from "../api.js";
+    import { uploadBlob, postCreate, getTagAutocomplete } from "../api.js";
     import { navigate, Link } from "svelte-routing";
     import Tags from "svelte-tags-input";
     import AuthRequired from "../AuthRequired.svelte";
@@ -36,6 +36,11 @@
 
     const onTagChange = (value) => {
         form.tags = value.detail.tags;
+    };
+
+    const onAutocomplete = async () => {
+        const list = await getTagAutocomplete();
+        return list;
     };
 
     const onSubmit = async () => {
@@ -107,7 +112,7 @@
             <div class="field">
                 <label for="tags" class="label">Tags</label>
                 <div class="control" id="tags">
-                    <Tags addKeys={[9, 32]} on:tags={onTagChange} />
+                    <Tags addKeys={[9, 32]} on:tags={onTagChange} autoComplete={onAutocomplete} autoCompleteKey={"name"} />
                 </div>
             </div>
             <div class="control">

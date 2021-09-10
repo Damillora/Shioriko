@@ -12,6 +12,10 @@ type TagListItem struct {
 	PostCount int    `json:"postCount"`
 }
 
+type TagAutocompleteListItem struct {
+	Name string `json:"name"`
+}
+
 type PostListItem struct {
 	ID                 string   `json:"id"`
 	ImagePath          string   `json:"image_path"`

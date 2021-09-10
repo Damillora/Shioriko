@@ -51,6 +51,11 @@
         searchTerms = value.detail.tags;
     };
 
+    const onAutocomplete = async () => {
+        const list = await getTagAutocomplete();
+        return list;
+    };
+
     $: {
         queryParams = queryString.parse(location.search);
         if (queryParams.tags) {
@@ -88,6 +93,8 @@
                                 tags={searchTerms}
                                 addKeys={[9, 32]}
                                 on:tags={onTagChange}
+                                autoComplete={onAutocomplete}
+                                autoCompleteKey={"name"}
                             />
                         </div>
                     </div>

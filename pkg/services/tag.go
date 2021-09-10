@@ -21,6 +21,18 @@ func GetTagAll() []models.TagListItem {
 	return tags
 }
 
+func GetTagAutocomplete() []models.TagAutocompleteListItem {
+	var tags []models.TagAutocompleteListItem
+	result := database.DB.Model(&database.Tag{}).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Select("concat(tag_types.name,':',tags.name) as name").
+		Find(&tags)
+	if result.Error != nil {
+		return []models.TagAutocompleteListItem{}
+	}
+	return tags
+}
+
 func FindTagGeneric(tagName string) (*database.Tag, error) {
 	var tag database.Tag
 	result := database.DB.Where("name = ?", tagName).First(&tag)

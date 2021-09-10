@@ -49,4 +49,13 @@
 			font-size: 13.3333px;
 		}
 	}
+	#tags .svelte-tags-input-matchs {
+		z-index: 200;
+		&-parent {
+			z-index: 200;
+		}
+		& li:hover {
+			background: $primary;
+		}
+	}
 </style>

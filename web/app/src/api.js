@@ -41,6 +41,11 @@ export async function getTags() {
     const response = await axios.get(endpoint);
     return response.data;
 }
+export async function getTagAutocomplete() {
+    const endpoint = url + "/api/tag/autocomplete";
+    const response = await axios.get(endpoint);
+    return response.data;
+}
 export async function getPosts({ page }) {
     const endpoint = url + "/api/post?page=" + page;
     const response = await axios.get(endpoint);
