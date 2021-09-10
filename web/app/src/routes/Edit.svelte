@@ -1,5 +1,5 @@
 <script>
-    import { getPost, postUpdate } from "../api.js";
+    import { getPost, postUpdate, getTagAutocomplete } from "../api.js";
     import { navigate } from "svelte-routing";
     import Tags from "svelte-tags-input";
     import { onMount } from "svelte";
@@ -24,6 +24,11 @@
 
     const onTagChange = (value) => {
         form.tags = value.detail.tags;
+    };
+
+    const onAutocomplete = async () => {
+        const list = await getTagAutocomplete();
+        return list;
     };
 
     const onSubmit = async () => {
@@ -71,6 +76,7 @@
                                 tags={form.tags}
                                 addKeys={[9, 32]}
                                 on:tags={onTagChange}
+                                autoComplete={onAutocomplete}
                             />
                         </div>
                     </div>
