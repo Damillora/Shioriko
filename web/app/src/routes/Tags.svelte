@@ -1,6 +1,6 @@
 <script>
-import { getTags } from "../api";
-
+    import { getTags } from "../api";
+    import { Link } from "svelte-routing";
 
     let tags = [];
 
@@ -25,15 +25,19 @@ import { getTags } from "../api";
         <table class="table is-fullwidth">
             <thead>
                 <tr>
-                    <th>Tag</th>
-                    <th>Tag Type</th>
+                    <th >Tag</th>
+                    <th style="width: 30%;">Tag Type</th>
+                    <th style="width: 10%;">Post Count</th>
                 </tr>
             </thead>
             <tbody>
                 {#each tags as tag}
                     <tr>
-                        <td>{tag.name}</td>
+                        <td>
+                          <Link to="/posts?tags={tag.tagType}:{tag.tagName}">{tag.tagName}</Link>
+                        </td>
                         <td>{tag.tagType}</td>
+                        <td>{tag.postCount}</td>
                     </tr>
                 {/each}
             </tbody>

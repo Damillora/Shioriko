@@ -6,9 +6,10 @@ type TagTypeListItem struct {
 }
 
 type TagListItem struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	TagType string `json:"tagType"`
+	TagID     string `json:"tagId"`
+	TagName   string `json:"tagName"`
+	TagType   string `json:"tagType"`
+	PostCount int    `json:"postCount"`
 }
 
 type PostListItem struct {

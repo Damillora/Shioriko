@@ -5,12 +5,19 @@ import (
 	"strings"
 
 	"github.com/Damillora/Shioriko/pkg/database"
+	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/google/uuid"
 )
 
-func GetTagAll() []database.Tag {
-	var tags []database.Tag
-	database.DB.Joins("TagType").Find(&tags)
+func GetTagAll() []models.TagListItem {
+	var tags []models.TagListItem
+	database.DB.Model(&database.Tag{}).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Joins("left join post_tags on post_tags.tag_id = tags.id").
+		Select("tags.id as tag_id, tags.name as tag_name, tag_types.name as tag_type, count(post_tags.post_id) as post_count").
+		Group("tags.id, tags.name, tag_types.name").
+		Order("post_count DESC").
+		Find(&tags)
 	return tags
 }
 

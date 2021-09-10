@@ -35,6 +35,7 @@
     <div class="navbar-menu" class:is-active={menu_shown}>
         <div class="navbar-start">
             <Link class="navbar-item" to="/posts">Posts</Link>
+            <Link class="navbar-item" to="/tags">Tags</Link>
             {#if loggedIn}
                 <Link class="navbar-item" to="/upload">Upload</Link>
             {/if}
