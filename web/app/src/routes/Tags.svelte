@@ -16,6 +16,7 @@
 
 <section class="section">
     <div class="container">
+        <h1 class="title">Tag List</h1>
         <table class="table is-fullwidth">
             <thead>
                 <tr>

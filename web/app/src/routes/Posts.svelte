@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import { getPostSearchTag, getTagAutocomplete } from "../api.js";
     import { Link, navigate } from "svelte-routing";
-    import InfiniteScroll from "svelte-infinite-scroll";
     import TagLinkNumbered from "../TagLinkNumbered.svelte";
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
@@ -17,6 +16,7 @@
     let totalPages = 1;
     let pagination = [];
     let posts = [];
+    let postCount = 0;
     let tags = [];
     let categorizedTags = {};
 
@@ -26,11 +26,13 @@
             posts = data.posts;
             tags = data.tags.sort((a, b) => b.postCount - a.postCount);
             totalPages = data.totalPage;
+            postCount = data.postCount;
             pagination = paginate(page, totalPages);
         } else {
             posts = [];
             tags = [];
             totalPages = 0;
+            postCount = 0;
             pagination = paginate(page, totalPages);
         }
     };
@@ -65,36 +67,43 @@
     };
 
     const changePage = (i) => {
-        page = i;
-        getData();
-    }
+        if (i >= 1 && i <= totalPages) {
+            page = i;
+            getData();
+        }
+    };
 </script>
 
 <section class="section">
     <div class="container">
         <div class="block">
-            <form on:submit|preventDefault={onSearch}>
-                <div class="field has-addons">
-                    <div class="control is-expanded">
-                        <div class="control" id="tags">
-                            <Tags
-                                tags={searchTerms}
-                                addKeys={[9, 32]}
-                                on:tags={onTagChange}
-                                autoComplete={onAutocomplete}
-                            />
-                        </div>
-                    </div>
-                    <div class="control">
-                        <button type="submit" class="button is-primary">
-                            Search
-                        </button>
+            <div class="columns is-multiline">
+                <div class="column is-full">
+                    <div class="block">
+                        <form on:submit|preventDefault={onSearch}>
+                            <div class="field has-addons">
+                                <div class="control is-expanded">
+                                    <div class="control" id="tags">
+                                        <Tags
+                                            tags={searchTerms}
+                                            addKeys={[9, 32]}
+                                            on:tags={onTagChange}
+                                            autoComplete={onAutocomplete}
+                                        />
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <button
+                                        type="submit"
+                                        class="button is-primary"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="block">
-            <div class="columns">
                 <div class="column is-one-third">
                     <div class="panel is-primary">
                         <div class="panel-heading">Tags</div>
@@ -105,7 +114,9 @@
                                         <li>
                                             <TagLinkNumbered
                                                 class=""
-                                                tag={tag.tagType+":"+tag.tagName}
+                                                tag={tag.tagType +
+                                                    ":" +
+                                                    tag.tagName}
                                                 num={tag.postCount}
                                             />
                                         </li>
@@ -115,8 +126,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="column  is-two-thirds">
+                <div class="column is-two-thirds">
                     <div class="columns is-multiline">
+                        <div class="column is-full">
+                            <div class="columns is-multiline">
+                                {#each posts as post, i (post.id)}
+                                    <div class="column is-one-quarter">
+                                        <div class="block">
+                                            <div class="card">
+                                                <div class="card-image">
+                                                    <figure class="image">
+                                                        <Link
+                                                            to="/post/{post.id}"
+                                                        >
+                                                            <img
+                                                                alt={post.id}
+                                                                src={post.thumbnail_path}
+                                                            />
+                                                        </Link>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+
                         <div class="column is-full">
                             <nav
                                 class="pagination is-centered"
@@ -126,12 +162,15 @@
                                 <a
                                     href={null}
                                     on:click={changePage(page - 1)}
-                                    class="pagination-previous">Previous</a
+                                    class="pagination-previous"
+                                    class:is-disabled={page == 1}>Previous</a
                                 >
                                 <a
                                     href={null}
                                     on:click={changePage(page + 1)}
-                                    class="pagination-next">Next page</a
+                                    class="pagination-next"
+                                    class:is-disabled={page == totalPages}
+                                    >Next</a
                                 >
                                 <ul class="pagination-list">
                                     {#each pagination as pageEntry}
@@ -147,7 +186,7 @@
                                                 <a
                                                     href={null}
                                                     on:click={() =>
-                                                        (changePage(pageEntry))}
+                                                        changePage(pageEntry)}
                                                     class="pagination-link"
                                                     class:is-current={page ==
                                                         pageEntry}
@@ -160,39 +199,9 @@
                                 </ul>
                             </nav>
                         </div>
-                        <div class="column is-full">
-                            <div class="columns is-multiline">
-                                {#each posts as post, i (post.id)}
-                                    <div class="column is-one-third">
-                                        <div class="block">
-                                            <div class="card">
-                                                <div class="card-image">
-                                                    <figure class="image">
-                                                        <Link
-                                                            to="/post/{post.id}"
-                                                        >
-                                                            <img
-                                                                alt={post.id}
-                                                                src={post.thumbnail_path}
-                                                            />
-                                                        </Link>
-                                                    </figure>
-                                                </div>
-                                                <div class="card-content" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                {/each}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        {#if page >= totalPages}
-            <div class="notification is-primary">
-                <p class="has-text-centered">End of posts</p>
-            </div>
-        {/if}
     </div>
 </section>

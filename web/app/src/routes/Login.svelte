@@ -5,7 +5,7 @@
     let username = "";
     let password = "";
     let error = "";
-    
+
     const doLogin = async () => {
         error = "";
         try {
@@ -24,43 +24,45 @@
     </div>
 </section>
 
-<div class="container">
-    <form on:submit|preventDefault={doLogin}>
-        <div class="field">
-            <label for="username" class="label">Username</label>
-            <div class="control">
-                <input
-                    id="username"
-                    class="input"
-                    type="text"
-                    placeholder="Username"
-                    bind:value={username}
-                    required
-                />
-            </div>
-        </div>
-        <div class="field">
-            <label for="password" class="label">Password</label>
-            <div class="control">
-                <input
-                    id="password"
-                    class="input"
-                    type="password"
-                    placeholder="Password"
-                    bind:value={password}
-                    required
-                />
-            </div>
-        </div>
-        {#if error}
+<section class="section">
+    <div class="container">
+        <form on:submit|preventDefault={doLogin}>
             <div class="field">
-                <p class="has-text-danger">{error}</p>
+                <label for="username" class="label">Username</label>
+                <div class="control">
+                    <input
+                        id="username"
+                        class="input"
+                        type="text"
+                        placeholder="Username"
+                        bind:value={username}
+                        required
+                    />
+                </div>
             </div>
-        {/if}
-        <div class="field">
-            <div class="control">
-                <button class="button is-link">Login</button>
+            <div class="field">
+                <label for="password" class="label">Password</label>
+                <div class="control">
+                    <input
+                        id="password"
+                        class="input"
+                        type="password"
+                        placeholder="Password"
+                        bind:value={password}
+                        required
+                    />
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+            {#if error}
+                <div class="field">
+                    <p class="has-text-danger">{error}</p>
+                </div>
+            {/if}
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

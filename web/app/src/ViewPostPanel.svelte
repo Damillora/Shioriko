@@ -23,14 +23,6 @@
     </div>
     <div class="panel-block column">
         <div class="row">
-            <strong>Source URL:</strong>
-        </div>
-        <div class="row">
-            <a href={post.source_url}>{trimUrl(post.source_url)}</a>
-        </div>
-    </div>
-    <div class="panel-block column">
-        <div class="row">
             <strong>Original:</strong>
         </div>
         <div class="row">
@@ -43,6 +35,14 @@
         </div>
         <div class="row">
             {post.width}x{post.height}
+        </div>
+    </div>
+    <div class="panel-block column">
+        <div class="row">
+            <strong>Source URL:</strong>
+        </div>
+        <div class="row">
+            <a href={post.source_url}>{trimUrl(post.source_url)}</a>
         </div>
     </div>
     <div class="panel-block column">

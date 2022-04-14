@@ -18,7 +18,7 @@
 
     const getData = async () => {
         form.source_url = post.source_url;
-        form.tags = post.tags;
+        form.tags = post.tags.map(x => x.tagType+":"+x.tagName);
     };
 
     const onTagChange = (value) => {
@@ -47,7 +47,29 @@
         <p class="panel-heading">Edit Post</p>
         <div class="panel-block column">
             <div class="row">
-                <label for="source" class="label">Source URL</label>
+                <strong>Uploader:</strong>
+            </div>
+            <div class="row">{post.uploader}</div>
+        </div>
+        <div class="panel-block column">
+            <div class="row">
+                <strong>Original:</strong>
+            </div>
+            <div class="row">
+                <a href={post.image_path}>Image</a>
+            </div>
+        </div>
+        <div class="panel-block column">
+            <div class="row">
+                <strong>Dimensions:</strong>
+            </div>
+            <div class="row">
+                {post.width}x{post.height}
+            </div>
+        </div>
+        <div class="panel-block column">
+            <div class="row">
+                <label for="source" class="label">Source URL:</label>
             </div>
             <div class="row">
                 <div class="field">
@@ -65,7 +87,7 @@
         </div>
         <div class="panel-block column">
             <div class="row">
-                <label for="tags" class="label">Tags</label>
+                <label for="tags" class="label">Tags:</label>
             </div>
             <div class="row">
                 <div class="field">

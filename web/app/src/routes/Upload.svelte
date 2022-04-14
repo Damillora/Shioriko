@@ -53,6 +53,7 @@
 
 <section class="section">
     <div class="container">
+        <h1 class="title">Upload Image</h1>
         <form on:submit|preventDefault={onSubmit}>
             <div class="field">
                 <label for="file" class="label">Image File</label>
