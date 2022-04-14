@@ -5,6 +5,7 @@
 
     let tagType = tag.split(":")[0] ?? "";
     let tagName = tag.split(":")[1] ?? "";
+    let tagDisplay = tagName.split("_").join(" ");
 </script>
 
-<Link class="button is-rounded is-primary is-small m-1" to="/posts?tags={tagName}">{tagName}</Link>
+<Link class="button is-rounded is-primary is-small m-1" to="/posts?tags={tagName}">{tagDisplay}</Link>
