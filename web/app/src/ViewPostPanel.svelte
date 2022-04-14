@@ -26,7 +26,7 @@
             <strong>Original:</strong>
         </div>
         <div class="row">
-            <a href={post.image_path}>Image</a>
+            <a href={post.image_path} target="_blank">Image</a>
         </div>
     </div>
     <div class="panel-block column">

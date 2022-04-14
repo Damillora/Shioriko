@@ -40,6 +40,13 @@
     const toggleEditMenu = () => {
         editMenuShown = !editMenuShown;
     };
+
+    let imagePercentage = "0%";
+
+    $: {
+        if (post)
+            imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
+    }
 </script>
 
 {#if post}
@@ -82,8 +89,10 @@
                 <div class="column box">
                     {#if post.width > 1000}
                         <div class="notification is-info">
-                            The image has been resized due to size. The original
-                            image link is in the sidebar
+                            Resized to {imagePercentage} of the original image.
+                            <a href={post.image_path} target="_blank"
+                                >View original</a
+                            >
                         </div>
                         <figure class="image">
                             <img alt={post.id} src={post.preview_path} />
@@ -97,5 +106,4 @@
             </div>
         </section>
     </div>
-
 {/if}
