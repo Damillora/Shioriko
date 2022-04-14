@@ -3,6 +3,8 @@
     import TagLink from "../TagLink.svelte";
     import { getPost, postCreate, postDelete } from "../api.js";
     import { Link, navigate } from "svelte-routing";
+    import EditPostPanel from "../EditPostPanel.svelte";
+    import ViewPostPanel from "../ViewPostPanel.svelte";
     export let id;
     let post;
     const getData = async () => {
@@ -21,70 +23,62 @@
         getData();
     });
 
-    let modal_shown = false;
+    let deleteMenuShown = false;
 
     const deletePost = async () => {
-        toggleModal();
+        toggleDeleteMenu();
         const success = await postDelete({ id });
         if (success) {
             navigate("/posts");
         }
     };
-    const toggleModal = () => {
-        modal_shown = !modal_shown;
+    const toggleDeleteMenu = () => {
+        deleteMenuShown = !deleteMenuShown;
+    };
+
+    let editMenuShown = false;
+
+    const toggleEditMenu = () => {
+        editMenuShown = !editMenuShown;
     };
 </script>
 
-<section class="hero is-primary">
-    <div class="hero-body">
-        {#if post}
-            <p class="title">
-                Post ID: {post.id}
-            </p>
-        {/if}
-    </div>
-</section>
 {#if post}
     <div class="container">
         <section class="section">
             <div class="columns">
-                <div class="column is-one-third box">
-                    <div class="content">
-                        <p>
-                            <Link
-                                class="button is-primary"
-                                to="/post/edit/{post.id}">Edit</Link
-                            >
-                            <button
-                                on:click|preventDefault={toggleModal}
-                                class="button is-danger">Delete</button
-                            >
-                        </p>
-                        <p>
-                            Uploader: {post.uploader}
-                        </p>
-                        <p>
-                            Source URL: <a href={post.source_url}
-                                >{trimUrl(post.source_url)}</a
-                            >
-                        </p>
-                        <p>
-                            Original: <a href={post.image_path}>Image</a>
-                        </p>
-                        <p>
-                            Dimensions: {post.width}x{post.height}
-                        </p>
-                        <p>
-                            Tags:<br />
-                        </p>
-                        <p>
-                            {#if post.tags}
-                                {#each post.tags as tag (tag)}
-                                    <TagLink {tag} />
-                                {/each}
-                            {/if}
-                        </p>
-                    </div>
+                <div class="column is-one-third">
+                    {#if editMenuShown == false && deleteMenuShown == false}
+                        <ViewPostPanel
+                            {post}
+                            {toggleDeleteMenu}
+                            {toggleEditMenu}
+                        />
+                    {:else if editMenuShown == true}
+                        <EditPostPanel
+                            bind:isActive={editMenuShown}
+                            {post}
+                            onSubmit={getData}
+                        />
+                    {:else if deleteMenuShown == true}
+                        <div class="panel is-danger">
+                            <p class="panel-heading">Delete Post</p>
+                            <div class="panel-block">
+                                Are you sure to delete post {post.id}?
+                            </div>
+                            <div class="panel-block column">
+                                <button
+                                    on:click|preventDefault={deletePost}
+                                    class="button is-danger">Delete</button
+                                >
+                                <button
+                                    class="button"
+                                    on:click|preventDefault={toggleDeleteMenu}
+                                    >Cancel</button
+                                >
+                            </div>
+                        </div>
+                    {/if}
                 </div>
                 <div class="column box">
                     {#if post.width > 1000}
@@ -105,26 +99,4 @@
         </section>
     </div>
 
-    <div class="modal" class:is-active={modal_shown}>
-        <div class="modal-background" />
-        <div class="modal-content">
-            Are you sure to delete post {post.id}?
-        </div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Delete post?</p>
-                <button class="delete" aria-label="close" />
-            </header>
-            <section class="modal-card-body" />
-            <footer class="modal-card-foot">
-                <button
-                    on:click|preventDefault={deletePost}
-                    class="button is-danger">Delete</button
-                >
-                <button class="button" on:click|preventDefault={toggleModal}
-                    >Cancel</button
-                >
-            </footer>
-        </div>
-    </div>
 {/if}

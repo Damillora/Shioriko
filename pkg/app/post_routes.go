@@ -57,8 +57,9 @@ func postGet(c *gin.Context) {
 	}
 
 	var postResult []models.PostListItem
+	var tagStrings []string
 	for _, post := range posts {
-		var tagStrings []string
+
 		for _, tag := range post.Tags {
 			tagStrings = append(tagStrings, tag.TagType.Name+":"+tag.Name)
 		}
@@ -67,7 +68,6 @@ func postGet(c *gin.Context) {
 			ID:                 post.ID,
 			ImageThumbnailPath: "/data/" + post.Blob.ThumbnailFilePath,
 			ImagePath:          "/data/" + post.Blob.FilePath,
-			Tags:               tagStrings,
 		})
 	}
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
@@ -75,6 +75,7 @@ func postGet(c *gin.Context) {
 		TotalPage:   totalPage,
 		PostCount:   postPages,
 		Posts:       postResult,
+		Tags:        tagStrings,
 	})
 }
 

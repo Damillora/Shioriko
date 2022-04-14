@@ -14,12 +14,6 @@
 </script>
 
 
-<section class="hero is-primary">
-    <div class="hero-body">
-        <p class="title">Tags</p>
-    </div>
-</section>
-
 <section class="section">
     <div class="container">
         <table class="table is-fullwidth">

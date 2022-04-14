@@ -51,12 +51,6 @@
 
 <AuthRequired />
 
-<section class="hero is-primary">
-    <div class="hero-body">
-        <p class="title">Upload</p>
-    </div>
-</section>
-
 <section class="section">
     <div class="container">
         <form on:submit|preventDefault={onSubmit}>

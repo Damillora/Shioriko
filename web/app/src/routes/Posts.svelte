@@ -3,47 +3,47 @@
     import { getPostSearchTag, getTagAutocomplete } from "../api.js";
     import { Link, navigate } from "svelte-routing";
     import InfiniteScroll from "svelte-infinite-scroll";
-    import TagLink from "../TagLink.svelte";
+    import TagLinkNumbered from "../TagLinkNumbered.svelte";
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
     import { add_attribute } from "svelte/internal";
+    import { paginate } from "../simple-pagination.js";
 
     export let location;
 
     let searchTerms = [];
 
     let page = 1;
+    let totalPages = 1;
+    let pagination = [];
     let posts = [];
-    let newBatch = [];
-
-    const splitToChunks = (array, parts) => {
-        let result = [];
-        for (let i = 0; i < parts; i++) {
-            let currentColumn = [];
-            for (let j = i; j < array.length; j += parts) {
-                currentColumn.push(array[j]);
-            }
-            result.push(currentColumn);
-        }
-        return result;
-    };
-
-    let postChunks = [];
-    // split posts into 4 columns
-    $: {
-        postChunks = splitToChunks(posts, 5);
-    }
+    let tags = [];
+    let categorizedTags = {};
 
     const getData = async () => {
         const data = await getPostSearchTag({ page, q: searchTerms.join("+") });
         if (data.posts) {
-            newBatch = data.posts;
+            posts = data.posts;
+            tags = data.tags;
+            totalPages = data.totalPage;
+            pagination = paginate(page, totalPages);
         } else {
-            newBatch = [];
+            posts = [];
+            tags = [];
+            totalPages = 0;
+            pagination = paginate(page, totalPages);
         }
     };
     $: {
-        posts = [...posts, ...newBatch];
+        let catTags = tags.reduce(
+            (acc, o) => ((acc[o] = (acc[o] || 0) + 1), acc),
+            {}
+        );
+        categorizedTags = Object.entries(catTags).map(([k, v]) => ({
+            tag: k,
+            num: v,
+        }));
+        categorizedTags = categorizedTags.sort((a, b) => b.num - a.num);
     }
     let queryParams;
 
@@ -64,9 +64,9 @@
             searchTerms = [];
         }
         posts = [];
+        page = 1;
         getData();
     }
-
     const onSearch = (i) => {
         if (searchTerms.length > 0) {
             navigate(`/posts?tags=${searchTerms.join("+")}`);
@@ -74,13 +74,12 @@
             navigate(`/posts`);
         }
     };
-</script>
 
-<section class="hero is-primary">
-    <div class="hero-body">
-        <p class="title">Posts</p>
-    </div>
-</section>
+    const changePage = (i) => {
+        page = i;
+        getData();
+    }
+</script>
 
 <section class="section">
     <div class="container">
@@ -107,46 +106,101 @@
         </div>
         <div class="block">
             <div class="columns">
-                {#each postChunks as postChunk}
-                    <div class="column is-one-fifth">
-                        {#each postChunk as post, i (post.id)}
-                            <div class="block">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <figure class="image">
-                                            <Link to="/post/{post.id}">
-                                                <img
-                                                    alt={post.id}
-                                                    src={post.thumbnail_path}
-                                                />
-                                            </Link>
-                                        </figure>
-                                    </div>
-                                    <div class="card-content">
-                                        {#if post.tags}
-                                            {#each post.tags as tag (tag)}
-                                                <TagLink {tag} />
-                                            {/each}
-                                        {:else}
-                                            <TagLink tag="tagme" />
-                                        {/if}
-                                    </div>
-                                </div>
+                <div class="column is-one-third">
+                    <div class="panel is-primary">
+                        <div class="panel-heading">Tags</div>
+                        <div class="panel-block column">
+                            <div class="menu">
+                                <ul class="menu-list">
+                                    {#each categorizedTags as tag (tag)}
+                                        <li>
+                                            <TagLinkNumbered
+                                                class=""
+                                                tag={tag.tag}
+                                                num={tag.num}
+                                            />
+                                        </li>
+                                    {/each}
+                                </ul>
                             </div>
-                        {/each}
+                        </div>
                     </div>
-                {/each}
+                </div>
+                <div class="column  is-two-thirds">
+                    <div class="columns is-multiline">
+                        <div class="column is-full">
+                            <nav
+                                class="pagination is-centered"
+                                role="navigation"
+                                aria-label="pagination"
+                            >
+                                <a
+                                    href={null}
+                                    on:click={changePage(page - 1)}
+                                    class="pagination-previous">Previous</a
+                                >
+                                <a
+                                    href={null}
+                                    on:click={changePage(page + 1)}
+                                    class="pagination-next">Next page</a
+                                >
+                                <ul class="pagination-list">
+                                    {#each pagination as pageEntry}
+                                        {#if pageEntry == "..."}
+                                            <li>
+                                                <span
+                                                    class="pagination-ellipsis"
+                                                    >&hellip;</span
+                                                >
+                                            </li>
+                                        {:else}
+                                            <li>
+                                                <a
+                                                    href={null}
+                                                    on:click={() =>
+                                                        (changePage(pageEntry))}
+                                                    class="pagination-link"
+                                                    class:is-current={page ==
+                                                        pageEntry}
+                                                    aria-label="Goto page {pageEntry}"
+                                                    >{pageEntry}</a
+                                                >
+                                            </li>
+                                        {/if}
+                                    {/each}
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="column is-full">
+                            <div class="columns is-multiline">
+                                {#each posts as post, i (post.id)}
+                                    <div class="column is-one-third">
+                                        <div class="block">
+                                            <div class="card">
+                                                <div class="card-image">
+                                                    <figure class="image">
+                                                        <Link
+                                                            to="/post/{post.id}"
+                                                        >
+                                                            <img
+                                                                alt={post.id}
+                                                                src={post.thumbnail_path}
+                                                            />
+                                                        </Link>
+                                                    </figure>
+                                                </div>
+                                                <div class="card-content" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/each}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <InfiniteScroll
-                hasMore={newBatch.length}
-                elementScroll={document}
-                on:loadMore={() => {
-                    page++;
-                    getData();
-                }}
-            />
         </div>
-        {#if newBatch.length == 0}
+        {#if page >= totalPages}
             <div class="notification is-primary">
                 <p class="has-text-centered">End of posts</p>
             </div>
