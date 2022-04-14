@@ -70,12 +70,14 @@ func postGet(c *gin.Context) {
 			ImagePath:          "/data/" + post.Blob.FilePath,
 		})
 	}
+	tagObjs := services.GetTagFilter(tagStrings)
+
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
 		TotalPage:   totalPage,
 		PostCount:   postPages,
 		Posts:       postResult,
-		Tags:        tagStrings,
+		Tags:        tagObjs,
 	})
 }
 

@@ -31,5 +31,5 @@ type PostPaginationResponse struct {
 	TotalPage   int            `json:"totalPage"`
 	PostCount   int            `json:"postCount"`
 	Posts       []PostListItem `json:"posts"`
-	Tags        []string       `json:"tags"`
+	Tags        []TagListItem  `json:"tags"`
 }

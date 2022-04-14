@@ -21,6 +21,24 @@ func GetTagAll() []models.TagListItem {
 	return tags
 }
 
+func GetTagFilter(tagString []string) []models.TagListItem {
+	tagObjs, _ := ParseReadTags(tagString)
+	var tagIds []string
+	for _, val := range tagObjs {
+		tagIds = append(tagIds, val.ID)
+	}
+
+	var tags []models.TagListItem
+	database.DB.Model(&tagObjs).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Joins("left join post_tags on post_tags.tag_id = tags.id").
+		Select("tags.id as tag_id, tags.name as tag_name, tag_types.name as tag_type, count(post_tags.post_id) as post_count").
+		Group("tags.id, tags.name, tag_types.name").
+		Order("post_count DESC").
+		Find(&tags, tagIds)
+	return tags
+}
+
 func GetTagAutocomplete() []string {
 	var tags []string
 	result := database.DB.Model(&database.Tag{}).

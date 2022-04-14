@@ -24,7 +24,7 @@
         const data = await getPostSearchTag({ page, q: searchTerms.join("+") });
         if (data.posts) {
             posts = data.posts;
-            tags = data.tags;
+            tags = data.tags.sort((a, b) => b.postCount - a.postCount);
             totalPages = data.totalPage;
             pagination = paginate(page, totalPages);
         } else {
@@ -34,17 +34,6 @@
             pagination = paginate(page, totalPages);
         }
     };
-    $: {
-        let catTags = tags.reduce(
-            (acc, o) => ((acc[o] = (acc[o] || 0) + 1), acc),
-            {}
-        );
-        categorizedTags = Object.entries(catTags).map(([k, v]) => ({
-            tag: k,
-            num: v,
-        }));
-        categorizedTags = categorizedTags.sort((a, b) => b.num - a.num);
-    }
     let queryParams;
 
     const onTagChange = (value) => {
@@ -112,12 +101,12 @@
                         <div class="panel-block column">
                             <div class="menu">
                                 <ul class="menu-list">
-                                    {#each categorizedTags as tag (tag)}
+                                    {#each tags as tag (tag)}
                                         <li>
                                             <TagLinkNumbered
                                                 class=""
-                                                tag={tag.tag}
-                                                num={tag.num}
+                                                tag={tag.tagType+":"+tag.tagName}
+                                                num={tag.postCount}
                                             />
                                         </li>
                                     {/each}
