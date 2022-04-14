@@ -21,8 +21,12 @@ func GetTagAll() []models.TagListItem {
 	return tags
 }
 
-func GetTagFilter(tagString []string) []models.TagListItem {
+func GetTagFilterString(tagString []string) []models.TagListItem {
 	tagObjs, _ := ParseReadTags(tagString)
+	return GetTagFilter(tagObjs)
+}
+
+func GetTagFilter(tagObjs []database.Tag) []models.TagListItem {
 	var tagIds []string
 	for _, val := range tagObjs {
 		tagIds = append(tagIds, val.ID)
@@ -38,7 +42,6 @@ func GetTagFilter(tagString []string) []models.TagListItem {
 		Find(&tags, tagIds)
 	return tags
 }
-
 func GetTagAutocomplete() []string {
 	var tags []string
 	result := database.DB.Model(&database.Tag{}).

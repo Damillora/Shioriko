@@ -1,8 +1,7 @@
 <script>
     import { onMount } from "svelte";
-    import TagLink from "../TagLink.svelte";
-    import { getPost, postCreate, postDelete } from "../api.js";
-    import { Link, navigate } from "svelte-routing";
+    import { getPost, postDelete } from "../api.js";
+    import { navigate } from "svelte-routing";
     import EditPostPanel from "../EditPostPanel.svelte";
     import ViewPostPanel from "../ViewPostPanel.svelte";
     export let id;

@@ -70,7 +70,7 @@ func postGet(c *gin.Context) {
 			ImagePath:          "/data/" + post.Blob.FilePath,
 		})
 	}
-	tagObjs := services.GetTagFilter(tagStrings)
+	tagObjs := services.GetTagFilterString(tagStrings)
 
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
@@ -90,17 +90,15 @@ func postGetOne(c *gin.Context) {
 			Message: err.Error(),
 		})
 	}
-	var tagStrings []string
-	for _, tag := range post.Tags {
-		tagStrings = append(tagStrings, tag.TagType.Name+":"+tag.Name)
-	}
+
+	tagObjs := services.GetTagFilter(post.Tags)
 
 	c.JSON(http.StatusOK, models.PostReadModel{
 		ID:               post.ID,
 		ImagePreviewPath: "/data/" + post.Blob.PreviewFilePath,
 		ImagePath:        "/data/" + post.Blob.FilePath,
 		SourceURL:        post.SourceURL,
-		Tags:             tagStrings,
+		Tags:             tagObjs,
 		Width:            post.Blob.Width,
 		Height:           post.Blob.Height,
 		Uploader:         post.User.Username,

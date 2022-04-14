@@ -1,6 +1,6 @@
 <script>
     import AuthCheck from "./AuthCheck.svelte";
-    import TagLink from "./TagLink.svelte";
+    import TagLinkNumbered from "./TagLinkNumbered.svelte";
     export let post;
     export let toggleEditMenu;
     export let toggleDeleteMenu;
@@ -55,7 +55,11 @@
                     {#if post.tags}
                         {#each post.tags as tag (tag)}
                             <li>
-                                <TagLink class="" {tag} />
+                                <TagLinkNumbered
+                                    class=""
+                                    tag={tag.tagType + ":" + tag.tagName}
+                                    num={tag.postCount}
+                                />
                             </li>
                         {/each}
                     {/if}
