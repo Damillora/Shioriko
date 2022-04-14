@@ -32,12 +32,16 @@ func postGet(c *gin.Context) {
 	pageParam := c.Query("page")
 	page, _ := strconv.Atoi(pageParam)
 
+	if page < 1 {
+		page = 1
+	}
 	tag := c.Query("tags")
 
 	tags := strings.Split(tag, " ")
 
 	var posts []database.Post
 	var postPages int
+	var perPage = 20
 
 	if tag != "" {
 		posts = services.GetPostTags(page, tags)
@@ -45,6 +49,11 @@ func postGet(c *gin.Context) {
 	} else {
 		posts = services.GetPostAll(page)
 		postPages = services.CountPostPages()
+	}
+
+	var totalPage = postPages / perPage
+	if postPages%perPage > 0 {
+		totalPage++
 	}
 
 	var postResult []models.PostListItem
@@ -63,6 +72,7 @@ func postGet(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
+		TotalPage:   totalPage,
 		PostCount:   postPages,
 		Posts:       postResult,
 	})
