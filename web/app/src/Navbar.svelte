@@ -1,12 +1,13 @@
 <script>
     import { Link } from "svelte-routing";
     import { token } from "./stores.js";
+    import { isTokenExpired } from "./login-check.js";
 
     let menu_shown = false;
 
     let loggedIn = false;
     token.subscribe((value) => {
-        loggedIn = value !== "";
+        loggedIn = !isTokenExpired(value);
     });
 
     const toggleMenu = () => {
