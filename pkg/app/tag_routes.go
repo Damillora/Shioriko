@@ -10,11 +10,14 @@ import (
 )
 
 func InitializeTagRoutes(g *gin.Engine) {
+	autocomplete := g.Group("/api/tag-autocomplete")
+	{
+		autocomplete.GET("/", tagAutocomplete)
+	}
 	unprotected := g.Group("/api/tag")
 	{
 		unprotected.GET("/", tagGet)
 		unprotected.GET("/:tag", tagGetOne)
-		unprotected.GET("/autocomplete", tagAutocomplete)
 	}
 	protected := g.Group("/api/tag").Use(middleware.AuthMiddleware())
 	{
@@ -36,6 +39,7 @@ func tagGetOne(c *gin.Context) {
 			Code:    http.StatusBadRequest,
 			Message: err.Error(),
 		})
+		c.Abort()
 	}
 
 	c.JSON(http.StatusOK, models.TagReadModel{

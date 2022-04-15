@@ -49,7 +49,7 @@ export async function getTag({ tag }) {
 }
 
 export async function getTagAutocomplete() {
-    const endpoint = url + "/api/tag/autocomplete";
+    const endpoint = url + "/api/tag-autocomplete";
     const response = await axios.get(endpoint);
     return response.data;
 }
