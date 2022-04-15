@@ -152,6 +152,15 @@ func postCreate(c *gin.Context) {
 }
 
 func postUpdate(c *gin.Context) {
+	_, ok := c.Get("user")
+	if !ok {
+		c.JSON(http.StatusForbidden, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "User don't exist",
+		})
+		c.Abort()
+	}
+
 	id := c.Param("id")
 
 	var model models.PostUpdateModel
@@ -194,6 +203,15 @@ func postUpdate(c *gin.Context) {
 }
 
 func postDelete(c *gin.Context) {
+	_, ok := c.Get("user")
+	if !ok {
+		c.JSON(http.StatusForbidden, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "User don't exist",
+		})
+		c.Abort()
+	}
+
 	id := c.Param("id")
 
 	err := services.DeletePost(id)

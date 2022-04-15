@@ -1,5 +1,5 @@
 <script>
-    import { login } from "../api.js";
+    import { login } from "../../api.js";
     import { navigate } from "svelte-routing";
 
     let username = "";

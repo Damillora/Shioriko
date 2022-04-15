@@ -1,8 +1,8 @@
 <script>
-    import { uploadBlob, postCreate, getTagAutocomplete } from "../api.js";
+    import { uploadBlob, postCreate, getTagAutocomplete } from "../../api.js";
     import { navigate, Link } from "svelte-routing";
     import Tags from "svelte-tags-input";
-    import AuthRequired from "../AuthRequired.svelte";
+    import AuthRequired from "../../AuthRequired.svelte";
 
     let currentProgress = 0;
 

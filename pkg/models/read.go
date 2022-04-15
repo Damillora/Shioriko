@@ -10,3 +10,11 @@ type PostReadModel struct {
 	Height           int           `json:"height"`
 	Uploader         string        `json:"uploader"`
 }
+
+type TagReadModel struct {
+	TagID     string `json:"tagId"`
+	TagName   string `json:"tagName"`
+	TagType   string `json:"tagType"`
+	TagNote   string `json:"tagNote"`
+	PostCount int    `json:"postCount"`
+}

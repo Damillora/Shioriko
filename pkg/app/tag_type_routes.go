@@ -12,10 +12,12 @@ import (
 )
 
 func InitializeTagTypeRoutes(g *gin.Engine) {
-
+	unprotected := g.Group(("/api/tagtype"))
+	{
+		unprotected.GET("/", tagTypeGet)
+	}
 	protected := g.Group("/api/tagtype").Use(middleware.AuthMiddleware())
 	{
-		protected.GET("/", tagTypeGet)
 		protected.POST("/create", tagTypeCreate)
 		protected.DELETE("/:id", tagTypeDelete)
 	}

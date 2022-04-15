@@ -46,6 +46,9 @@
             {#if loggedIn}
                 <div class="navbar-item">
                     <div class="buttons">
+                        <Link to="/user/profile" class="button is-primary">
+                            Profile
+                        </Link>
                         <Link to="/auth/logout" class="button is-light">
                             Log out
                         </Link>

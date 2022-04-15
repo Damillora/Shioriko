@@ -42,6 +42,24 @@ func GetTagFilter(tagObjs []database.Tag) []models.TagListItem {
 		Find(&tags, tagIds)
 	return tags
 }
+
+func GetTag(tagString string) (*models.TagReadModel, error) {
+	tagObj, err := FindTag(tagString)
+	if err != nil {
+		return nil, err
+	}
+	var tagModel models.TagReadModel
+
+	database.DB.Model(&tagObj).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Joins("left join post_tags on post_tags.tag_id = tags.id").
+		Select("tags.id as tag_id, tags.name as tag_name, tag_types.name as tag_type, tags.note as tag_note, count(post_tags.post_id) as post_count").
+		Group("tags.id, tags.name, tag_types.name, tags.note").
+		First(&tagModel, "tags.id = ? ", tagObj.ID)
+
+	return &tagModel, nil
+}
+
 func GetTagAutocomplete() []string {
 	var tags []string
 	result := database.DB.Model(&database.Tag{}).
@@ -134,6 +152,7 @@ func CreateOrUpdateTag(tagSyntax string) (*database.Tag, error) {
 		return nil, errors.New("Malformed tag syntax")
 	}
 }
+
 func FindTag(tagSyntax string) (*database.Tag, error) {
 	tagFields := strings.Split(tagSyntax, ":")
 	var tagName string
@@ -172,4 +191,37 @@ func ParseReadTags(tags []string) ([]database.Tag, error) {
 		result = append(result, *tag)
 	}
 	return result, nil
+}
+
+func UpdateTagNotes(tagString string, notes string) error {
+	tagObj, err := FindTag(tagString)
+	if err != nil {
+		return err
+	}
+
+	tagObj.Note = notes
+
+	result := database.DB.Save(&tagObj)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func UpdateTag(tagString string, model models.TagUpdateModel) error {
+	tagObj, err := FindTag(tagString)
+	if err != nil {
+		return err
+	}
+
+	tagObj.TagTypeID = model.TagTypeID
+	tagObj.Name = model.Name
+
+	result := database.DB.Save(&tagObj)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

@@ -1,5 +1,5 @@
 <script>
-    import { token } from "../stores.js";
+    import { token } from "../../stores.js";
     import { navigate } from "svelte-routing";
     import { onMount } from "svelte";
 

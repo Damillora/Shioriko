@@ -1,5 +1,5 @@
 <script>
-    import { getTags } from "../api";
+    import { getTags } from "../../api";
     import { Link } from "svelte-routing";
 
     let tags = [];
@@ -29,7 +29,7 @@
                 {#each tags as tag}
                     <tr>
                         <td>
-                          <Link to="/posts?tags={tag.tagType}:{tag.tagName}">{tag.tagName}</Link>
+                          <Link to="/tags/{tag.tagName}">{tag.tagName}</Link>
                         </td>
                         <td>{tag.tagType}</td>
                         <td>{tag.postCount}</td>

@@ -3,15 +3,21 @@
 
 	import Navbar from "./Navbar.svelte";
 
+	
 	import Home from "./routes/Home.svelte";
-	import Posts from "./routes/Posts.svelte";
-	import Post from "./routes/Post.svelte";
-	import Login from "./routes/Login.svelte";
-	import Logout from "./routes/Logout.svelte";
-	import Upload from "./routes/Upload.svelte";
-	import Edit from "./routes/Edit.svelte";
-	import Tags from "./routes/Tags.svelte";
-	import Register from "./routes/Register.svelte";
+
+	import Login from "./routes/Auth/Login.svelte";
+	import Logout from "./routes/Auth/Logout.svelte";
+	import Register from "./routes/Auth/Register.svelte";
+
+	import Posts from "./routes/Post/Posts.svelte";
+	import Post from "./routes/Post/Post.svelte";
+	import Upload from "./routes/Post/Upload.svelte";
+
+	import Tags from "./routes/Tags/Tags.svelte";
+	import Tag from "./routes/Tags/Tag.svelte";
+
+	import Profile from "./routes/User/Profile.svelte";
 
 	export let url = "";
 	let baseURL = window.BASE_URL;
@@ -23,12 +29,13 @@
 		<Route path="/" component={Home} />
 		<Route path="/posts" component={Posts} />
 		<Route path="/post/:id" component={Post} />
-		<Route path="/post/edit/:id" component={Edit} />
 		<Route path="/auth/login" component={Login} />
 		<Route path="/auth/logout" component={Logout} />
 		<Route path="/upload" component={Upload} />
 		<Route path="/tags" component={Tags} />
+		<Route path="/tags/:tag" component={Tag} />
 		<Route path="/auth/register" component={Register} />
+		<Route path="/user/profile" component={Profile} />
 	</div>
 </Router>
 

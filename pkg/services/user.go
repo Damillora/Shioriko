@@ -50,7 +50,12 @@ func UpdateUser(id string, model models.UserUpdateModel) (*database.User, error)
 	user.Username = model.Username
 
 	if user.Password != "" {
-		passwd, err := bcrypt.GenerateFromPassword([]byte(model.Password), bcrypt.DefaultCost)
+		verifyErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(model.OldPassword))
+		if verifyErr != nil {
+			return nil, verifyErr
+		}
+
+		passwd, err := bcrypt.GenerateFromPassword([]byte(model.NewPassword), bcrypt.DefaultCost)
 		if err != nil {
 			return nil, err
 		}

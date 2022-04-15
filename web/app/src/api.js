@@ -41,6 +41,13 @@ export async function getTags() {
     const response = await axios.get(endpoint);
     return response.data;
 }
+
+export async function getTag({ tag }) {
+    const endpoint = url + "/api/tag/" + tag;
+    const response = await axios.get(endpoint);
+    return response.data;
+}
+
 export async function getTagAutocomplete() {
     const endpoint = url + "/api/tag/autocomplete";
     const response = await axios.get(endpoint);
@@ -123,6 +130,7 @@ export async function postUpdate(id, { source_url, tags }) {
     })
     return response.data;
 }
+
 export async function postDelete({ id }) {
     const endpoint = url + "/api/post/" + id;
     const response = await axios({
@@ -134,4 +142,57 @@ export async function postDelete({ id }) {
         withCredentials: true,
     })
     return response.status == 200;
+}
+
+export async function getUserProfile() {
+    const endpoint = url + "/api/user/profile";
+    const response = await axios({
+        url: endpoint,
+        method: "GET",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+    });
+    console.log(response.data);
+    return response.data;
+}
+
+export async function updateTagNotes(id, { note }) {
+    const endpoint = url + "/api/tag/" + id + "/note";
+    const response = await axios({
+        url: endpoint,
+        method: "PUT",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            note
+        }
+    })
+    return response.data;
+}
+
+export async function updateTag(id, { name, tagTypeId }) {
+    const endpoint = url + "/api/tag/" + id;
+    const response = await axios({
+        url: endpoint,
+        method: "PUT",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            name, tagTypeId
+        }
+    })
+    return response.data;
+}
+
+
+export async function getTagTypes() {
+    const endpoint = url + "/api/tagtype";
+    const response = await axios.get(endpoint);
+    return response.data;
 }

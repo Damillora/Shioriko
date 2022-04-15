@@ -1,9 +1,9 @@
 <script>
     import { onMount } from "svelte";
-    import { getPost, postDelete } from "../api.js";
+    import { getPost, postDelete } from "../../api.js";
     import { navigate } from "svelte-routing";
-    import EditPostPanel from "../EditPostPanel.svelte";
-    import ViewPostPanel from "../ViewPostPanel.svelte";
+    import EditPostPanel from "../../EditPostPanel.svelte";
+    import ViewPostPanel from "../../ViewPostPanel.svelte";
     export let id;
     let post;
     const getData = async () => {

@@ -1,12 +1,10 @@
 <script>
-    import { onMount } from "svelte";
-    import { getPostSearchTag, getTagAutocomplete } from "../api.js";
+    import { getPostSearchTag, getTagAutocomplete } from "../../api.js";
     import { Link, navigate } from "svelte-routing";
-    import TagLinkNumbered from "../TagLinkNumbered.svelte";
+    import TagLinkNumbered from "../../TagLinkNumbered.svelte";
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
-    import { add_attribute } from "svelte/internal";
-    import { paginate } from "../simple-pagination.js";
+    import { paginate } from "../../simple-pagination.js";
 
     export let location;
 
