@@ -1,5 +1,6 @@
 <script>
     import { Link } from "svelte-routing";
+    import AuthCheck from "../../AuthCheck.svelte";
 
     export let tag;
     export let data;
@@ -28,11 +29,12 @@
             {data.postCount} (<Link to="/posts?tags={tag}">Browse</Link>)
         </div>
     </div>
-    <div class="panel-block column">
-        <button
-            on:click|preventDefault={toggleRenameMenu}
-            class="button is-primary">Rename</button
-        >
-
-    </div>
+    <AuthCheck>
+        <div class="panel-block column">
+            <button
+                on:click|preventDefault={toggleRenameMenu}
+                class="button is-primary">Rename</button
+            >
+        </div>
+    </AuthCheck>
 </div>
