@@ -57,11 +57,11 @@ func postGet(c *gin.Context) {
 	}
 
 	var postResult []models.PostListItem
-	var tagStrings []string
+	var tagObjs []database.Tag
 	for _, post := range posts {
 
 		for _, tag := range post.Tags {
-			tagStrings = append(tagStrings, tag.TagType.Name+":"+tag.Name)
+			tagObjs = append(tagObjs, tag)
 		}
 
 		postResult = append(postResult, models.PostListItem{
@@ -70,14 +70,14 @@ func postGet(c *gin.Context) {
 			ImagePath:          "/data/" + post.Blob.FilePath,
 		})
 	}
-	tagObjs := services.GetTagFilterString(tagStrings)
+	tagFilters := services.GetTagFilter(tagObjs)
 
 	c.JSON(http.StatusOK, models.PostPaginationResponse{
 		CurrentPage: page,
 		TotalPage:   totalPage,
 		PostCount:   postPages,
 		Posts:       postResult,
-		Tags:        tagObjs,
+		Tags:        tagFilters,
 	})
 }
 

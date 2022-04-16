@@ -24,7 +24,13 @@
         const data = await getPostSearchTag({ page, q: searchTerms.join("+") });
         if (data.posts) {
             posts = data.posts;
-            tags = data.tags.sort((a, b) => b.postCount - a.postCount);
+            tags = data.tags
+                .filter(
+                    (x) =>
+                        !searchTerms.includes(x.tagName) &&
+                        !searchTerms.includes(x.tagType + ":" + x.tagName)
+                )
+                .sort((a, b) => b.postCount - a.postCount);
             totalPages = data.totalPage;
             postCount = data.postCount;
             pagination = paginate(page, totalPages);
@@ -113,7 +119,7 @@
                     {#if tagInfo}
                         <div class="panel is-info">
                             <p class="panel-heading">
-                                Tag: 
+                                Tag:
                                 {tagInfo.tagName.split("_").join(" ")}
                             </p>
                             {#if tagInfo.tagNote}

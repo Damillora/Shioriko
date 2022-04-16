@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/Damillora/Shioriko/pkg/database"
 	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/google/uuid"
@@ -20,8 +22,34 @@ func GetPostTags(page int, tagSyntax []string) []database.Post {
 	if err != nil {
 		return []database.Post{}
 	}
+
+	var tagIds []string
+	for _, tag := range tags {
+		tagIds = append(tagIds, tag.ID)
+	}
+	fmt.Printf("%v", tagIds)
+
+	var postIds []string
+	database.DB.
+		Model(&tags).
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.post_id").
+		Where("post_tags.tag_id IN ?", tagIds).
+		Group("post_tags.post_id").
+		Having("count(*) = ?", len(tagIds)).
+		Distinct().
+		Find(&postIds)
+
 	var posts []database.Post
-	database.DB.Model(&tags).Distinct().Joins("Blob").Preload("Tags").Preload("Tags.TagType").Order("created_at desc").Offset((page - 1) * perPage).Limit(20).Association("Posts").Find(&posts)
+	database.DB.
+		Joins("Blob").
+		Preload("Tags").
+		Preload("Tags.TagType").
+		Where("posts.id IN ?", postIds).
+		Order("created_at desc").
+		Offset((page - 1) * perPage).
+		Limit(20).
+		Find(&posts)
 	return posts
 }
 
@@ -95,8 +123,23 @@ func CountPostPagesTag(tagSyntax []string) int {
 		return 0
 	}
 
+	var tagIds []string
+	for _, tag := range tags {
+		tagIds = append(tagIds, tag.ID)
+	}
+	fmt.Printf("%v", tagIds)
+
 	var count int64
-	count = database.DB.Model(&tags).Distinct().Joins("Blob").Preload("Tags").Preload("Tags.TagType").Association("Posts").Count()
+	database.DB.
+		Model(&tags).
+		Distinct().
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.post_id").
+		Where("post_tags.tag_id IN ?", tagIds).
+		Group("post_tags.post_id").
+		Having("count(*) = ?", len(tagIds)).
+		Count(&count)
+
 	return int(count)
 }
 

@@ -34,7 +34,7 @@
     <div class="container has-text-centered">
       <form on:submit|preventDefault={onSearch}>
         <div class="field has-addons">
-          <div class="control is-expanded">
+          <div class="control has-text-left is-expanded">
             <div class="control" id="tags">
               <Tags
                 tags={searchTerms}
