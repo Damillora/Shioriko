@@ -1,7 +1,8 @@
 <script>
-    import { getPostSearchTag, getTagAutocomplete } from "../../api.js";
+    import { getPostSearchTag, getTag, getTagAutocomplete } from "../../api.js";
     import { Link, navigate } from "svelte-routing";
     import TagLinkNumbered from "../../TagLinkNumbered.svelte";
+    import PostGallery from "../../components/Post/PostGallery.svelte";
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
     import { paginate } from "../../simple-pagination.js";
@@ -16,6 +17,7 @@
     let posts = [];
     let postCount = 0;
     let tags = [];
+    let tagInfo = null;
     let categorizedTags = {};
 
     const getData = async () => {
@@ -32,6 +34,10 @@
             totalPages = 0;
             postCount = 0;
             pagination = paginate(page, totalPages);
+        }
+
+        if (searchTerms.length == 1) {
+            tagInfo = await getTag({ tag: searchTerms[0] });
         }
     };
     let queryParams;
@@ -51,6 +57,7 @@
             searchTerms = queryParams.tags.split(" ");
         } else {
             searchTerms = [];
+            tagInfo = null;
         }
         posts = [];
         page = 1;
@@ -103,6 +110,27 @@
                     </div>
                 </div>
                 <div class="column is-one-third">
+                    {#if tagInfo}
+                        <div class="panel is-info">
+                            <p class="panel-heading">
+                                Tag: 
+                                {tagInfo.tagName.split("_").join(" ")}
+                            </p>
+                            {#if tagInfo.tagNote}
+                                <div class="panel-block column ">
+                                    <div class="content pre-line">
+                                        {tagInfo.tagNote}
+                                    </div>
+                                </div>
+                            {/if}
+                            <div class="panel-block column">
+                                <Link
+                                    class="button is-primary"
+                                    to="/tags/{tagInfo.tagName}">View Tag</Link
+                                >
+                            </div>
+                        </div>
+                    {/if}
                     <div class="panel is-primary">
                         <div class="panel-heading">Tags</div>
                         <div class="panel-block column">
@@ -127,28 +155,7 @@
                 <div class="column is-two-thirds">
                     <div class="columns is-multiline">
                         <div class="column is-full">
-                            <div class="columns is-multiline">
-                                {#each posts as post, i (post.id)}
-                                    <div class="column is-one-quarter">
-                                        <div class="block">
-                                            <div class="card">
-                                                <div class="card-image">
-                                                    <figure class="image">
-                                                        <Link
-                                                            to="/post/{post.id}"
-                                                        >
-                                                            <img
-                                                                alt={post.id}
-                                                                src={post.thumbnail_path}
-                                                            />
-                                                        </Link>
-                                                    </figure>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {/each}
-                            </div>
+                            <PostGallery {posts} />
                         </div>
 
                         <div class="column is-full">

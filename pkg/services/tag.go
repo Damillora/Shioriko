@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/Damillora/Shioriko/pkg/database"
@@ -224,4 +225,42 @@ func UpdateTag(tagString string, model models.TagUpdateModel) error {
 	}
 
 	return nil
+}
+
+func GetRelatedTags(tagSyntax string) ([]models.TagListItem, error) {
+	tags, err := FindTag(tagSyntax)
+
+	if err != nil {
+		return nil, err
+	}
+	var postIds []string
+	database.DB.
+		Model(&tags).
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.post_id").
+		Where("post_tags.tag_id = ?", tags.ID).
+		Find(&postIds)
+
+	var tagIds []string
+	database.DB.
+		Model(&tags).
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.tag_id").
+		Where("post_tags.post_id IN ?", postIds).
+		Find(&tagIds)
+	fmt.Printf("%+v", tags)
+	fmt.Println()
+	fmt.Printf("%v", tagIds)
+	fmt.Println()
+
+	var tagInfo []models.TagListItem
+	database.DB.Model(&tags).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Joins("left join post_tags on post_tags.tag_id = tags.id").
+		Select("tags.id as tag_id, tags.name as tag_name, tag_types.name as tag_type, count(post_tags.post_id) as post_count").
+		Group("tags.id, tags.name, tag_types.name").
+		Order("post_count DESC").
+		Find(&tagInfo, tagIds)
+
+	return tagInfo, nil
 }

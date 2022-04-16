@@ -19,6 +19,10 @@ func InitializeTagRoutes(g *gin.Engine) {
 		unprotected.GET("/", tagGet)
 		unprotected.GET("/:tag", tagGetOne)
 	}
+	related := g.Group("/api/tag-related")
+	{
+		related.GET("/:tag", tagGetRelated)
+	}
 	protected := g.Group("/api/tag").Use(middleware.AuthMiddleware())
 	{
 		protected.PUT("/:tag/note", tagUpdateNote)
@@ -49,6 +53,20 @@ func tagGetOne(c *gin.Context) {
 		TagNote:   tagObj.TagNote,
 		PostCount: tagObj.PostCount,
 	})
+}
+
+func tagGetRelated(c *gin.Context) {
+	tag := c.Param("tag")
+	tagObj, err := services.GetRelatedTags(tag)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		c.Abort()
+	}
+
+	c.JSON(http.StatusOK, tagObj)
 }
 
 func tagAutocomplete(c *gin.Context) {

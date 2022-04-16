@@ -48,6 +48,11 @@ export async function getTag({ tag }) {
     return response.data;
 }
 
+export async function getRelatedTags({ tag }) {
+    const endpoint = url + "/api/tag-related/" + tag;
+    const response = await axios.get(endpoint);
+    return response.data;
+}
 export async function getTagAutocomplete() {
     const endpoint = url + "/api/tag-autocomplete";
     const response = await axios.get(endpoint);
