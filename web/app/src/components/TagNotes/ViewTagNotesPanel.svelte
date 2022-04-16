@@ -21,9 +21,3 @@
         </div>
     </AuthCheck>
 </div>
-
-<style>
-    .pre-line {
-        white-space: pre-line;
-    }
-</style>

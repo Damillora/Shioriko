@@ -9,10 +9,10 @@
     searchTerms = value.detail.tags;
   };
 
-  const onAutocomplete = async () => {
-    const list = await getTagAutocomplete();
-    return list;
-  };
+  const onAutocomplete = async (tag) => {
+        const list = await getTagAutocomplete({ tag });
+        return list;
+    };
 
   const onSearch = (i) => {
     if (searchTerms.length > 0) {
@@ -41,6 +41,7 @@
                 addKeys={[9, 32]}
                 on:tags={onTagChange}
                 autoComplete={onAutocomplete}
+                autoCompleteFilter={false}
               />
             </div>
           </div>

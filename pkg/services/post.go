@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/Damillora/Shioriko/pkg/database"
 	"github.com/Damillora/Shioriko/pkg/models"
@@ -17,36 +18,74 @@ func GetPostAll(page int) []database.Post {
 }
 
 func GetPostTags(page int, tagSyntax []string) []database.Post {
-	tags, err := ParseReadTags(tagSyntax)
+	positiveTagSyntax := []string{}
+	negativeTagSyntax := []string{}
 
+	for _, tag := range tagSyntax {
+		if strings.HasPrefix(tag, "-") {
+			negativeTagSyntax = append(negativeTagSyntax, strings.TrimPrefix(tag, "-"))
+		} else {
+			positiveTagSyntax = append(positiveTagSyntax, tag)
+
+		}
+	}
+	positiveTags, err := ParseReadTags(positiveTagSyntax)
+	if err != nil {
+		return []database.Post{}
+	}
+	negativeTags, err := ParseReadTags(negativeTagSyntax)
 	if err != nil {
 		return []database.Post{}
 	}
 
-	var tagIds []string
-	for _, tag := range tags {
-		tagIds = append(tagIds, tag.ID)
+	var positiveTagIds []string
+	for _, tag := range positiveTags {
+		positiveTagIds = append(positiveTagIds, tag.ID)
 	}
-	fmt.Printf("%v", tagIds)
 
-	var postIds []string
+	var negativeTagIds []string
+	for _, tag := range negativeTags {
+		negativeTagIds = append(negativeTagIds, tag.ID)
+	}
+
+	var positivePostIds []string
 	database.DB.
-		Model(&tags).
+		Model(&positiveTags).
 		Joins("join post_tags on post_tags.tag_id = tags.id").
 		Select("post_tags.post_id").
-		Where("post_tags.tag_id IN ?", tagIds).
+		Where("post_tags.tag_id IN ?", positiveTagIds).
 		Group("post_tags.post_id").
-		Having("count(*) = ?", len(tagIds)).
+		Having("count(*) = ?", len(positiveTagIds)).
 		Distinct().
-		Find(&postIds)
+		Find(&positivePostIds)
+	var negativePostIds []string
+	database.DB.
+		Model(&positiveTags).
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.post_id").
+		Where("post_tags.tag_id IN ?", negativeTagIds).
+		Group("post_tags.post_id").
+		Having("count(*) = ?", len(negativeTagIds)).
+		Distinct().
+		Find(&negativePostIds)
 
 	var posts []database.Post
-	database.DB.
+	query := database.DB.
 		Joins("Blob").
 		Preload("Tags").
-		Preload("Tags.TagType").
-		Where("posts.id IN ?", postIds).
-		Order("created_at desc").
+		Preload("Tags.TagType")
+
+	if len(positivePostIds) > 0 && len(negativePostIds) > 0 {
+		query = query.
+			Where("posts.id IN ? AND posts.id NOT IN ?", positivePostIds, negativePostIds)
+	} else if len(positivePostIds) > 0 {
+		query = query.
+			Where("posts.id IN ?", positivePostIds)
+	} else if len(negativePostIds) > 0 {
+		query = query.
+			Where("posts.id NOT IN ?", negativePostIds)
+	}
+	query.Order("created_at desc").
 		Offset((page - 1) * perPage).
 		Limit(20).
 		Find(&posts)
@@ -118,28 +157,73 @@ func CountPostPages() int {
 	return int(count)
 }
 func CountPostPagesTag(tagSyntax []string) int {
-	tags, err := ParseReadTags(tagSyntax)
+	positiveTagSyntax := []string{}
+	negativeTagSyntax := []string{}
+
+	for _, tag := range tagSyntax {
+		if strings.HasPrefix(tag, "-") {
+			negativeTagSyntax = append(negativeTagSyntax, strings.TrimPrefix(tag, "-"))
+		} else {
+			positiveTagSyntax = append(positiveTagSyntax, tag)
+
+		}
+	}
+	positiveTags, err := ParseReadTags(positiveTagSyntax)
+	if err != nil {
+		return 0
+	}
+	negativeTags, err := ParseReadTags(negativeTagSyntax)
 	if err != nil {
 		return 0
 	}
 
-	var tagIds []string
-	for _, tag := range tags {
-		tagIds = append(tagIds, tag.ID)
+	var positiveTagIds []string
+	for _, tag := range positiveTags {
+		positiveTagIds = append(positiveTagIds, tag.ID)
 	}
-	fmt.Printf("%v", tagIds)
 
-	var count int64
+	var negativeTagIds []string
+	for _, tag := range negativeTags {
+		negativeTagIds = append(negativeTagIds, tag.ID)
+	}
+
+	var positivePostIds []string
 	database.DB.
-		Model(&tags).
-		Distinct().
+		Model(&positiveTags).
 		Joins("join post_tags on post_tags.tag_id = tags.id").
 		Select("post_tags.post_id").
-		Where("post_tags.tag_id IN ?", tagIds).
+		Where("post_tags.tag_id IN ?", positiveTagIds).
 		Group("post_tags.post_id").
-		Having("count(*) = ?", len(tagIds)).
-		Count(&count)
+		Having("count(*) = ?", len(positiveTagIds)).
+		Distinct().
+		Find(&positivePostIds)
+	var negativePostIds []string
+	database.DB.
+		Model(&positiveTags).
+		Joins("join post_tags on post_tags.tag_id = tags.id").
+		Select("post_tags.post_id").
+		Where("post_tags.tag_id IN ?", negativeTagIds).
+		Group("post_tags.post_id").
+		Having("count(*) = ?", len(negativeTagIds)).
+		Distinct().
+		Find(&negativePostIds)
 
+	var count int64
+	query := database.DB.
+		Model(&database.Post{})
+	if len(positivePostIds) > 0 && len(negativePostIds) > 0 {
+		query = query.
+			Where("posts.id IN ? AND posts.id NOT IN ?", positivePostIds, negativePostIds)
+	} else if len(positivePostIds) > 0 {
+		query = query.
+			Where("posts.id IN ?", positivePostIds)
+	} else if len(negativePostIds) > 0 {
+		query = query.
+			Where("posts.id NOT IN ?", negativePostIds)
+	}
+	query.
+		Count(&count)
+	fmt.Println(count)
 	return int(count)
 }
 

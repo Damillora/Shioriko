@@ -42,7 +42,7 @@
             pagination = paginate(page, totalPages);
         }
 
-        if (searchTerms.length == 1) {
+        if (searchTerms.filter(x => !x.startsWith("-")).length == 1) {
             tagInfo = await getTag({ tag: searchTerms[0] });
         }
     };
@@ -52,8 +52,8 @@
         searchTerms = value.detail.tags;
     };
 
-    const onAutocomplete = async () => {
-        const list = await getTagAutocomplete();
+    const onAutocomplete = async (tag) => {
+        const list = await getTagAutocomplete({ tag });
         return list;
     };
 
@@ -100,6 +100,7 @@
                                             addKeys={[9, 32]}
                                             on:tags={onTagChange}
                                             autoComplete={onAutocomplete}
+                                            autoCompleteFilter={false}
                                         />
                                     </div>
                                 </div>
@@ -167,7 +168,6 @@
                         <div class="column is-full">
                             <nav
                                 class="pagination is-centered"
-                                role="navigation"
                                 aria-label="pagination"
                             >
                                 <a

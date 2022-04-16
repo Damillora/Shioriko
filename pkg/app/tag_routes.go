@@ -70,7 +70,10 @@ func tagGetRelated(c *gin.Context) {
 }
 
 func tagAutocomplete(c *gin.Context) {
-	tags := services.GetTagAutocomplete()
+	tagParam := c.Query("tag")
+	positiveParam := c.Query("positive")
+
+	tags := services.GetTagAutocomplete(tagParam, positiveParam != "")
 	c.JSON(http.StatusOK, tags)
 }
 

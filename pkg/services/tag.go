@@ -61,12 +61,56 @@ func GetTag(tagString string) (*models.TagReadModel, error) {
 	return &tagModel, nil
 }
 
-func GetTagAutocomplete() []string {
+func GetTagAutocomplete(searchValue string, forcePositive bool) []string {
+	if forcePositive {
+		return getPositiveTagAutocomplete(strings.TrimPrefix(searchValue, "-"))
+	}
+	if strings.HasPrefix(searchValue, "-") {
+		return getNegativeTagAutocomplete(strings.TrimPrefix(searchValue, "-"))
+	} else {
+		return getPositiveTagAutocomplete(searchValue)
+	}
+}
+
+func getPositiveTagAutocomplete(searchValue string) []string {
 	var tags []string
-	result := database.DB.Model(&database.Tag{}).
+	query := database.DB.Model(&database.Tag{}).
 		Joins("join tag_types on tag_types.id = tags.tag_type_id").
-		Select("concat(tag_types.name,':',tags.name) as name").
-		Find(&tags)
+		Select("concat(tag_types.name,':',tags.name) as name")
+
+	tagFields := strings.Split(searchValue, ":")
+	if len(tagFields) == 2 {
+		query = query.
+			Where("tags.name LIKE ?", "%"+tagFields[1]+"%").
+			Where("tag_types.name = ?", tagFields[0])
+	} else if len(tagFields) == 1 {
+		query = query.
+			Where("tags.name LIKE ?", "%"+tagFields[0]+"%")
+	}
+
+	result := query.Find(&tags)
+	if result.Error != nil {
+		return []string{}
+	}
+	return tags
+}
+func getNegativeTagAutocomplete(searchValue string) []string {
+	var tags []string
+	query := database.DB.Model(&database.Tag{}).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Select("concat('-',tag_types.name,':',tags.name) as name")
+
+	tagFields := strings.Split(searchValue, ":")
+	if len(tagFields) == 2 {
+		query = query.
+			Where("tags.name LIKE ?", "%"+tagFields[1]+"%").
+			Where("tag_types.name = ?", tagFields[0])
+	} else if len(tagFields) == 1 {
+		query = query.
+			Where("tags.name LIKE ?", "%"+tagFields[0]+"%")
+	}
+
+	result := query.Find(&tags)
 	if result.Error != nil {
 		return []string{}
 	}

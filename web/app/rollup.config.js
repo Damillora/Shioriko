@@ -1,3 +1,4 @@
+import json from '@rollup/plugin-json';
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
@@ -40,6 +41,7 @@ export default {
         entryFileNames: 'bundle.js'
 	},
 	plugins: [
+        json(),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production

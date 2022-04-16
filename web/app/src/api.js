@@ -53,8 +53,11 @@ export async function getRelatedTags({ tag }) {
     const response = await axios.get(endpoint);
     return response.data;
 }
-export async function getTagAutocomplete() {
-    const endpoint = url + "/api/tag-autocomplete";
+export async function getTagAutocomplete({ tag, positive }) {
+    let endpoint = url + "/api/tag-autocomplete?tag=" + tag;
+    if (positive) {
+        endpoint = endpoint + "&positive=true";
+    }
     const response = await axios.get(endpoint);
     return response.data;
 }

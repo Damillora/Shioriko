@@ -38,8 +38,8 @@
         form.tags = value.detail.tags;
     };
 
-    const onAutocomplete = async () => {
-        const list = await getTagAutocomplete();
+    const onAutocomplete = async (tag) => {
+        const list = await getTagAutocomplete({ tag, positive: true });
         return list;
     };
 
@@ -107,7 +107,7 @@
             <div class="field">
                 <label for="tags" class="label">Tags</label>
                 <div class="control" id="tags">
-                    <Tags addKeys={[9, 32]} on:tags={onTagChange} autoComplete={onAutocomplete} />
+                    <Tags addKeys={[9, 32]} on:tags={onTagChange} autoComplete={onAutocomplete} autoCompleteFilter={false}/>
                 </div>
             </div>
             <div class="control">
