@@ -12,7 +12,7 @@ FROM node:14-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/web/app
-RUN yarn install && yarn build
+RUN pnpm install && pnpm build
 
 FROM alpine AS runtime
 
