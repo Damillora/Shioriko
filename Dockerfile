@@ -12,7 +12,7 @@ FROM node:18-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/web/app
-RUN pnpm install && pnpm build
+RUN npm install -g pnpm && pnpm install && pnpm build
 
 FROM alpine AS runtime
 
