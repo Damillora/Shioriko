@@ -8,7 +8,7 @@ RUN go get -d -v ./...
 RUN go build -o /shioriko
 RUN mkdir -p /web && cp -r web/static /web
 
-FROM node:14-alpine AS node_build
+FROM node:18-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/web/app
