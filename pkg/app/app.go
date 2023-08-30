@@ -52,7 +52,7 @@ func Start() {
 	g.StaticFile("/", "./web/static/index.html")
 	g.Static("/_app", "./web/static/_app")
 	g.Static("/data", config.CurrentConfig.DataDirectory)
-
+	
 	g.Use(cors.Default())
 
 	InitializeRoutes(g)

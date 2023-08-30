@@ -1,8 +1,6 @@
 package app
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,5 +9,5 @@ func InitializeFrontendRoutes(g *gin.Engine) {
 }
 
 func frontendHome(c *gin.Context) {    
-	c.Redirect(http.StatusFound, "/")
+	c.File("./web/static/index.html")
 }
