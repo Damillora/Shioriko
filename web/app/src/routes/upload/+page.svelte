@@ -108,6 +108,7 @@
                 <label for="tags" class="label">Tags</label>
                 <div class="control" id="tags">
                     <Tags
+                        tags={form.tags}
                         addKeys={[9, 32]}
                         on:tags={onTagChange}
                         autoComplete={onAutocomplete}
