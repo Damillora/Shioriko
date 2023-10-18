@@ -5,10 +5,10 @@
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
     import { paginate } from "$lib/simple-pagination";
-    import { goto } from "$app/navigation";
+    import { beforeNavigate, goto } from "$app/navigation";
     import { page as currentPage } from '$app/stores';
 
-    const url = $currentPage.url;
+    $: url = $currentPage.url;
 
     let searchTerms = [];
 
