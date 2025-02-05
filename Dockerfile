@@ -8,11 +8,11 @@ RUN go get -d -v ./...
 RUN go build -o /shioriko
 RUN mkdir -p /web && cp -r web/static /web
 
-FROM node:18-alpine AS node_build
+FROM node:20-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/web/app
-RUN npm install -g pnpm && pnpm install && pnpm build
+RUN npm install && npm run build
 
 FROM alpine AS runtime
 
