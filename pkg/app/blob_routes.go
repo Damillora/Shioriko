@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	_ "golang.org/x/image/webp"
+	"golang.org/x/image/draw"
 
 	"github.com/Damillora/Shioriko/pkg/config"
 	"github.com/Damillora/Shioriko/pkg/database"
@@ -19,7 +20,6 @@ import (
 	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/Damillora/Shioriko/pkg/services"
 	"github.com/corona10/goimagehash"
-	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -128,24 +128,26 @@ func uploadBlob(c *gin.Context) {
 		})
 		return
 	}
-
-	previewImage := imaging.Resize(originalImage, 1000, 0, imaging.Lanczos)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
-		return
+   
+	// Resize logic
+	previewWidth := 1000;
+    previewFactor := float32(previewWidth) / float32(width)
+	previewHeight := int(float32(height) * previewFactor)
+	if width <= previewWidth {
+	  previewHeight = height
+	}
+	thumbnailWidth := 300;
+    thumbnailFactor := float32(thumbnailWidth) / float32(width)
+	thumbnailHeight := int(float32(height) * thumbnailFactor)
+	if width <= thumbnailWidth {
+	  thumbnailHeight = height
 	}
 
-	thumbnailImage := imaging.Resize(originalImage, 300, 0, imaging.Lanczos)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
-		return
-	}
+	previewImage := image.NewRGBA(image.Rect(0, 0, previewWidth, previewHeight))
+	draw.BiLinear.Scale(previewImage, previewImage.Rect, originalImage, originalImage.Bounds(), draw.Over, nil)
+
+	thumbnailImage := image.NewRGBA(image.Rect(0, 0, thumbnailWidth, thumbnailHeight))
+	draw.BiLinear.Scale(thumbnailImage, thumbnailImage.Rect, originalImage, originalImage.Bounds(), draw.Over, nil)
 
 	previewFile, err := os.Create(previewFilePath)
 	if err != nil {
