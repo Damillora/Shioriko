@@ -107,6 +107,28 @@ func uploadBlob(c *gin.Context) {
 	hashSlice := make([]byte, 8)
 	binary.LittleEndian.PutUint64(hashSlice, hashInt)
 
+	if len(similarPosts) > 0 {
+		c.JSON(http.StatusOK,
+			models.BlobSimilarResponse{
+				ID:      id,
+				Width:   width,
+				Height:  height,
+				Similar: similarPosts,
+			})
+		return
+	} 
+
+	filename := id + filepath.Ext(file.Filename)
+	filePath := filepath.Join(dataDir, folder1, folder2, filename)
+	err = c.SaveUploadedFile(file, filePath)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	previewImage := imaging.Resize(originalImage, 1000, 0, imaging.Lanczos)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -158,17 +180,6 @@ func uploadBlob(c *gin.Context) {
 		return
 	}
 
-	filename := id + filepath.Ext(file.Filename)
-	filePath := filepath.Join(dataDir, folder1, folder2, filename)
-	err = c.SaveUploadedFile(file, filePath)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
-		return
-	}
-
 	blob := database.Blob{
 		ID:                id,
 		FilePath:          filepath.Join(folder1, folder2, filename),
@@ -184,21 +195,10 @@ func uploadBlob(c *gin.Context) {
 
 	database.DB.Create(&blob)
 
-	if len(similarPosts) > 0 {
-		c.JSON(http.StatusOK,
-			models.BlobSimilarResponse{
-				ID:      id,
-				Width:   width,
-				Height:  height,
-				Similar: similarPosts,
-			})
-		return
-	} else {
-		c.JSON(http.StatusOK, models.BlobResponse{
-			ID:     id,
-			Width:  width,
-			Height: height,
-		})
-		return
-	}
+	c.JSON(http.StatusOK, models.BlobResponse{
+		ID:     id,
+		Width:  width,
+		Height: height,
+	})
+	return
 }
