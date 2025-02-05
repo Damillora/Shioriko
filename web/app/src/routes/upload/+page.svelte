@@ -4,16 +4,16 @@
     import Tags from "svelte-tags-input";
     import AuthRequired from "$lib/components/AuthRequired.svelte";
 
-    let currentProgress = 0;
+    let currentProgress = $state(0);
 
-    let fileName = "";
-    let similar = [];
+    let fileName = $state("");
+    let similar = $state([]);
 
-    let form = {
+    let form = $state({
         blob_id: "",
         source_url: "",
         tags: [],
-    };
+    });
 
     const onProgress = (e) => {
         var percentCompleted = Math.round((e.loaded * 100) / e.total);
@@ -43,7 +43,8 @@
         return list;
     };
 
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault();
         const response = await postCreate(form);
         goto(`/post/${response.id}`);
     };
@@ -54,7 +55,7 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Upload Image</h1>
-        <form on:submit|preventDefault={onSubmit}>
+        <form onsubmit={onSubmit}>
             <div class="field">
                 <label for="file" class="label">Image File</label>
                 <div class="control">
@@ -65,10 +66,10 @@
                                 class="file-input"
                                 type="file"
                                 name="resume"
-                                on:change={onFileChange}
+                                onchange={onFileChange}
                             />
                             <span class="file-cta">
-                                <span class="file-icon" />
+                                <span class="file-icon"></span>
                                 <span class="file-label"> Choose a file… </span>
                             </span>
                         </label>

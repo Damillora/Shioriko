@@ -4,7 +4,7 @@
 
 	import { goto } from '$app/navigation';
 
-  let searchTerms: string[] = [];
+  let searchTerms: string[] = $state([]);
 
   const onTagChange = (value) => {
     searchTerms = value.detail.tags;
@@ -15,7 +15,8 @@
         return list;
     };
 
-  const onSearch = (i) => {
+  const onSearch = (e) => {
+    e.preventDefault();
     if (searchTerms.length > 0) {
       goto(`/posts?tags=${searchTerms.join("+")}`);
     } else {
@@ -33,7 +34,7 @@
   </div>
   <div class="hero-foot">
     <div class="container has-text-centered">
-      <form on:submit|preventDefault={onSearch}>
+      <form onsubmit={onSearch}>
         <div class="field has-addons">
           <div class="control has-text-left is-expanded">
             <div class="control" id="tags">

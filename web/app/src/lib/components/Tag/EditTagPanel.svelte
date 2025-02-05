@@ -1,18 +1,20 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
 
     import { getTagTypes, updateTag } from "$lib/api";
 
-    export let tag;
-    export let data;
-    export let toggleRenameMenu;
-    export let onSubmit;
+    let {
+        tag,
+        data,
+        toggleRenameMenu,
+        onSubmit
+    } = $props();
 
-    let tagTypes = [];
-    let form = {
+    let tagTypes = $state([]);
+    let form = $state({
         name: "",
         tagTypeId: 1,
-    };
+    });
 
     const getData = async () => {
         tagTypes = await getTagTypes();
@@ -21,12 +23,12 @@
         form.tagTypeId = tagType[0].id;
     };
 
-    const onFormSubmit = async () => {
+    const onFormSubmit = async (e) => {
+        e.preventDefault();
         await updateTag(tag, form);
 
         goto("/tags/" + form.name);
 
-        toggleRenameMenu();
         onSubmit(form.name);
     };
 
@@ -35,7 +37,7 @@
     });
 </script>
 
-<form on:submit|preventDefault={onFormSubmit}>
+<form onsubmit={onFormSubmit}>
     <div class="panel is-warning">
         <p class="panel-heading">Edit Tag</p>
         <div class="panel-block column">
@@ -85,7 +87,7 @@
         </div>
         <div class="panel-block column">
             <button class="button is-primary" type="submit">Submit</button>
-            <button on:click|preventDefault={toggleRenameMenu} class="button"
+            <button onclick={toggleRenameMenu} class="button"
                 >Cancel</button
             >
         </div>

@@ -2,11 +2,12 @@
     import { login } from "$lib/api";
     import { goto } from "$app/navigation";
 
-    let username = "";
-    let password = "";
-    let error = "";
+    let username = $state("");
+    let password = $state("");
+    let error = $state("");
 
-    const doLogin = async () => {
+    const doLogin = async (e) => {
+        e.preventDefault();
         error = "";
         try {
             const tokenData = await login({ username, password });
@@ -26,7 +27,7 @@
 
 <section class="section">
     <div class="container">
-        <form on:submit|preventDefault={doLogin}>
+        <form onsubmit={doLogin}>
             <div class="field">
                 <label for="username" class="label">Username</label>
                 <div class="control">

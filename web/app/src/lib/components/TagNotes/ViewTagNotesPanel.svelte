@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
     import AuthCheck from "$lib/components/AuthCheck.svelte";
 
-    export let data;
-    export let toggleEditMenu;
+    let { data, toggleEditMenu } = $props();
 </script>
 
 <div class="panel is-info">
@@ -15,7 +14,7 @@
     <AuthCheck>
         <div class="panel-block column">
             <button
-                on:click|preventDefault={toggleEditMenu}
+                onclick={toggleEditMenu}
                 class="button is-primary">Edit</button
             >
         </div>

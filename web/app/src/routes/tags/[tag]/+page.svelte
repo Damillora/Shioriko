@@ -10,10 +10,10 @@
 
 
     import { page } from "$app/stores";
-    let { tag } = $page.params;
+    let { tag } = $state($page.params);
 
-    let data;
-    let posts = [];
+    let data = $state();
+    let posts = $state([]);
 
     const getData = async () => {
         if (tag) {
@@ -28,12 +28,13 @@
         }
     };
 
-    let renameMenuShown = false;
-    const toggleRenameMenu = () => {
+    let renameMenuShown = $state(false);
+    const toggleRenameMenu = (e) => {
+        e.preventDefault();
         renameMenuShown = !renameMenuShown;
     };
 
-    let editMenuShown = false;
+    let editMenuShown = $state(false);
     const toggleEditMenu = () => {
         editMenuShown = !editMenuShown;
     };

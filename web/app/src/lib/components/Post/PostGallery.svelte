@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
 
-    export let posts = [];
+    let { posts = [] } = $props();
 </script>
 
 <div class="columns is-multiline">

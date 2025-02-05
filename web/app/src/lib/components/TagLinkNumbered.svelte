@@ -1,6 +1,5 @@
-<script>
-    export let tag;
-    export let num;
+<script lang="ts">
+    let { tag, num } = $props();
 
     let tagType = tag.split(":")[0] ?? "";
     let tagName = tag.split(":")[1] ?? "";

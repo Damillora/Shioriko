@@ -1,15 +1,17 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { getTags } from "$lib/api";
 
-    let tags = [];
+    let tags = $state([]);
 
     const getData = async () => {
         const data = await getTags();
         tags = data;
     };
-    $: {
+    run(() => {
         getData();
-    }
+    });
 </script>
 
 

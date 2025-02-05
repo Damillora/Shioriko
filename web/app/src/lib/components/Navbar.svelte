@@ -2,9 +2,9 @@
     import { token } from "$lib/stores";
     import { isTokenExpired } from "$lib/login-check";
 
-    let menu_shown = false;
+    let menu_shown = $state(false);
     
-    let loggedIn = false;
+    let loggedIn = $state(false);
     token.subscribe((value) => {
         loggedIn = !isTokenExpired(value);
     });
@@ -20,15 +20,15 @@
 
         <a
             href={"#"}
-            on:click={toggleMenu}
+            onclick={toggleMenu}
             role="button"
             class="navbar-burger"
             aria-label="menu"
             aria-expanded="false"
         >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </a>
     </div>
 

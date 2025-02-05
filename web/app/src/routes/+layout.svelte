@@ -1,6 +1,11 @@
-<script>
+<script lang="ts">
     import "../app.scss";
     import Navbar from "$lib/components/Navbar.svelte";
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
 
     export const ssr = false;
 </script>
@@ -11,4 +16,4 @@
 
 <Navbar />
 
-<slot />
+{@render children?.()}

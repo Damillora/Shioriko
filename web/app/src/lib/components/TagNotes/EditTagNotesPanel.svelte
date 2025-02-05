@@ -1,21 +1,24 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import { updateTagNotes } from "$lib/api";
 
-    export let tag;
-    export let data;
-    export let toggleEditMenu;
-    export let onSubmit;
+    let {
+        tag,
+        data,
+        toggleEditMenu,
+        onSubmit
+    } = $props();
 
-    let form = {
+    let form = $state({
         note: "",
-    };
+    });
 
     const getData = async () => {
         form.note = data.tagNote;
     };
 
-    const onFormSubmit = async () => {
+    const onFormSubmit = async (e) => {
+        e.preventDefault();
         await updateTagNotes(tag, form);
         toggleEditMenu();
 
@@ -27,19 +30,19 @@
     });
 </script>
 
-<form on:submit|preventDefault={onFormSubmit}>
+<form onsubmit={onFormSubmit}>
     <div class="panel is-warning">
         <p class="panel-heading">Edit Notes</p>
         <div class="panel-block column">
             <textarea
                 bind:value={form.note}
                 class="textarea has-fixed-size"
-            />
-            <div class="content" />
+></textarea>
+            <div class="content"></div>
         </div>
         <div class="panel-block column">
             <button type="submit" class="button is-primary">Save</button>
-            <button on:click|preventDefault={toggleEditMenu} class="button"
+            <button onclick={toggleEditMenu} class="button"
                 >Cancel</button
             >
         </div>

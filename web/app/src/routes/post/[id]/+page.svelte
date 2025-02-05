@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { getPost, postDelete } from "$lib/api";
     import { goto } from "$app/navigation";
@@ -8,7 +10,7 @@
     import { page } from "$app/stores";
     const { id } = $page.params;
 
-    let post: any;
+    let post: any = $state();
     const getData = async () => {
         const data = await getPost({ id });
         post = data;
@@ -25,31 +27,34 @@
         getData();
     });
 
-    let deleteMenuShown = false;
+    let deleteMenuShown = $state(false);
 
-    const deletePost = async () => {
+    const deletePost = async (e) => {
+        e.preventDefault();
         toggleDeleteMenu();
         const success = await postDelete({ id });
         if (success) {
             goto("/posts");
         }
     };
-    const toggleDeleteMenu = () => {
+    const toggleDeleteMenu = (e) => {
+        e.preventDefault();
         deleteMenuShown = !deleteMenuShown;
     };
 
-    let editMenuShown = false;
+    let editMenuShown = $state(false);
 
-    const toggleEditMenu = () => {
+    const toggleEditMenu = (e) => {
+        e.preventDefault();
         editMenuShown = !editMenuShown;
     };
 
-    let imagePercentage = "0%";
+    let imagePercentage = $state("0%");
 
-    $: {
+    run(() => {
         if (post)
             imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
-    }
+    });
 </script>
 
 {#if post}
@@ -77,12 +82,12 @@
                             </div>
                             <div class="panel-block column">
                                 <button
-                                    on:click|preventDefault={deletePost}
+                                    onclick={deletePost}
                                     class="button is-danger">Delete</button
                                 >
                                 <button
                                     class="button"
-                                    on:click|preventDefault={toggleDeleteMenu}
+                                    onclick={toggleDeleteMenu}
                                     >Cancel</button
                                 >
                             </div>

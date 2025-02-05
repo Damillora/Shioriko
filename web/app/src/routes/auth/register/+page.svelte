@@ -2,12 +2,13 @@
     import { register } from "$lib/api";
     import { goto } from "$app/navigation";
 
-    let username = "";
-    let password = "";
-    let email = "";
+    let username = $state("");
+    let password = $state("");
+    let email = $state("");
     let error = "";
 
-    const doRegister = async () => {
+    const doRegister = async (e) => {
+        e.preventDefault();
         try {
             const tokenData = await register({ email, username, password });
             goto("/");
@@ -24,7 +25,7 @@
 </section>
 
 <div class="container">
-    <form on:submit|preventDefault={doRegister}>
+    <form onsubmit={doRegister}>
         <div class="field">
             <label for="email" class="label">Email</label>
             <div class="control">

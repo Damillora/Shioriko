@@ -1,14 +1,12 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
 
     import { getRelatedTags } from "$lib/api";
     import AuthCheck from "$lib/components/AuthCheck.svelte";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
 
-    export let tag;
-    export let data;
-    export let toggleRenameMenu;
-    let related_tags = [];
+    let { tag, data, toggleRenameMenu } = $props();
+    let related_tags = $state([]);
     const getData = async () => {
         related_tags = await getRelatedTags({ tag });
         related_tags = related_tags
@@ -65,7 +63,7 @@
     <AuthCheck>
         <div class="panel-block column">
             <button
-                on:click|preventDefault={toggleRenameMenu}
+                onclick={toggleRenameMenu}
                 class="button is-primary">Rename</button
             >
         </div>

@@ -1,9 +1,7 @@
-<script>
+<script lang="ts">
     import AuthCheck from "./AuthCheck.svelte";
     import TagLinkNumbered from "./TagLinkNumbered.svelte";
-    export let post;
-    export let toggleEditMenu;
-    export let toggleDeleteMenu;
+    let { post, toggleEditMenu, toggleDeleteMenu } = $props();
 
     const trimUrl = (str) => {
         if (str.length > 30) {
@@ -70,11 +68,11 @@
     <AuthCheck>
         <p class="panel-block column">
             <button
-                on:click|preventDefault={toggleEditMenu}
+                onclick={toggleEditMenu}
                 class="button is-primary">Edit</button
             >
             <button
-                on:click|preventDefault={toggleDeleteMenu}
+                onclick={toggleDeleteMenu}
                 class="button is-danger">Delete</button
             >
         </p>

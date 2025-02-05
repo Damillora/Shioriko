@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { run } from 'svelte/legacy';
+
     import { getPostSearchTag, getTag, getTagAutocomplete } from "$lib/api";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
     import PostGallery from "$lib/components/Post/PostGallery.svelte";
@@ -8,17 +10,17 @@
     import { beforeNavigate, goto } from "$app/navigation";
     import { page as currentPage } from '$app/stores';
 
-    $: url = $currentPage.url;
+    let url = $derived($currentPage.url);
 
-    let searchTerms = [];
+    let searchTerms = $state([]);
 
-    let page = 1;
-    let totalPages = 1;
-    let pagination = [];
-    let posts = [];
+    let page = $state(1);
+    let totalPages = $state(1);
+    let pagination = $state([]);
+    let posts = $state([]);
     let postCount = 0;
-    let tags = [];
-    let tagInfo = null;
+    let tags = $state([]);
+    let tagInfo = $state(null);
     let categorizedTags = {};
 
     const getData = async () => {
@@ -47,7 +49,7 @@
             tagInfo = await getTag({ tag: searchTerms[0] });
         }
     };
-    let tagQuery;
+    let tagQuery = $state();
 
     const onTagChange = (value) => {
         searchTerms = value.detail.tags;
@@ -58,7 +60,7 @@
         return list;
     };
 
-    $: {
+    run(() => {
         tagQuery = url.searchParams.get('tags');
         if (tagQuery) {
             searchTerms = tagQuery.split(" ");
@@ -69,8 +71,9 @@
         posts = [];
         page = 1;
         getData();
-    }
-    const onSearch = (i) => {
+    });
+    const onSearch = (e) => {
+        e.preventDefault();
         if (searchTerms.length > 0) {
             goto(`/posts?tags=${searchTerms.join("+")}`);
         } else {
@@ -92,7 +95,7 @@
             <div class="columns is-multiline">
                 <div class="column is-full">
                     <div class="block">
-                        <form on:submit|preventDefault={onSearch}>
+                        <form onsubmit={onSearch}>
                             <div class="field has-addons">
                                 <div class="control is-expanded">
                                     <div class="control" id="tags">
@@ -173,13 +176,13 @@
                             >
                                 <a
                                     href={null}
-                                    on:click={changePage(page - 1)}
+                                    onclick={changePage(page - 1)}
                                     class="pagination-previous"
                                     class:is-disabled={page == 1}>Previous</a
                                 >
                                 <a
                                     href={null}
-                                    on:click={changePage(page + 1)}
+                                    onclick={changePage(page + 1)}
                                     class="pagination-next"
                                     class:is-disabled={page == totalPages}
                                     >Next</a
@@ -197,7 +200,7 @@
                                             <li>
                                                 <a
                                                     href={null}
-                                                    on:click={() =>
+                                                    onclick={() =>
                                                         changePage(pageEntry)}
                                                     class="pagination-link"
                                                     class:is-current={page ==

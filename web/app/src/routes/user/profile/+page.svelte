@@ -3,7 +3,7 @@
     import { getUserProfile } from "$lib/api";
     import AuthRequired from "$lib/components/AuthRequired.svelte";
 
-    let user;
+    let user = $state();
 
     const getData = async () => {
         user = await getUserProfile();

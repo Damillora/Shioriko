@@ -1,20 +1,25 @@
-<script>
+<script lang="ts">
     import Tags from "svelte-tags-input";
     import { onMount } from "svelte";
     import { getPost, postUpdate, getTagAutocomplete } from "$lib/api";
 
-    export let isActive = false;
-    export let post;
-    export let onSubmit;
+    interface Props {
+        isActive?: boolean;
+        post: any;
+        onSubmit: any;
+    }
 
-    const toggleEditModal = () => {
+    let { isActive = $bindable(false), post, onSubmit }: Props = $props();
+
+    const toggleEditModal = (e) => {
+        e.preventDefault();
         isActive = !isActive;
     };
 
-    let form = {
+    let form = $state({
         source_url: "",
         tags: [],
-    };
+    });
 
     const getData = async () => {
         form.source_url = post.source_url;
@@ -30,7 +35,8 @@
         return list;
     };
 
-    const onFormSubmit = async () => {
+    const onFormSubmit = async (e) => {
+        e.preventDefault();
         const response = await postUpdate(post.id, form);
         toggleEditModal();
 
@@ -42,7 +48,7 @@
     });
 </script>
 
-<form on:submit|preventDefault={onFormSubmit}>
+<form onsubmit={onFormSubmit}>
     <div class="panel is-warning">
         <p class="panel-heading">Edit Post</p>
         <div class="panel-block column">
@@ -105,7 +111,7 @@
         </div>
         <div class="panel-block column">
             <button class="button is-primary" type="submit">Save</button>
-            <button class="button" on:click|preventDefault={toggleEditModal}
+            <button class="button" onclick={toggleEditModal}
                 >Cancel</button
             >
         </div>
