@@ -1,6 +1,6 @@
 <script lang="ts">
-    import AuthCheck from "./AuthCheck.svelte";
-    import TagLinkNumbered from "./TagLinkNumbered.svelte";
+    import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
+    import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
     let { post, toggleEditMenu, toggleDeleteMenu } = $props();
 
     const trimUrl = (str) => {

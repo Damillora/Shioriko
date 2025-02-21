@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../app.scss";
-    import Navbar from "$lib/components/Navbar.svelte";
+    import Navbar from "$lib/components/ui/Navbar.svelte";
     interface Props {
         children?: import('svelte').Snippet;
     }

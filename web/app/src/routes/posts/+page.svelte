@@ -2,8 +2,8 @@
     import { run } from 'svelte/legacy';
 
     import { getPostSearchTag, getTag, getTagAutocomplete } from "$lib/api";
-    import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
-    import PostGallery from "$lib/components/Post/PostGallery.svelte";
+    import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
+    import PostGallery from "$lib/components/ui/PostGallery.svelte";
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
     import { paginate } from "$lib/simple-pagination";

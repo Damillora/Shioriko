@@ -2,11 +2,11 @@
     import { onMount } from "svelte";
 
     import { getTag, getPostSearchTag } from "$lib/api";
-    import EditTagNotesPanel from "$lib/components/TagNotes/EditTagNotesPanel.svelte";
-    import ViewTagNotesPanel from "$lib/components/TagNotes/ViewTagNotesPanel.svelte";
-    import ViewTagPanel from "$lib/components/Tag/ViewTagPanel.svelte";
-    import EditTagPanel from "$lib/components/Tag/EditTagPanel.svelte";
-    import PostGallery from "$lib/components/Post/PostGallery.svelte";
+    import EditTagNotesPanel from "$lib/components/panels/EditTagNotesPanel.svelte";
+    import ViewTagNotesPanel from "$lib/components/panels/ViewTagNotesPanel.svelte";
+    import ViewTagPanel from "$lib/components/panels/ViewTagPanel.svelte";
+    import EditTagPanel from "$lib/components/panels/EditTagPanel.svelte";
+    import PostGallery from "$lib/components/ui/PostGallery.svelte";
 
 
     import { page } from "$app/stores";

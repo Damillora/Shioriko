@@ -2,8 +2,8 @@
     import { onMount } from "svelte";
 
     import { getRelatedTags } from "$lib/api";
-    import AuthCheck from "$lib/components/AuthCheck.svelte";
-    import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
+    import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
+    import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
 
     let { tag, data, toggleRenameMenu } = $props();
     let related_tags = $state([]);

@@ -4,8 +4,8 @@
     import { onMount } from "svelte";
     import { getPost, postDelete } from "$lib/api";
     import { goto } from "$app/navigation";
-    import EditPostPanel from "$lib/components/EditPostPanel.svelte";
-    import ViewPostPanel from "$lib/components/ViewPostPanel.svelte";
+    import EditPostPanel from "$lib/components/panels/EditPostPanel.svelte";
+    import ViewPostPanel from "$lib/components/panels/ViewPostPanel.svelte";
     
     import { page } from "$app/stores";
     const { id } = $page.params;

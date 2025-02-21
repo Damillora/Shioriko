@@ -2,7 +2,7 @@
     import { uploadBlob, postCreate, getTagAutocomplete } from "$lib/api";
     import { goto } from "$app/navigation";
     import Tags from "svelte-tags-input";
-    import AuthRequired from "$lib/components/AuthRequired.svelte";
+    import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
 
     let currentProgress = $state(0);
 

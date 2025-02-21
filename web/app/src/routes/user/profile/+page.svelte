@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { getUserProfile } from "$lib/api";
-    import AuthRequired from "$lib/components/AuthRequired.svelte";
+    import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
 
     let user = $state();
 

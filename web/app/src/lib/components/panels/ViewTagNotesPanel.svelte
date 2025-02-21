@@ -1,5 +1,5 @@
 <script lang="ts">
-    import AuthCheck from "$lib/components/AuthCheck.svelte";
+    import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
 
     let { data, toggleEditMenu } = $props();
 </script>
