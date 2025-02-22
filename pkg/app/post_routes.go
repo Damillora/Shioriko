@@ -30,10 +30,14 @@ func InitializePostRoutes(g *gin.Engine) {
 
 func postGet(c *gin.Context) {
 	pageParam := c.Query("page")
+	perPageParam := c.Query("perPage")
 	page, _ := strconv.Atoi(pageParam)
-
+	perPage, _ := strconv.Atoi(perPageParam)
 	if page < 1 {
 		page = 1
+	}
+	if perPage < 1 {
+		perPage = 20
 	}
 	tag := c.Query("tags")
 
@@ -41,7 +45,6 @@ func postGet(c *gin.Context) {
 
 	var posts []database.Post
 	var postPages int
-	var perPage = 20
 
 	if tag != "" {
 		posts = services.GetPostTags(page, tags)
@@ -59,10 +62,7 @@ func postGet(c *gin.Context) {
 	var postResult []models.PostListItem
 	var tagObjs []database.Tag
 	for _, post := range posts {
-
-		for _, tag := range post.Tags {
-			tagObjs = append(tagObjs, tag)
-		}
+		tagObjs = append(tagObjs, post.Tags...)
 
 		postResult = append(postResult, models.PostListItem{
 			ID:                 post.ID,
