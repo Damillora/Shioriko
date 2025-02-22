@@ -11,8 +11,8 @@ import (
 	"os"
 	"path/filepath"
 
-	_ "golang.org/x/image/webp"
 	"golang.org/x/image/draw"
+	_ "golang.org/x/image/webp"
 
 	"github.com/Damillora/Shioriko/pkg/config"
 	"github.com/Damillora/Shioriko/pkg/database"
@@ -116,7 +116,7 @@ func uploadBlob(c *gin.Context) {
 				Similar: similarPosts,
 			})
 		return
-	} 
+	}
 
 	filename := id + filepath.Ext(file.Filename)
 	filePath := filepath.Join(dataDir, folder1, folder2, filename)
@@ -128,19 +128,19 @@ func uploadBlob(c *gin.Context) {
 		})
 		return
 	}
-   
+
 	// Resize logic
-	previewWidth := 1000;
-    previewFactor := float32(previewWidth) / float32(width)
+	previewWidth := 1000
+	previewFactor := float32(previewWidth) / float32(width)
 	previewHeight := int(float32(height) * previewFactor)
 	if width <= previewWidth {
-	  previewHeight = height
+		previewHeight = height
 	}
-	thumbnailWidth := 300;
-    thumbnailFactor := float32(thumbnailWidth) / float32(width)
+	thumbnailWidth := 300
+	thumbnailFactor := float32(thumbnailWidth) / float32(width)
 	thumbnailHeight := int(float32(height) * thumbnailFactor)
 	if width <= thumbnailWidth {
-	  thumbnailHeight = height
+		thumbnailHeight = height
 	}
 
 	previewImage := image.NewRGBA(image.Rect(0, 0, previewWidth, previewHeight))
@@ -198,9 +198,10 @@ func uploadBlob(c *gin.Context) {
 	database.DB.Create(&blob)
 
 	c.JSON(http.StatusOK, models.BlobResponse{
-		ID:     id,
-		Width:  width,
-		Height: height,
+		ID:         id,
+		Width:      width,
+		Height:     height,
+		PreviewUrl: "/data/" + blob.PreviewFilePath,
 	})
 	return
 }
