@@ -13,7 +13,7 @@ const getUsernameFromToken = (token) => {
         const tokenData = (JSON.parse(atob(token.split('.')[1])));
         return tokenData.name;
     }
-    return "logged out";
+    return "Guest";
 
 }
 

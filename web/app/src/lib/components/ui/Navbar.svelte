@@ -33,6 +33,7 @@
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </a>
     </div>
 
@@ -46,20 +47,27 @@
         </div>
 
         <div class="navbar-end">
-            <div class="navbar-item has-dropdown is-hoverable">
+            <div
+                class="navbar-item has-dropdown is-hoverable"
+            >
+                <a
+                    href={"#"}
+                    class="navbar-link"
+                >
+                    {loggedIn ? username : "Guest"}
+                </a>
                 {#if loggedIn}
-                    <div class="navbar-link">{username}</div>
-
-                    <div class="navbar-dropdown">
+                    <div class="navbar-dropdown is-right">
                         <a href="/user/profile" class="navbar-item">
                             Profile
                         </a>
-
+                        <a href="/user/password" class="navbar-item">
+                            Change Password
+                        </a>
+                        <hr class="navbar-divider" />
                         <a href="/auth/logout" class="navbar-item">Log out</a>
                     </div>
                 {:else}
-                    <div class="navbar-link">logged out</div>
-
                     <div class="navbar-dropdown">
                         <a href="/auth/register" class="navbar-item">
                             Register
