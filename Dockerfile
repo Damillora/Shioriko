@@ -11,7 +11,7 @@ FROM node:20-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/web/app
-RUN npm install && npm run build
+RUN npm ci && npm run build
 
 FROM scratch AS runtime
 
