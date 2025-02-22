@@ -8,6 +8,7 @@
 
   let searchTerms: string[] = $state([]);
   let postCount: number = $state(0);
+  let postCountLoaded: boolean = $state(false);
 
   const onTagChange = (value) => {
     searchTerms = value.detail.tags;
@@ -30,6 +31,7 @@
   const getCounts = async () => {
     const response = await getPostCount();
     postCount = response.postCount;
+    postCountLoaded = true;
   };
   onMount(() => {
     getCounts();
@@ -42,8 +44,8 @@
       <div class="columns is-centered">
         <div class="column is-12-tablet is-8-desktop is-8-widescreen">
           <div class="box has-text-centered">
-            <p class="title">Shioriko</p>
-            <p class="subtitle">Booru-style gallery written in Go and Svelte</p>
+            <p class="title">shioriko</p>
+            <p class="subtitle">a booru-style gallery written in Go and Svelte</p>
             <div class="block">
               <form onsubmit={onSearch}>
                 <div class="field">
@@ -66,8 +68,10 @@
                 </div>
               </form>
             </div>
-            {#if postCount > 0}
-              <p class="block">Serving <strong>{postCount}</strong> images</p>
+            {#if postCountLoaded}
+              <p class="block">serving <span class="is-primary"><strong>{postCount}</strong></span> images</p>
+            {:else}
+            <p class="block">serving <span class="is-primary"><strong>...</strong></span> images</p>
             {/if}
           </div>
         </div>
