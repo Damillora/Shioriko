@@ -4,6 +4,7 @@
     import { getRelatedTags } from "$lib/api";
     import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
     import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
+    import TagTypeIndicator from "../ui/TagTypeIndicator.svelte";
 
     let { tag, data, toggleRenameMenu } = $props();
     let related_tags = $state([]);
@@ -30,7 +31,7 @@
         <div class="row">
             <strong>Category:</strong>
         </div>
-        <div class="row">{data.tagType}</div>
+        <div class="row"><TagTypeIndicator tagType={data.tagType} /></div>
     </div>
     <div class="panel-block column">
         <div class="row">
