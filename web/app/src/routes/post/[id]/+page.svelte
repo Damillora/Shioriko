@@ -14,6 +14,7 @@
     const getData = async () => {
         const data = await getPost({ id });
         post = data;
+        imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
     };
 
     const trimUrl = (str) => {
@@ -50,11 +51,6 @@
     };
 
     let imagePercentage = $state("0%");
-
-    afterNavigate(() => {
-        if (post)
-            imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
-    });
 </script>
 
 {#if post}
