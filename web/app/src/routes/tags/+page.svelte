@@ -6,13 +6,16 @@
     import TagTypeIndicator from '$lib/components/ui/TagTypeIndicator.svelte';
 
     let tags = $state([]);
+    let loading = $state(false);
 
     const getData = async () => {
         const data = await getTags();
         tags = data;
+        loading = false;
     };
     
     afterNavigate(() => {
+        loading = true;
         getData();
     })
 </script>
@@ -21,6 +24,7 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Tag List</h1>
+        {#if !loading}
         <table class="table is-fullwidth">
             <thead>
                 <tr>
@@ -41,5 +45,8 @@
                 {/each}
             </tbody>
         </table>
+        {:else}
+        <div class="skeleton-block"></div>
+        {/if}
     </div>
 </section>

@@ -23,6 +23,7 @@
     let tags = $state([]);
     let tagInfo = $state(null);
     let categorizedTags = {};
+    let loading = $state(false);
 
     const getData = async () => {
         const data = await getPosts({ page, q: searchTerms.join("+") });
@@ -49,6 +50,7 @@
         if (searchTerms.filter((x) => !x.startsWith("-")).length == 1) {
             tagInfo = await getTag({ tag: searchTerms[0] });
         }
+        loading = false;
     };
     let tagQuery = $state();
 
@@ -62,6 +64,7 @@
     };
 
     afterNavigate(() => {
+        loading = true;
         tagQuery = url.searchParams.get("tags");
         if (tagQuery) {
             searchTerms = tagQuery.split(" ");
@@ -99,7 +102,7 @@
                 </div>
                 <div class="column is-one-third">
                     <div class="panel is-primary">
-                        <div class="panel-heading">Tags</div>
+                        <div class="panel-heading">Menu</div>
                         <div class="panel-block column">
                             <form onsubmit={onSearch}>
                                 <div class="field">
@@ -128,21 +131,30 @@
                             </form>
                         </div>
                         <div class="panel-block column">
-                            <div class="menu">
-                                <ul class="menu-list">
-                                    {#each tags as tag (tag)}
-                                        <li>
-                                            <TagLinkNumbered
-                                                class=""
-                                                tag={tag.tagType +
-                                                    ":" +
-                                                    tag.tagName}
-                                                num={tag.postCount}
-                                            />
-                                        </li>
-                                    {/each}
-                                </ul>
-                            </div>
+                            {#if !loading}
+                                <div class="row">
+                                    <strong>Tags:</strong>
+                                </div>
+                                <div class="row">
+                                    <div class="menu">
+                                        <ul class="menu-list">
+                                            {#each tags as tag (tag)}
+                                                <li>
+                                                    <TagLinkNumbered
+                                                        class=""
+                                                        tag={tag.tagType +
+                                                            ":" +
+                                                            tag.tagName}
+                                                        num={tag.postCount}
+                                                    />
+                                                </li>
+                                            {/each}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {:else}
+                                <div class="skeleton-block"></div>
+                            {/if}
                         </div>
                     </div>
                     {#if tagInfo}
@@ -169,55 +181,64 @@
                 </div>
                 <div class="column is-two-thirds">
                     <div class="columns is-multiline">
-                        <div class="column is-full">
-                            <PostGallery {posts} />
-                        </div>
+                        {#if !loading}
+                            <div class="column is-full">
+                                <PostGallery {posts} />
+                            </div>
 
-                        <div class="column is-full">
-                            <nav
-                                class="pagination is-centered"
-                                aria-label="pagination"
-                            >
-                                <a
-                                    href={null}
-                                    onclick={() => changePage(page - 1)}
-                                    class="pagination-previous"
-                                    class:is-disabled={page == 1}>Previous</a
+                            <div class="column is-full">
+                                <nav
+                                    class="pagination is-centered"
+                                    aria-label="pagination"
                                 >
-                                <a
-                                    href={null}
-                                    onclick={() => changePage(page + 1)}
-                                    class="pagination-next"
-                                    class:is-disabled={page == totalPages}
-                                    >Next</a
-                                >
-                                <ul class="pagination-list">
-                                    {#each pagination as pageEntry}
-                                        {#if pageEntry == "..."}
-                                            <li>
-                                                <span
-                                                    class="pagination-ellipsis"
-                                                    >&hellip;</span
-                                                >
-                                            </li>
-                                        {:else}
-                                            <li>
-                                                <a
-                                                    href={null}
-                                                    onclick={() =>
-                                                        changePage(pageEntry)}
-                                                    class="pagination-link"
-                                                    class:is-current={page ==
-                                                        pageEntry}
-                                                    aria-label="Goto page {pageEntry}"
-                                                    >{pageEntry}</a
-                                                >
-                                            </li>
-                                        {/if}
-                                    {/each}
-                                </ul>
-                            </nav>
-                        </div>
+                                    <a
+                                        href={null}
+                                        onclick={() => changePage(page - 1)}
+                                        class="pagination-previous"
+                                        class:is-disabled={page == 1}
+                                        >Previous</a
+                                    >
+                                    <a
+                                        href={null}
+                                        onclick={() => changePage(page + 1)}
+                                        class="pagination-next"
+                                        class:is-disabled={page == totalPages}
+                                        >Next</a
+                                    >
+                                    <ul class="pagination-list">
+                                        {#each pagination as pageEntry}
+                                            {#if pageEntry == "..."}
+                                                <li>
+                                                    <span
+                                                        class="pagination-ellipsis"
+                                                        >&hellip;</span
+                                                    >
+                                                </li>
+                                            {:else}
+                                                <li>
+                                                    <a
+                                                        href={null}
+                                                        onclick={() =>
+                                                            changePage(
+                                                                pageEntry,
+                                                            )}
+                                                        class="pagination-link"
+                                                        class:is-current={page ==
+                                                            pageEntry}
+                                                        aria-label="Goto page {pageEntry}"
+                                                        >{pageEntry}</a
+                                                    >
+                                                </li>
+                                            {/if}
+                                        {/each}
+                                    </ul>
+                                </nav>
+                            </div>
+                        {:else}
+                            <div class="column">
+                                <div class="skeleton-block"></div>
+                            </div>
+                        {/if}
                     </div>
                 </div>
             </div>

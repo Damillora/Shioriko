@@ -15,6 +15,7 @@
         post = data;
         imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
     };
+    let loading = $state(false);
     let isOriginal = $state(false);
 
     const trimUrl = (str: string) => {
@@ -53,11 +54,11 @@
     let imagePercentage = $state("0%");
 </script>
 
-{#if post}
-    <div class="container">
-        <section class="section">
-            <div class="columns">
-                <div class="column is-one-third">
+<div class="container">
+    <section class="section">
+        <div class="columns">
+            <div class="column is-one-third">
+                {#if post}
                     {#if editMenuShown == false && deleteMenuShown == false}
                         <ViewPostPanel
                             {post}
@@ -88,8 +89,14 @@
                             </div>
                         </div>
                     {/if}
-                </div>
-                <div class="column box">
+                {:else}
+                    <div class="skeleton-block">
+
+                    </div>
+                {/if}
+            </div>
+            <div class="column box">
+                {#if post}
                     {#if post.width > 1000 && isOriginal == false}
                         <div class="notification is-info">
                             Resized to {imagePercentage} of the original image.
@@ -101,15 +108,19 @@
                             <ShiorikoImage alt={post.id} src={post.preview_path} />
                         </figure>
                     {:else}
-                    <div class="notification is-primary">
-                        Currently viewing original image.
-                    </div>
+                        <div class="notification is-primary">
+                            Currently viewing original image.
+                        </div>
                         <figure class="image">
                             <ShiorikoImage alt={post.id} src={post.image_path} />
                         </figure>
                     {/if}
-                </div>
+                {:else}
+                    <div class="skeleton-block">
+
+                    </div>
+                {/if}
             </div>
-        </section>
-    </div>
-{/if}
+        </div>
+    </section>
+</div>

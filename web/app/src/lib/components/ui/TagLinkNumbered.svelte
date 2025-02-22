@@ -9,7 +9,9 @@
 </script>
 
 <a href="/posts?tags={tagName}">
-    {tagDisplay}
+    <span>
+        {tagDisplay}
+    </span>
     <TagTypeIndicator tagType={tagType}></TagTypeIndicator>
     <span class="is-pulled-right">{num}</span>
 </a>

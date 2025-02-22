@@ -8,7 +8,6 @@
     import EditTagPanel from "$lib/components/panels/EditTagPanel.svelte";
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
 
-
     import { page } from "$app/stores";
     let { tag } = $state($page.params);
 
@@ -51,9 +50,9 @@
 
 <section class="section">
     <div class="container">
-        {#if data}
-            <div class="columns">
-                <div class="column is-one-third">
+        <div class="columns">
+            <div class="column is-one-third">
+                {#if data}
                     {#if renameMenuShown}
                         <EditTagPanel
                             {tag}
@@ -64,8 +63,12 @@
                     {:else}
                         <ViewTagPanel {tag} {data} {toggleRenameMenu} />
                     {/if}
-                </div>
-                <div class="column is-two-thirds">
+                {:else}
+                    <div class="skeleton-block"></div>
+                {/if}
+            </div>
+            <div class="column is-two-thirds">
+                {#if data}
                     {#if editMenuShown}
                         <EditTagNotesPanel
                             {tag}
@@ -78,8 +81,10 @@
                     {/if}
                     <h1 class="title">Posts</h1>
                     <PostGallery {posts} />
-                </div>
+                {:else}
+                    <div class="skeleton-block"></div>
+                {/if}
             </div>
-        {/if}
+        </div>
     </div>
 </section>
