@@ -1,12 +1,14 @@
 <script>
     import { token } from "$lib/stores";
-    import { isTokenExpired } from "$lib/login-check";
+    import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
 
     let menu_shown = $state(false);
-    
+
     let loggedIn = $state(false);
+    let username = $state("");
     token.subscribe((value) => {
         loggedIn = !isTokenExpired(value);
+        username = getUsernameFromToken(value);
     });
 
     const toggleMenu = () => {
@@ -14,9 +16,11 @@
     };
 </script>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-primary" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/">Shioriko</a>
+        <a class="navbar-item" href="/">
+            <strong>shioriko</strong>
+        </a>
 
         <a
             href={"#"}
@@ -42,29 +46,28 @@
         </div>
 
         <div class="navbar-end">
-            {#if loggedIn}
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a href="/user/profile" class="button is-primary">
+            <div class="navbar-item has-dropdown is-hoverable">
+                {#if loggedIn}
+                    <div class="navbar-link">{username}</div>
+
+                    <div class="navbar-dropdown">
+                        <a href="/user/profile" class="navbar-item">
                             Profile
                         </a>
-                        <a href="/auth/logout" class="button is-light">
-                            Log out
-                        </a>
+
+                        <a href="/auth/logout" class="navbar-item">Log out</a>
                     </div>
-                </div>
-            {:else}
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a href="/auth/register" class="button is-primary">
+                {:else}
+                    <div class="navbar-link">logged out</div>
+
+                    <div class="navbar-dropdown">
+                        <a href="/auth/register" class="navbar-item">
                             Register
                         </a>
-                        <a href="/auth/login" class="button is-light">
-                            Log in
-                        </a>
+                        <a href="/auth/login" class="navbar-item">Log in</a>
                     </div>
-                </div>
-            {/if}
+                {/if}
+            </div>
         </div>
     </div>
 </nav>
