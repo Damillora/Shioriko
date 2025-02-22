@@ -19,6 +19,10 @@ func InitializePostRoutes(g *gin.Engine) {
 		unprotected.GET("/", postGet)
 		unprotected.GET("/:id", postGetOne)
 	}
+	count := g.Group("/api/post-count")
+	{
+		count.GET("/", postCount)
+	}
 	protected := g.Group("/api/post").Use(middleware.AuthMiddleware())
 	{
 		protected.POST("/create", postCreate)
@@ -80,7 +84,13 @@ func postGet(c *gin.Context) {
 		Tags:        tagFilters,
 	})
 }
+func postCount(c *gin.Context) {
+	postPages := services.CountPostPages()
 
+	c.JSON(http.StatusOK, models.PostCountResponse{
+		PostCount: postPages,
+	})
+}
 func postGetOne(c *gin.Context) {
 	id := c.Param("id")
 	post, err := services.GetPost(id)

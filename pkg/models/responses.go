@@ -33,3 +33,7 @@ type PostPaginationResponse struct {
 	Posts       []PostListItem `json:"posts"`
 	Tags        []TagListItem  `json:"tags"`
 }
+
+type PostCountResponse struct {
+	PostCount int `json:"postCount"`
+}
