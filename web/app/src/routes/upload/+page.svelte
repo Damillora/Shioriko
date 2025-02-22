@@ -185,8 +185,3 @@
         </div>
     </div>
 </section>
-<section class="section">
-    <div class="container">
-        <h1 class="title">Upload Image</h1>
-    </div>
-</section>
