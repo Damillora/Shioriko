@@ -160,7 +160,7 @@
                             {/if}
                             <div class="panel-block column">
                                 <a
-                                    class="button is-primary"
+                                    class="button is-primary is-fullwidth is-outlined"
                                     href="/tags/{tagInfo.tagName}">View Tag</a
                                 >
                             </div>
