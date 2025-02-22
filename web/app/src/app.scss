@@ -1,6 +1,15 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
-@use "../node_modules/bulma/sass";
 
+// Path to Bulma's sass folder
+@use "bulma/sass" with (
+  $family-primary: '"Nunito", sans-serif',
+  $primary: #00afcc,
+);
+// Import the Google Font
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+
+
+// Others
 .tile.is-multiline {
   flex-wrap: wrap;
 }
@@ -9,6 +18,30 @@
   white-space: pre-line;
 }
 
-.svelte-tags-input-matchs-parent {
+// Svelte Tags
+#tags .svelte-tags-input-layout {
+  @extend .input;
+  padding: 0;
+  padding-top: var(--bulma-control-padding-vertical);
+  padding-right: var(--bulma-control-padding-horizontal);
+  padding-left: var(--bulma-control-padding-horizontal);
+  height: auto !important;
+}
+#tags  .svelte-tags-input-layout:focus-within {
+  outline: 0;
+}
+
+#tags .svelte-tags-input {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: var(--bulma-control-padding-vertical);
+}
+#tags .svelte-tags-input-tag {
+  @extend .tag;
+  margin-top: 0;
+  margin-bottom: var(--bulma-control-padding-vertical);
+  margin-right: var(--bulma-control-padding-horizontal);
+}
+#tags .svelte-tags-input-matchs-parent{
   z-index: 2000;
 }

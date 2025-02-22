@@ -57,7 +57,7 @@
                 <div class="navbar-item">
                     <div class="buttons">
                         <a href="/auth/register" class="button is-primary">
-                            <strong>Register</strong>
+                            Register
                         </a>
                         <a href="/auth/login" class="button is-light">
                             Log in

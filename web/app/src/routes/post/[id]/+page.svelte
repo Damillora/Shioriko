@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { onMount } from "svelte";
     import { getPost, postDelete } from "$lib/api";
-    import { goto } from "$app/navigation";
+    import { afterNavigate, goto } from "$app/navigation";
     import EditPostPanel from "$lib/components/panels/EditPostPanel.svelte";
     import ViewPostPanel from "$lib/components/panels/ViewPostPanel.svelte";
-    
+
     import { page } from "$app/stores";
     const { id } = $page.params;
 
@@ -51,7 +51,7 @@
 
     let imagePercentage = $state("0%");
 
-    run(() => {
+    afterNavigate(() => {
         if (post)
             imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
     });
@@ -87,8 +87,7 @@
                                 >
                                 <button
                                     class="button"
-                                    onclick={toggleDeleteMenu}
-                                    >Cancel</button
+                                    onclick={toggleDeleteMenu}>Cancel</button
                                 >
                             </div>
                         </div>

@@ -47,9 +47,9 @@
               />
             </div>
           </div>
-          <div class="control">
-            <button type="submit" class="button is-primary"> Search </button>
-          </div>
+        </div>
+        <div class="control">
+          <button type="submit" class="button is-primary"> Search </button>
         </div>
       </form>
     </div>

@@ -7,8 +7,9 @@
     import queryString from "query-string";
     import Tags from "svelte-tags-input";
     import { paginate } from "$lib/simple-pagination";
-    import { beforeNavigate, goto } from "$app/navigation";
+    import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
     import { page as currentPage } from '$app/stores';
+    import { onMount } from 'svelte';
 
     let url = $derived($currentPage.url);
 
@@ -16,7 +17,7 @@
 
     let page = $state(1);
     let totalPages = $state(1);
-    let pagination = $state([]);
+    let pagination: string[] = $state([]);
     let posts = $state([]);
     let postCount = 0;
     let tags = $state([]);
@@ -60,7 +61,7 @@
         return list;
     };
 
-    run(() => {
+    afterNavigate(() => {
         tagQuery = url.searchParams.get('tags');
         if (tagQuery) {
             searchTerms = tagQuery.split(" ");
@@ -71,7 +72,7 @@
         posts = [];
         page = 1;
         getData();
-    });
+    })
     const onSearch = (e) => {
         e.preventDefault();
         if (searchTerms.length > 0) {
@@ -95,17 +96,23 @@
             <div class="columns is-multiline">
                 <div class="column is-full">
                     <div class="block">
-                        <form onsubmit={onSearch}>
-                            <div class="field has-addons">
-                                <div class="control is-expanded">
-                                    <div class="control" id="tags">
-                                        <Tags
-                                            tags={searchTerms}
-                                            addKeys={[9, 32]}
-                                            on:tags={onTagChange}
-                                            autoComplete={onAutocomplete}
-                                            autoCompleteFilter={false}
-                                        />
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <div class="panel is-primary">
+                        <div class="panel-block column">
+                            <form onsubmit={onSearch}>
+                                <div class="field has-addons">
+                                    <div class="control is-expanded">
+                                        <div class="control" id="tags">
+                                            <Tags
+                                                tags={searchTerms}
+                                                addKeys={[9, 32]}
+                                                on:tags={onTagChange}
+                                                autoComplete={onAutocomplete}
+                                                autoCompleteFilter={false}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="control">
@@ -116,11 +123,9 @@
                                         Search
                                     </button>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
-                <div class="column is-one-third">
                     {#if tagInfo}
                         <div class="panel is-info">
                             <p class="panel-heading">

@@ -2,6 +2,7 @@
     import { run } from 'svelte/legacy';
 
     import { getTags } from "$lib/api";
+    import { afterNavigate } from '$app/navigation';
 
     let tags = $state([]);
 
@@ -9,9 +10,10 @@
         const data = await getTags();
         tags = data;
     };
-    run(() => {
+    
+    afterNavigate(() => {
         getData();
-    });
+    })
 </script>
 
 
