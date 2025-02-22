@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import { getTag, getPostSearchTag } from "$lib/api";
+    import { getTag, getPosts } from "$lib/api";
     import EditTagNotesPanel from "$lib/components/panels/EditTagNotesPanel.svelte";
     import ViewTagNotesPanel from "$lib/components/panels/ViewTagNotesPanel.svelte";
     import ViewTagPanel from "$lib/components/panels/ViewTagPanel.svelte";
@@ -18,7 +18,7 @@
     const getData = async () => {
         if (tag) {
             data = await getTag({ tag });
-            const response = await getPostSearchTag({
+            const response = await getPosts({
                 page: 1,
                 q: tag,
             });

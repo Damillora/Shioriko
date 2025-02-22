@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { run } from "svelte/legacy";
-
     import { onMount } from "svelte";
     import { getPost, postDelete } from "$lib/api";
     import { afterNavigate, goto } from "$app/navigation";
@@ -17,7 +15,7 @@
         imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
     };
 
-    const trimUrl = (str) => {
+    const trimUrl = (str: string) => {
         if (str.length > 30) {
             return str.substring(0, 30) + "...";
         }

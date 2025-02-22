@@ -1,7 +1,7 @@
 <script lang="ts">
     import { run } from 'svelte/legacy';
 
-    import { getPostSearchTag, getTag, getTagAutocomplete } from "$lib/api";
+    import { getPosts, getTag, getTagAutocomplete } from "$lib/api";
     import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
     import queryString from "query-string";
@@ -25,7 +25,7 @@
     let categorizedTags = {};
 
     const getData = async () => {
-        const data = await getPostSearchTag({ page, q: searchTerms.join("+") });
+        const data = await getPosts({ page, q: searchTerms.join("+") });
         if (data.posts) {
             posts = data.posts;
             tags = data.tags

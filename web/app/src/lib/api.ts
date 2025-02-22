@@ -62,26 +62,27 @@ export async function getTagAutocomplete({ tag, positive }) {
     const response = await axios.get(endpoint);
     return response.data;
 }
-export async function getPosts({ page }) {
-    const endpoint = url + "/api/post?page=" + page;
+export async function getPosts({ page, q, perPage }: { page: any, q?: any, perPage?: any }) {
+    if (!perPage) {
+        perPage = 20;
+    }
+    let endpoint = url + "/api/post?page=" + page + "&perPage=" + perPage;
+    if (q) {
+        endpoint = url + "/api/post?tags=" + q + "&page=" + page + "&perPage=" + perPage;
+    }
     const response = await axios.get(endpoint);
     return response.data;
 }
 
-export async function getPostSearchTag({ page, q }) {
-    if (q) {
-        const endpoint = url + "/api/post?tags=" + q + "&page=" + page;
-        const response = await axios(endpoint);
-        return response.data;
-    } else {
-        const endpoint = url + "/api/post?page=" + page;
-        const response = await axios(endpoint);
-        return response.data;
-    }
-}
 
 export async function getPost({ id }) {
     const endpoint = url + "/api/post/" + id;
+    const response = await axios(endpoint);
+    return response.data;
+}
+
+export async function getPostCount() {
+    const endpoint = url + "/api/post-count";
     const response = await axios(endpoint);
     return response.data;
 }

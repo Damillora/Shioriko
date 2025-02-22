@@ -1,12 +1,12 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
 
 // Path to Bulma's sass folder
-@use "bulma/sass" with (
+@use "../node_modules/bulma/sass/" as * with (
   $family-primary: '"Nunito", sans-serif',
-  $primary: #00afcc,
+  $primary: #37b484,
 );
 // Import the Google Font
-@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+@import "https://fonts.googleapis.com/css?family=Nunito:400,700";
 
 
 // Others
@@ -19,6 +19,9 @@
 }
 
 // Svelte Tags
+#tags {
+  position: relative;
+}
 #tags .svelte-tags-input-layout {
   @extend .input;
   padding: 0;
@@ -43,5 +46,28 @@
   margin-right: var(--bulma-control-padding-horizontal);
 }
 #tags .svelte-tags-input-matchs-parent{
+  @extend .dropdown-menu;
+  display: block;
+  position: relative;
   z-index: 2000;
+}
+
+#tags .svelte-tags-input-matchs {
+  @extend .dropdown-content;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+  li {
+    @extend .dropdown-item;
+    background-color: hsl(var(--bulma-scheme-h), var(--bulma-scheme-s), calc(var(--bulma-scheme-main-l) + var(--bulma-dropdown-item-background-l-delta)));
+    --bulma-dropdown-item-background-l-delta: 0%;    
+    &:hover {
+      --bulma-dropdown-item-background-l-delta: var(--bulma-hover-background-l-delta);
+      --bulma-dropdown-item-border-l-delta: var(--bulma-hover-border-l-delta);
+    }
+    
+    transition-duration: var(--bulma-duration);
+    transition-property: background-color, border-color, color;
+  }
 }

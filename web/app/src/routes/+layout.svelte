@@ -17,3 +17,11 @@
 <Navbar />
 
 {@render children?.()}
+
+<footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong><a href="https://github.com/Damillora/Shioriko">Shioriko</a></strong>: a booru-style image gallery written in Go and Svelte
+      </p>
+    </div>
+  </footer>
