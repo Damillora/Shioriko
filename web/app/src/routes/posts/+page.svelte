@@ -97,9 +97,6 @@
     <div class="container">
         <div class="block">
             <div class="columns is-multiline">
-                <div class="column is-full">
-                    <div class="block"></div>
-                </div>
                 <div class="column is-one-third">
                     <div class="panel is-primary">
                         <div class="panel-heading">Menu</div>
