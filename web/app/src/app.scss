@@ -62,7 +62,7 @@
     @extend .dropdown-item;
     background-color: hsl(var(--bulma-scheme-h), var(--bulma-scheme-s), calc(var(--bulma-scheme-main-l) + var(--bulma-dropdown-item-background-l-delta)));
     --bulma-dropdown-item-background-l-delta: 0%;    
-    &:hover {
+    &:hover, &.focus, &:focus {
       --bulma-dropdown-item-background-l-delta: var(--bulma-hover-background-l-delta);
       --bulma-dropdown-item-border-l-delta: var(--bulma-hover-border-l-delta);
     }
