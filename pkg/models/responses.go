@@ -22,10 +22,11 @@ type BlobResponse struct {
 }
 
 type BlobSimilarResponse struct {
-	ID      string                   `json:"id"`
-	Width   int                      `json:"width"`
-	Height  int                      `json:"height"`
-	Similar []PostSimilarityListItem `json:"similar"`
+	ID         string                   `json:"id"`
+	Width      int                      `json:"width"`
+	Height     int                      `json:"height"`
+	PreviewUrl string                   `json:"previewUrl"`
+	Similar    []PostSimilarityListItem `json:"similar"`
 }
 type PostPaginationResponse struct {
 	CurrentPage int            `json:"currentPage"`
