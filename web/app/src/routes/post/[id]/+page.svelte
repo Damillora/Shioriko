@@ -6,6 +6,7 @@
     import ViewPostPanel from "$lib/components/panels/ViewPostPanel.svelte";
 
     import { page } from "$app/stores";
+    import ShiorikoImage from "$lib/components/ui/ShiorikoImage.svelte";
     const { id } = $page.params;
 
     let post: any = $state();
@@ -14,6 +15,7 @@
         post = data;
         imagePercentage = ((1000 * 100) / post.width).toFixed(0) + "%";
     };
+    let isOriginal = $state(false);
 
     const trimUrl = (str: string) => {
         if (str.length > 30) {
@@ -88,19 +90,22 @@
                     {/if}
                 </div>
                 <div class="column box">
-                    {#if post.width > 1000}
+                    {#if post.width > 1000 && isOriginal == false}
                         <div class="notification is-info">
                             Resized to {imagePercentage} of the original image.
-                            <a href={post.image_path} target="_blank"
+                            <a onclick="{() => { isOriginal = true; }}"
                                 >View original</a
                             >
                         </div>
                         <figure class="image">
-                            <img alt={post.id} src={post.preview_path} />
+                            <ShiorikoImage alt={post.id} src={post.preview_path} />
                         </figure>
                     {:else}
+                    <div class="notification is-primary">
+                        Currently viewing original image.
+                    </div>
                         <figure class="image">
-                            <img alt={post.id} src={post.image_path} />
+                            <ShiorikoImage alt={post.id} src={post.image_path} />
                         </figure>
                     {/if}
                 </div>

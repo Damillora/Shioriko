@@ -69,7 +69,7 @@
               </form>
             </div>
             {#if postCountLoaded}
-              <p class="block">serving <span class="is-primary"><strong>{postCount}</strong></span> images</p>
+            <p class="block">serving <span class="is-primary"><strong>{postCount}</strong></span> images</p>
             {:else}
             <p class="block">serving <span class="is-primary"><strong>...</strong></span> images</p>
             {/if}
