@@ -57,14 +57,18 @@
                     />
                   </div>
                 </div>
-                <div class="control">
-                  <button type="submit" class="button is-primary">
-                    Search
-                  </button>
+                <div class="field">
+                  <div class="control">
+                    <button type="submit" class="button is-primary">
+                      Search
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
-            <p class="block">Serving <strong>{postCount}</strong> images</p>
+            {#if postCount > 0}
+              <p class="block">Serving <strong>{postCount}</strong> images</p>
+            {/if}
           </div>
         </div>
       </div>

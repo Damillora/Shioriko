@@ -3,6 +3,7 @@
 
     import { getTags } from "$lib/api";
     import { afterNavigate } from '$app/navigation';
+    import TagTypeIndicator from '$lib/components/ui/TagTypeIndicator.svelte';
 
     let tags = $state([]);
 
@@ -34,7 +35,7 @@
                         <td>
                           <a href="/tags/{tag.tagName}">{tag.tagName}</a>
                         </td>
-                        <td>{tag.tagType}</td>
+                        <td><TagTypeIndicator tagType={tag.tagType} /></td>
                         <td>{tag.postCount}</td>
                     </tr>
                 {/each}

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import TagTypeIndicator from "$lib/components/ui/TagTypeIndicator.svelte";
+
     let { tag, num } = $props();
 
     let tagType = tag.split(":")[0] ?? "";
@@ -8,12 +10,6 @@
 
 <a href="/posts?tags={tagName}">
     {tagDisplay}
-    {#if tagType == "character"}
-    <span class="tag is-link is-light">character</span>
-    {:else if tagType == "series"}
-    <span class="tag is-warning is-light">series</span>
-    {:else}
-    <span class="tag">{tagType}</span>
-    {/if}
+    <TagTypeIndicator tagType={tagType}></TagTypeIndicator>
     <span class="is-pulled-right">{num}</span>
 </a>

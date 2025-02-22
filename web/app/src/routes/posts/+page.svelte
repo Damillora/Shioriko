@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { getPosts, getTag, getTagAutocomplete } from "$lib/api";
     import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
@@ -8,8 +8,8 @@
     import Tags from "svelte-tags-input";
     import { paginate } from "$lib/simple-pagination";
     import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
-    import { page as currentPage } from '$app/stores';
-    import { onMount } from 'svelte';
+    import { page as currentPage } from "$app/stores";
+    import { onMount } from "svelte";
 
     let url = $derived($currentPage.url);
 
@@ -32,7 +32,7 @@
                 .filter(
                     (x) =>
                         !searchTerms.includes(x.tagName) &&
-                        !searchTerms.includes(x.tagType + ":" + x.tagName)
+                        !searchTerms.includes(x.tagType + ":" + x.tagName),
                 )
                 .sort((a, b) => b.postCount - a.postCount);
             totalPages = data.totalPage;
@@ -46,7 +46,7 @@
             pagination = paginate(page, totalPages);
         }
 
-        if (searchTerms.filter(x => !x.startsWith("-")).length == 1) {
+        if (searchTerms.filter((x) => !x.startsWith("-")).length == 1) {
             tagInfo = await getTag({ tag: searchTerms[0] });
         }
     };
@@ -62,7 +62,7 @@
     };
 
     afterNavigate(() => {
-        tagQuery = url.searchParams.get('tags');
+        tagQuery = url.searchParams.get("tags");
         if (tagQuery) {
             searchTerms = tagQuery.split(" ");
         } else {
@@ -72,7 +72,7 @@
         posts = [];
         page = 1;
         getData();
-    })
+    });
     const onSearch = (e) => {
         e.preventDefault();
         if (searchTerms.length > 0) {
@@ -95,14 +95,14 @@
         <div class="block">
             <div class="columns is-multiline">
                 <div class="column is-full">
-                    <div class="block">
-                    </div>
+                    <div class="block"></div>
                 </div>
                 <div class="column is-one-third">
                     <div class="panel is-primary">
+                        <div class="panel-heading">Tags</div>
                         <div class="panel-block column">
                             <form onsubmit={onSearch}>
-                                <div class="field has-addons">
+                                <div class="field">
                                     <div class="control is-expanded">
                                         <div class="control" id="tags">
                                             <Tags
@@ -115,15 +115,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="control">
-                                    <button
-                                        type="submit"
-                                        class="button is-primary"
-                                    >
-                                        Search
-                                    </button>
+                                <div class="field">
+                                    <div class="control">
+                                        <button
+                                            type="submit"
+                                            class="button is-primary"
+                                        >
+                                            Search
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
+                        </div>
+                        <div class="panel-block column">
+                            <div class="menu">
+                                <ul class="menu-list">
+                                    {#each tags as tag (tag)}
+                                        <li>
+                                            <TagLinkNumbered
+                                                class=""
+                                                tag={tag.tagType +
+                                                    ":" +
+                                                    tag.tagName}
+                                                num={tag.postCount}
+                                            />
+                                        </li>
+                                    {/each}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     {#if tagInfo}
@@ -147,26 +166,6 @@
                             </div>
                         </div>
                     {/if}
-                    <div class="panel is-primary">
-                        <div class="panel-heading">Tags</div>
-                        <div class="panel-block column">
-                            <div class="menu">
-                                <ul class="menu-list">
-                                    {#each tags as tag (tag)}
-                                        <li>
-                                            <TagLinkNumbered
-                                                class=""
-                                                tag={tag.tagType +
-                                                    ":" +
-                                                    tag.tagName}
-                                                num={tag.postCount}
-                                            />
-                                        </li>
-                                    {/each}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="column is-two-thirds">
                     <div class="columns is-multiline">
@@ -181,13 +180,13 @@
                             >
                                 <a
                                     href={null}
-                                    onclick={changePage(page - 1)}
+                                    onclick={() => changePage(page - 1)}
                                     class="pagination-previous"
                                     class:is-disabled={page == 1}>Previous</a
                                 >
                                 <a
                                     href={null}
-                                    onclick={changePage(page + 1)}
+                                    onclick={() => changePage(page + 1)}
                                     class="pagination-next"
                                     class:is-disabled={page == totalPages}
                                     >Next</a
