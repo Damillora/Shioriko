@@ -3,11 +3,13 @@
     import { goto } from "$app/navigation";
     import Tags from "svelte-tags-input";
     import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
+    import ShiorikoImage from "$lib/components/ui/ShiorikoImage.svelte";
 
     let currentProgress = $state(0);
 
     let fileName = $state("");
     let similar = $state([]);
+    let previewUrl = $state("");
 
     let form = $state({
         blob_id: "",
@@ -21,16 +23,20 @@
     };
 
     const onFileChange = async (e) => {
-        fileName = "";
-        similar = [];
         var file = e.target.files[0];
+        fileName = "";
+        previewUrl = "";
+        similar = [];
         if (file) {
             var response = await uploadBlob({ file, onProgress });
             if (response.similar) {
+                fileName = "";
+                previewUrl = "";
                 similar = response.similar;
             }
             form.blob_id = response.id;
             fileName = file.name;
+            previewUrl = response.previewUrl;
         }
     };
 
@@ -54,72 +60,133 @@
 
 <section class="section">
     <div class="container">
+        <div class="columns">
+            <div class="column is-one-third">
+                <div class="panel is-primary">
+                    <form onsubmit={onSubmit}>
+                        <p class="panel-heading">Upload Image</p>
+                        <div class="panel-block column">
+                            <div class="row">
+                                <label for="file" class="label">Image:</label>
+                            </div>
+                            <div class="row">
+                                <div class="field">
+                                    <div class="control">
+                                        <div class="file">
+                                            <label class="file-label">
+                                                <input
+                                                    id="file"
+                                                    class="file-input"
+                                                    type="file"
+                                                    name="resume"
+                                                    onchange={onFileChange}
+                                                />
+                                                <span class="file-cta">
+                                                    <span class="file-icon"
+                                                    ></span>
+                                                    <span class="file-label">
+                                                        Choose a file…
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-block column">
+                            <div class="row">
+                                <label for="source" class="label"
+                                    >Source URL:</label
+                                >
+                            </div>
+                            <div class="row">
+                                <div class="field">
+                                    <div class="control">
+                                        <input
+                                            id="source"
+                                            class="input"
+                                            type="url"
+                                            placeholder="Source URL"
+                                            bind:value={form.source_url}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-block column">
+                            <div class="row">
+                                <label for="tags" class="label">Tags</label>
+                            </div>
+                            <div class="row">
+                                <div class="field">
+                                    <div class="control" id="tags">
+                                        <Tags
+                                            tags={form.tags}
+                                            addKeys={[9, 32]}
+                                            on:tags={onTagChange}
+                                            autoComplete={onAutocomplete}
+                                            autoCompleteFilter={false}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-block column">
+                            <button
+                                type="submit"
+                                class="button is-primary is-fullwidth is-outlined"
+                                >Submit</button
+                            >
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="column is-two-thirds">
+                <div class="box">
+                    {#if fileName}
+                        {#if similar.length > 0}
+                            <div class="notification is-warning">
+                                {fileName} has been succesfully uploaded. There are
+                                similar images existing:
+                                {#each similar as post, i}
+                                    <a href="/post/{post.id}">{post.id}</a>
+                                    {#if i < similar.length - 1}
+                                        ,
+                                    {/if}
+                                {/each}
+                            </div>
+                        {:else}
+                            <div class="notification is-primary">
+                                {fileName} has been succesfully uploaded.
+                            </div>
+                        {/if}
+                        <figure class="image">
+                            <ShiorikoImage alt={fileName} src={previewUrl} />
+                        </figure>
+                    {:else if currentProgress > 0 && currentProgress < 100}
+                        <progress
+                            class="progress is-primary"
+                            value={currentProgress}
+                            max="100"
+                        >
+                            {currentProgress}%
+                        </progress>
+                        <div class="notification is-info">
+                            Your image is currently uploading...
+                        </div>
+                    {:else}
+                        <div class="notification is-primary">
+                            Your image will appear here when you upload it.
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
         <h1 class="title">Upload Image</h1>
-        <form onsubmit={onSubmit}>
-            <div class="field">
-                <label for="file" class="label">Image File</label>
-                <div class="control">
-                    <div class="file">
-                        <label class="file-label">
-                            <input
-                                id="file"
-                                class="file-input"
-                                type="file"
-                                name="resume"
-                                onchange={onFileChange}
-                            />
-                            <span class="file-cta">
-                                <span class="file-icon"></span>
-                                <span class="file-label"> Choose a file… </span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-                {#if currentProgress > 0 && currentProgress < 100}
-                    <p class="help">{currentProgress}%</p>
-                {/if}
-                {#if fileName !== ""}
-                    <p class="help">{fileName} uploaded</p>
-                {/if}
-                {#if similar.length > 0}
-                    <p class="help">
-                        Similar posts:
-                        {#each similar as post, i}
-                            <a href="/post/{post.id}">{post.id}</a>
-                            {#if i < similar.length - 1}
-                                ,
-                            {/if}
-                        {/each}
-                    </p>
-                {/if}
-            </div>
-            <div class="field">
-                <label for="source" class="label">Source URL</label>
-                <div class="control">
-                    <input
-                        id="source"
-                        class="input"
-                        type="url"
-                        placeholder="Source URL"
-                        bind:value={form.source_url}
-                    />
-                </div>
-            </div>
-            <div class="field">
-                <label for="tags" class="label">Tags</label>
-                <div class="control" id="tags">
-                    <Tags
-                        tags={form.tags}
-                        addKeys={[9, 32]}
-                        on:tags={onTagChange}
-                        autoComplete={onAutocomplete}
-                        autoCompleteFilter={false}
-                    />
-                </div>
-            </div>
-            <div class="control">
-                <button type="submit" class="button is-primary">Submit</button>
-            </div>
-        </form>
     </div>
 </section>
