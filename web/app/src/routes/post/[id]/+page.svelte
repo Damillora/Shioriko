@@ -54,8 +54,8 @@
     let imagePercentage = $state("0%");
 </script>
 
-<div class="container">
-    <section class="section">
+<section class="section">
+    <div class="container">
         <div class="columns">
             <div class="column is-one-third">
                 {#if post}
@@ -90,9 +90,7 @@
                         </div>
                     {/if}
                 {:else}
-                    <div class="skeleton-block">
-
-                    </div>
+                    <div class="skeleton-block"></div>
                 {/if}
             </div>
             <div class="column box">
@@ -100,27 +98,33 @@
                     {#if post.width > 1000 && isOriginal == false}
                         <div class="notification is-info">
                             Resized to {imagePercentage} of the original image.
-                            <a onclick="{() => { isOriginal = true; }}"
-                                >View original</a
+                            <a
+                                onclick={() => {
+                                    isOriginal = true;
+                                }}>View original</a
                             >
                         </div>
                         <figure class="image">
-                            <ShiorikoImage alt={post.id} src={post.preview_path} />
+                            <ShiorikoImage
+                                alt={post.id}
+                                src={post.preview_path}
+                            />
                         </figure>
                     {:else}
                         <div class="notification is-primary">
                             Currently viewing original image.
                         </div>
                         <figure class="image">
-                            <ShiorikoImage alt={post.id} src={post.image_path} />
+                            <ShiorikoImage
+                                alt={post.id}
+                                src={post.image_path}
+                            />
                         </figure>
                     {/if}
                 {:else}
-                    <div class="skeleton-block">
-
-                    </div>
+                    <div class="skeleton-block"></div>
                 {/if}
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
