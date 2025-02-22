@@ -18,7 +18,8 @@ func InitializeUserRoutes(g *gin.Engine) {
 	protected := g.Group("/api/user").Use(middleware.AuthMiddleware())
 	{
 		protected.GET("/profile", userProfile)
-		protected.POST("/update", userUpdate)
+		protected.PUT("/update", userUpdate)
+		protected.PUT("/update-password", userUpdatePassword)
 	}
 }
 
@@ -114,7 +115,45 @@ func userUpdate(c *gin.Context) {
 	result, ok := c.Get("user")
 	if ok {
 		user := result.(*database.User)
-		services.UpdateUser(user.ID, model)
+		services.UpdateUserProfile(user.ID, model)
+		c.JSON(http.StatusOK, nil)
+	} else {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "User does not exist",
+		})
+	}
+}
+
+func userUpdatePassword(c *gin.Context) {
+	var model models.UserUpdatePasswordModel
+
+	err := c.ShouldBindJSON(&model)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		c.Abort()
+		return
+	}
+
+	validate := validator.New()
+	err = validate.Struct(model)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		c.Abort()
+		return
+	}
+
+	result, ok := c.Get("user")
+	if ok {
+		user := result.(*database.User)
+		services.UpdateUserPassword(user.ID, model)
+		c.JSON(http.StatusOK, nil)
 	} else {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Code:    http.StatusBadRequest,

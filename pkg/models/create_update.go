@@ -7,8 +7,11 @@ type UserCreateModel struct {
 }
 
 type UserUpdateModel struct {
-	Email       string `json:"email" validate:"required,email"`
-	Username    string `json:"username" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Username string `json:"username" validate:"required"`
+}
+
+type UserUpdatePasswordModel struct {
 	OldPassword string `json:"old_password"`
 	NewPassword string `json:"new_password"`
 }

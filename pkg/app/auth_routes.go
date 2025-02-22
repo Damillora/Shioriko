@@ -3,6 +3,8 @@ package app
 import (
 	"net/http"
 
+	"github.com/Damillora/Shioriko/pkg/database"
+	"github.com/Damillora/Shioriko/pkg/middleware"
 	"github.com/Damillora/Shioriko/pkg/models"
 	"github.com/Damillora/Shioriko/pkg/services"
 	"github.com/gin-gonic/gin"
@@ -11,6 +13,11 @@ import (
 
 func InitializeAuthRoutes(g *gin.Engine) {
 	g.POST("/api/auth/login", createToken)
+
+	protected := g.Group("/api/auth").Use(middleware.AuthMiddleware())
+	{
+		protected.POST("/token", createTokenLoggedIn)
+	}
 }
 func createToken(c *gin.Context) {
 	var model models.LoginFormModel
@@ -47,6 +54,24 @@ func createToken(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, models.ErrorResponse{
 			Code:    http.StatusUnauthorized,
 			Message: "Wrong username or password",
+		})
+	}
+}
+
+func createTokenLoggedIn(c *gin.Context) {
+	result, ok := c.Get("user")
+	if ok {
+		user := result.(*database.User)
+		if user != nil {
+			token := services.CreateToken(user)
+			c.JSON(http.StatusOK, models.TokenResponse{
+				Token: token,
+			})
+		}
+	} else {
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{
+			Code:    http.StatusUnauthorized,
+			Message: "No authorized user",
 		})
 	}
 }

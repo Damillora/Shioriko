@@ -37,6 +37,20 @@ export async function register({ email, username, password }) {
     return response.data;
 }
 
+
+export async function updateToken() {
+    const endpoint = url + "/api/auth/token";
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+    })
+    token.set(response.data.token);
+    return response.data;
+}
+
 export async function getTags() {
     const endpoint = url + "/api/tag";
     const response = await axios.get(endpoint);
@@ -200,8 +214,8 @@ export async function updateTag(id, { name, tagTypeId }) {
     return response.data;
 }
 
-export async function updateUserProfile({ email, username, oldPassword, newPassword }) {
-    const endpoint = url + "/api/tag/" + id;
+export async function updateUserProfile({ email, username, }) {
+    const endpoint = url + "/api/user/update";
     const response = await axios({
         url: endpoint,
         method: "PUT",
@@ -210,7 +224,22 @@ export async function updateUserProfile({ email, username, oldPassword, newPassw
         },
         withCredentials: true,
         data: {
-            email, username, oldPassword, newPassword
+            email, username,
+        }
+    })
+    return response.data;
+}
+export async function updateUserPassword({ old_password, new_password }) {
+    const endpoint = url + "/api/user/update-password";
+    const response = await axios({
+        url: endpoint,
+        method: "PUT",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            old_password, new_password
         }
     })
     return response.data;

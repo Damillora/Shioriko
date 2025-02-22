@@ -1,25 +1,22 @@
 <script>
-    import { getUserProfile, updateToken, updateUserProfile } from "$lib/api";
+    import { updateToken, updateUserPassword,  } from "$lib/api";
     import UserActionsPanel from "$lib/components/panels/UserActionsPanel.svelte";
     import { onMount } from "svelte";
 
     let loading = $state(false);
     let updated = $state(false);
     let form = $state({
-        email: "",
-        username: "",
+        old_password: "",
+        new_password: "",
     });
 
     const getData = async () => {
-        const user = await getUserProfile();
-        form.email = user.email;
-        form.username = user.username;
         loading = false;
     };
 
     const submitForm = async () => {
         updated = false;
-        await updateUserProfile({ email: form.email, username: form.username })
+        await updateUserPassword({ old_password: form.old_password, new_password: form.new_password })
         await updateToken();
         updated = true;
     };
@@ -38,41 +35,41 @@
             </div>
             <div class="column is-two-thirds">
                 <div class="box">
-                    <h1 class="title">Profile</h1>
+                    <h1 class="title">Change Password</h1>
                     {#if updated}
                     <div class="notification is-success">
-                        Profile updated!
+                        Password updated!
                     </div>
                     {/if}
                     <form onsubmit={submitForm}>
                         <div class="field">
-                            <label class="label" for="email">Email</label>
+                            <label class="label" for="old_password">Current Password</label>
                             <div class="control">
                                 <input
-                                    id="email"
+                                    id="old_password"
                                     class="input"
                                     class:is-skeleton="{loading}"
-                                    type="text"
-                                    placeholder="Email"
-                                    bind:value={form.email}
+                                    type="password"
+                                    placeholder="Current password"
+                                    bind:value={form.old_password}
                                 />
                             </div>
                         </div>
                         <div class="field">
-                            <label class="label" for="username">Username</label>
+                            <label class="label" for="new_password">New Password</label>
                             <div class="control">
                                 <input
-                                    id="username"
+                                    id="new_password"
                                     class="input"
                                     class:is-skeleton="{loading}"
-                                    type="text"
-                                    placeholder="Username"
-                                    bind:value={form.username}
+                                    type="password"
+                                    placeholder="New password"
+                                    bind:value={form.new_password}
                                 />
                             </div>
                         </div>
                         <div class="field">
-                            <button class="button is-primary is-fullwidth is-outlined" type="submit">Update</button>
+                            <button class="button is-primary is-fullwidth is-outlined" type="submit">Change Password</button>
                         </div>
                     </form>
                 </div>

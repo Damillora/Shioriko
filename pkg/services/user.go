@@ -39,7 +39,7 @@ func GetUserFromUsername(username string) *database.User {
 	return &user
 }
 
-func UpdateUser(id string, model models.UserUpdateModel) (*database.User, error) {
+func UpdateUserProfile(id string, model models.UserUpdateModel) (*database.User, error) {
 	var user database.User
 	result := database.DB.Where("id = ?", id).First(&user)
 
@@ -48,6 +48,19 @@ func UpdateUser(id string, model models.UserUpdateModel) (*database.User, error)
 	}
 	user.Email = model.Email
 	user.Username = model.Username
+
+	result = database.DB.Save(&user)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &user, nil
+}
+
+
+func UpdateUserPassword(id string, model models.UserUpdatePasswordModel) (*database.User, error) {
+	var user database.User
+	result := database.DB.Where("id = ?", id).First(&user)
+
 
 	if user.Password != "" {
 		verifyErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(model.OldPassword))
