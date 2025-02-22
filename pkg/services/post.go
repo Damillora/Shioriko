@@ -9,15 +9,13 @@ import (
 	"github.com/google/uuid"
 )
 
-const perPage = 20
-
-func GetPostAll(page int) []database.Post {
+func GetPostAll(page int, perPage int) []database.Post {
 	var posts []database.Post
-	database.DB.Joins("Blob").Preload("Tags").Preload("Tags.TagType").Order("created_at desc").Offset((page - 1) * perPage).Limit(20).Find(&posts)
+	database.DB.Joins("Blob").Preload("Tags").Preload("Tags.TagType").Order("created_at desc").Offset((page - 1) * perPage).Limit(perPage).Find(&posts)
 	return posts
 }
 
-func GetPostTags(page int, tagSyntax []string) []database.Post {
+func GetPostTags(page int, perPage int, tagSyntax []string) []database.Post {
 	positiveTagSyntax := []string{}
 	negativeTagSyntax := []string{}
 
@@ -87,7 +85,7 @@ func GetPostTags(page int, tagSyntax []string) []database.Post {
 	}
 	query.Order("created_at desc").
 		Offset((page - 1) * perPage).
-		Limit(20).
+		Limit(perPage).
 		Find(&posts)
 	return posts
 }

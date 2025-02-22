@@ -47,10 +47,10 @@ func postGet(c *gin.Context) {
 	var postPages int
 
 	if tag != "" {
-		posts = services.GetPostTags(page, tags)
+		posts = services.GetPostTags(page, perPage, tags)
 		postPages = services.CountPostPagesTag(tags)
 	} else {
-		posts = services.GetPostAll(page)
+		posts = services.GetPostAll(page, perPage)
 		postPages = services.CountPostPages()
 	}
 
