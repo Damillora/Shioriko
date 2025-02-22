@@ -200,6 +200,21 @@ export async function updateTag(id, { name, tagTypeId }) {
     return response.data;
 }
 
+export async function updateUserProfile({ email, username, oldPassword, newPassword }) {
+    const endpoint = url + "/api/tag/" + id;
+    const response = await axios({
+        url: endpoint,
+        method: "PUT",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+        },
+        withCredentials: true,
+        data: {
+            email, username, oldPassword, newPassword
+        }
+    })
+    return response.data;
+}
 
 export async function getTagTypes() {
     const endpoint = url + "/api/tagtype";
