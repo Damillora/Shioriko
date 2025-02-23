@@ -22,8 +22,10 @@
 <div class="container">
     <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-            <div class="box">
+            <div class="block has-text-centered">
                 <p class="title">Login</p>
+            </div>
+            <div class="box">
                 <form onsubmit={doLogin}>
                     <div class="field">
                         <label for="username" class="label">Username</label>
@@ -58,7 +60,7 @@
                     {/if}
                     <div class="field">
                         <div class="control">
-                            <button class="button is-link">Login</button>
+                            <button class="button is-primary">Login</button>
                         </div>
                     </div>
                 </form>
