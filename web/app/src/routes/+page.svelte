@@ -45,7 +45,7 @@
         <div class="column is-12-tablet is-8-desktop is-8-widescreen">
           <div class="block has-text-centered">
             <p class="title">shioriko</p>
-            <p class="subtitle">a booru-style gallery written in Go and Svelte</p>
+            <p class="subtitle">a booru-style image gallery and organizer</p>
           </div>
           <div class="box has-text-centered">
             <div class="block">
