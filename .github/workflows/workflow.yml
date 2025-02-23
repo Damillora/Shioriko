@@ -19,7 +19,7 @@ jobs:
     steps:
       - 
         name: Sanitize platform name
-        id: set-platform
+        id: set_platform
         run: |
           PLATFORM=$(echo ${{ matrix.platform }} | tr '/' '_')
           echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
@@ -37,7 +37,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build Binaries
-        id: docker_build
+        id: docker_build_bin
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -54,7 +54,7 @@ jobs:
       -
         name: Build and push (No tag)
         if: env.IS_LINUX == 'true' && env.IS_RELEASE == 'false'
-        id: docker_build
+        id: docker_build_git
         uses: docker/build-push-action@v6
         with:
           push: true
@@ -63,12 +63,12 @@ jobs:
       -
         name: Build and push (Tagged)
         if: env.IS_LINUX == 'true' && env.IS_RELEASE == 'true'
-        id: docker_build
+        id: docker_build_release
         uses: docker/build-push-action@v6
         with:
           push: true
           platforms: ${{ matrix.platform }}
-          tags: damillora/shioriko:${{ env.GIT_TAG }}
+          tags: damillora/shioriko:${{ env.GIT_TAG }}, damillora/shioriko:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
