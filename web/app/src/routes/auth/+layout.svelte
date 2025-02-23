@@ -10,7 +10,7 @@
 </script>
 
 
-<section class="hero is-primary is-fullheight-with-navbar">
+<section class="hero is-fullheight-with-navbar">
     <div class="hero-body">
         {@render children?.()}
     </div>

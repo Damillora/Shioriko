@@ -25,15 +25,20 @@
         return str;
     };
 
+
+    let deleteMenuShown = $state(false);
+
+    const onSubmitEdit = () => {
+        getData();
+        editMenuShown = false;
+    }
     onMount(() => {
         getData();
     });
 
-    let deleteMenuShown = $state(false);
-
     const deletePost = async (e) => {
         e.preventDefault();
-        toggleDeleteMenu();
+        toggleDeleteMenu(e);
         const success = await postDelete({ id });
         if (success) {
             goto("/posts");
@@ -69,7 +74,7 @@
                         <EditPostPanel
                             bind:isActive={editMenuShown}
                             {post}
-                            onSubmit={getData}
+                            onSubmit={onSubmitEdit}
                         />
                     {:else if deleteMenuShown == true}
                         <div class="panel is-danger">
