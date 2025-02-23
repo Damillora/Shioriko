@@ -40,8 +40,8 @@ jobs:
         id: docker_build_bin
         uses: docker/build-push-action@v6
         with:
-          push: true
           platforms: ${{ matrix.platform }}
+          target: runtime
           outputs: |
             type=local,dest=./output/${{ env.PLATFORM }}
       - 
