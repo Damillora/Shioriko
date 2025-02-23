@@ -34,11 +34,12 @@ func Start() {
 	webFS := web.WebAssets()
 	webAssets, _ := fs.Sub(webFS, "_app")
 
-	g.StaticFileFS("/", "./app.html", http.FS(webFS))
-	// g.StaticFile("/", "./pkg/web/build/index.html")
+	g.NoRoute(func(c *gin.Context) {
+		//c.String(http.StatusOK, "AAA")
+		c.FileFromFS("./app.html", http.FS(webFS))
+	})
 	g.StaticFS("/_app", http.FS(webAssets))
 	g.Static("/data", config.CurrentConfig.DataDirectory)
-
 	g.Use(cors.Default())
 
 	InitializeRoutes(g)
