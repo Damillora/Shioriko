@@ -1,34 +1,16 @@
 package app
 
 import (
-	"embed"
+	"io/fs"
 	"net/http"
 	"os"
 
 	"github.com/Damillora/Shioriko/pkg/config"
 	"github.com/Damillora/Shioriko/pkg/database"
+	"github.com/Damillora/Shioriko/pkg/web"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
-
-type embedFileSystem struct {
-	http.FileSystem
-}
-
-func (e embedFileSystem) Exists(prefix string, path string) bool {
-	_, err := e.Open(path)
-	if err != nil {
-		return false
-	}
-	return true
-}
-
-func EmbedFolder(fsEmbed embed.FS) static.ServeFileSystem {
-	return embedFileSystem{
-		FileSystem: http.FS(fsEmbed),
-	}
-}
 
 func Initialize() {
 	config.InitializeConfig()
@@ -49,10 +31,14 @@ func Initialize() {
 func Start() {
 	g := gin.Default()
 
-	g.StaticFile("/", "./web/static/index.html")
-	g.Static("/_app", "./web/static/_app")
+	webFS := web.WebAssets()
+	webAssets, _ := fs.Sub(webFS, "_app")
+
+	g.StaticFileFS("/", "./app.html", http.FS(webFS))
+	// g.StaticFile("/", "./pkg/web/build/index.html")
+	g.StaticFS("/_app", http.FS(webAssets))
 	g.Static("/data", config.CurrentConfig.DataDirectory)
-	
+
 	g.Use(cors.Default())
 
 	InitializeRoutes(g)
