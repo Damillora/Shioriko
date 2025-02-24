@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Damillora/Shioriko/pkg/app"
+	"github.com/Damillora/phoebe/pkg/app"
 )
 
 func main() {

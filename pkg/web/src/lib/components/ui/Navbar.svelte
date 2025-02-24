@@ -1,4 +1,5 @@
 <script>
+    import logo from "$lib/assets/phoebe-logo.svg";
     import { token } from "$lib/stores";
     import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
 
@@ -19,7 +20,8 @@
 <nav class="navbar is-primary" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
-            <strong>shioriko</strong>
+            <img class="image is-32x32" alt="phoebe logo" src={logo} />
+            <strong>phoebe</strong>
         </a>
 
         <a

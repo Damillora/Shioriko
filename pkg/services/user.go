@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/Damillora/Shioriko/pkg/database"
-	"github.com/Damillora/Shioriko/pkg/models"
+	"github.com/Damillora/phoebe/pkg/database"
+	"github.com/Damillora/phoebe/pkg/models"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -56,11 +56,9 @@ func UpdateUserProfile(id string, model models.UserUpdateModel) (*database.User,
 	return &user, nil
 }
 
-
 func UpdateUserPassword(id string, model models.UserUpdatePasswordModel) (*database.User, error) {
 	var user database.User
 	result := database.DB.Where("id = ?", id).First(&user)
-
 
 	if user.Password != "" {
 		verifyErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(model.OldPassword))

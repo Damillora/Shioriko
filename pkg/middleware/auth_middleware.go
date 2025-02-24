@@ -3,8 +3,8 @@ package middleware
 import (
 	"strings"
 
-	"github.com/Damillora/Shioriko/pkg/models"
-	"github.com/Damillora/Shioriko/pkg/services"
+	"github.com/Damillora/phoebe/pkg/models"
+	"github.com/Damillora/phoebe/pkg/services"
 	"github.com/gin-gonic/gin"
 )
 

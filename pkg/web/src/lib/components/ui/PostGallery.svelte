@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import ShiorikoImage from "./ShiorikoImage.svelte";
+    import ImageView from "./ImageView.svelte";
 
     let { posts = [] } = $props();
 </script>
@@ -13,7 +13,7 @@
                     <div class="card-image">
                         <figure class="image">
                             <a href="/post/{post.id}">
-                                <ShiorikoImage alt={post.id} src={post.thumbnail_path} />
+                                <ImageView alt={post.id} src={post.thumbnail_path} />
                             </a>
                         </figure>
                     </div>

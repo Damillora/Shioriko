@@ -3,8 +3,8 @@ package services
 import (
 	"encoding/binary"
 
-	"github.com/Damillora/Shioriko/pkg/database"
-	"github.com/Damillora/Shioriko/pkg/models"
+	"github.com/Damillora/phoebe/pkg/database"
+	"github.com/Damillora/phoebe/pkg/models"
 	"github.com/corona10/goimagehash"
 )
 

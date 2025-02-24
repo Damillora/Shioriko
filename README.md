@@ -1,8 +1,10 @@
-# shioriko
+# phoebe
+
+![project logo](./phoebe-logo.svg)
 
 a booru-style image gallery and organizer.
 
-Built with the Go language and Svelte framework, shioriko is designed for personal image gathering.
+Built with the Go language and Svelte framework, phoebe is designed for personal image gathering.
 
 ## Features
 * Upload and organize images
@@ -14,8 +16,8 @@ Built with the Go language and Svelte framework, shioriko is designed for person
 
 The easiest way to get started is to use Docker:
 ```bash
-docker pull damillora/shioriko
-docker run -e POSTGRES_DATABASE=<PostgreSQL DSN> -e AUTH_SECRET=<secret> -e DATA_DIR=/data -e BASE_URL=http://localhost:8080 -p 8080:8080 -v "./data:/data" damillora/shioriko
+docker pull damillora/phoebe
+docker run -e POSTGRES_DATABASE=<PostgreSQL DSN> -e AUTH_SECRET=<secret> -e DATA_DIR=/data -e BASE_URL=http://localhost:8080 -p 8080:8080 -v "./data:/data" damillora/phoebe
 ```
 
 ## Requirements
@@ -24,7 +26,7 @@ docker run -e POSTGRES_DATABASE=<PostgreSQL DSN> -e AUTH_SECRET=<secret> -e DATA
 
 ## Configuration
 
-Shioriko is configured using environment variables:
+phoebe is configured using environment variables:
 
 * `POSTGRES_DATABASE`: DSN string of Postgres Database, see [Gorm documentation](https://gorm.io/docs/connecting_to_the_database.html)
 * `AUTH_SECRET`: Secret used to sign JWTs
@@ -33,7 +35,7 @@ Shioriko is configured using environment variables:
 * `DISABLE_REGISTRATION`: Optional, disable registration on the instance
 
 ## Contributing
-Shioriko is still in an early stage, but contributions are welcome!
+phoebe is still in an early stage, but contributions are welcome!
 
 ## License
-shioriko is licensed under the [MIT license](https://choosealicense.com/licenses/mit/).
+phoebe is licensed under the [MIT license](https://choosealicense.com/licenses/mit/).

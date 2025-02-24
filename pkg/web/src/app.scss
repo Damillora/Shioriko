@@ -3,7 +3,7 @@
 // Path to Bulma's sass folder
 @use "../node_modules/bulma/sass/" as * with (
   $family-primary: '"Nunito", sans-serif',
-  $primary: #37b484,
+  $primary: #4c94e8,
 );
 // Import the Google Font
 @import "https://fonts.googleapis.com/css?family=Nunito:400,700";

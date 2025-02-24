@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Damillora/Shioriko/pkg/config"
-	"github.com/Damillora/Shioriko/pkg/database"
-	"github.com/Damillora/Shioriko/pkg/web"
+	"github.com/Damillora/phoebe/pkg/config"
+	"github.com/Damillora/phoebe/pkg/database"
+	"github.com/Damillora/phoebe/pkg/web"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

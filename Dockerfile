@@ -7,14 +7,14 @@ RUN npm ci && npm run build
 
 # Go application
 FROM golang:1.23-alpine AS build
-WORKDIR /go/src/shioriko
+WORKDIR /go/src/phoebe
 COPY . .
-COPY --from=node_build /src/pkg/web/build/ /go/src/shioriko/pkg/web/build/
+COPY --from=node_build /src/pkg/web/build/ /go/src/phoebe/pkg/web/build/
 RUN go get -d -v ./...
-RUN CGO_ENABLED=0 GOOS=linux go build -o /shioriko -ldflags '-extldflags "-static"' -tags timetzdata
+RUN CGO_ENABLED=0 GOOS=linux go build -o /phoebe -ldflags '-extldflags "-static"' -tags timetzdata
 
 FROM scratch AS runtime
 WORKDIR /app
-COPY --from=build /shioriko /app/
+COPY --from=build /phoebe /app/
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-ENTRYPOINT ["/app/shioriko"]
+ENTRYPOINT ["/app/phoebe"]

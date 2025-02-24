@@ -1,6 +1,6 @@
 {
-  "name": "Shioriko",
-  "version": "0.0.1",
+  "name": "phoebe",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "vite dev",
@@ -30,6 +30,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "bulma": "^1.0.3",
+    "child_process": "^1.0.2",
     "date-fns": "^4.1.0",
     "query-string": "^8.1.0"
   }

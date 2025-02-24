@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 
-	"github.com/Damillora/Shioriko/pkg/config"
+	"github.com/Damillora/phoebe/pkg/config"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 

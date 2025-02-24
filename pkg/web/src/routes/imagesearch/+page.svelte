@@ -1,7 +1,7 @@
 <script>
     import { getTagAutocomplete, searchBlob } from "$lib/api";
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
-    import ShiorikoImage from "$lib/components/ui/ShiorikoImage.svelte";
+    import ImageView from "$lib/components/ui/ImageView.svelte";
     import { paginate } from "$lib/simple-pagination";
 
     let currentProgress = $state(0);

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/Damillora/Shioriko/pkg/config"
-	"github.com/Damillora/Shioriko/pkg/database"
+	"github.com/Damillora/phoebe/pkg/config"
+	"github.com/Damillora/phoebe/pkg/database"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,9 +24,9 @@ func CreateToken(user *database.User) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": user.Email,
 		"name":  user.Username,
-		"iss":   "shioriko-api",
+		"iss":   "phoebe-api",
 		"sub":   user.ID,
-		"aud":   "shioriko",
+		"aud":   "phoebe",
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	})
 	jwtToken, _ := token.SignedString([]byte(config.CurrentConfig.AuthSecret))

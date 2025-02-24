@@ -3,7 +3,7 @@
     import { goto } from "$app/navigation";
     import Tags from "svelte-tags-input";
     import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
-    import ShiorikoImage from "$lib/components/ui/ShiorikoImage.svelte";
+    import ImageView from "$lib/components/ui/ImageView.svelte";
 
     let currentProgress = $state(0);
 
@@ -188,7 +188,7 @@
                 {#if fileName}
                     <div class="box">
                         <figure class="image">
-                            <ShiorikoImage alt={fileName} src={previewUrl} />
+                            <ImageView alt={fileName} src={previewUrl} />
                         </figure>
                     </div>
                 {:else if loading && !(currentProgress > 0 && currentProgress < 100)}

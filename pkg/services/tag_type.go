@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/Damillora/Shioriko/pkg/database"
-	"github.com/Damillora/Shioriko/pkg/models"
+	"github.com/Damillora/phoebe/pkg/database"
+	"github.com/Damillora/phoebe/pkg/models"
 )
 
 func GetTagTypeAll() []database.TagType {

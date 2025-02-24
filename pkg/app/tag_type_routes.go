@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Damillora/Shioriko/pkg/middleware"
-	"github.com/Damillora/Shioriko/pkg/models"
-	"github.com/Damillora/Shioriko/pkg/services"
+	"github.com/Damillora/phoebe/pkg/middleware"
+	"github.com/Damillora/phoebe/pkg/models"
+	"github.com/Damillora/phoebe/pkg/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )

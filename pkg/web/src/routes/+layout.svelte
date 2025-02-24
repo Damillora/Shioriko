@@ -1,6 +1,7 @@
 <script lang="ts">
     import "../app.scss";
     import Navbar from "$lib/components/ui/Navbar.svelte";
+    import Footer from "$lib/components/ui/Footer.svelte";
     interface Props {
         children?: import('svelte').Snippet;
     }
@@ -9,17 +10,11 @@
 </script>
 
 <svelte:head>
-    <title>Shioriko</title>
+    <title>phoebe</title>
 </svelte:head>
 
 <Navbar />
 
 {@render children?.()}
 
-<footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        <strong><a href="https://github.com/Damillora/Shioriko">shioriko</a></strong>: a booru-style image gallery and organizer
-      </p>
-    </div>
-  </footer>
+<Footer />

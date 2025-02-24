@@ -1,4 +1,4 @@
-module github.com/Damillora/Shioriko
+module github.com/Damillora/phoebe
 
 go 1.21.0
 

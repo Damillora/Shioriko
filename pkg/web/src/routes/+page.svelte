@@ -1,5 +1,6 @@
 <script lang="ts">
   import Tags from "svelte-tags-input";
+  import logo from "$lib/assets/phoebe-logo.svg";
   import { getPostCount, getPosts, getTagAutocomplete } from "$lib/api";
 
   import { goto } from "$app/navigation";
@@ -43,8 +44,13 @@
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-12-tablet is-8-desktop is-8-widescreen">
+          <div class="block is-flex is-justify-content-center">
+            <figure class="image is-128x128">
+              <img alt="phoebe logo" src={logo} />
+            </figure>
+          </div>
           <div class="block has-text-centered">
-            <p class="title">shioriko</p>
+            <p class="title">phoebe</p>
             <p class="subtitle">a booru-style image gallery and organizer</p>
           </div>
           <div class="box has-text-centered">
@@ -71,9 +77,15 @@
               </form>
             </div>
             {#if postCountLoaded}
-            <p class="block">serving <span class="is-primary"><strong>{postCount}</strong></span> images</p>
+              <p class="block">
+                serving <span class="is-primary"
+                  ><strong>{postCount}</strong></span
+                > images
+              </p>
             {:else}
-            <p class="block">serving <span class="is-primary"><strong>...</strong></span> images</p>
+              <p class="block">
+                serving <span class="is-primary"><strong>...</strong></span> images
+              </p>
             {/if}
           </div>
         </div>

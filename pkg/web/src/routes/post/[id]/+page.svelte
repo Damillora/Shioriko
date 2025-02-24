@@ -6,7 +6,7 @@
     import ViewPostPanel from "$lib/components/panels/ViewPostPanel.svelte";
 
     import { page } from "$app/stores";
-    import ShiorikoImage from "$lib/components/ui/ShiorikoImage.svelte";
+    import ImageView from "$lib/components/ui/ImageView.svelte";
     import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
     import DeletePostPanel from "$lib/components/panels/DeletePostPanel.svelte";
     const { id } = $page.params;
@@ -122,7 +122,7 @@
                             </div>
                             <div class="box">
                                 <figure class="image">
-                                    <ShiorikoImage
+                                    <ImageView
                                         alt={post.id}
                                         src={post.preview_path}
                                     />
@@ -134,7 +134,7 @@
                             </div>
                             <div class="box">
                                 <figure class="image">
-                                    <ShiorikoImage
+                                    <ImageView
                                         alt={post.id}
                                         src={post.image_path}
                                     />

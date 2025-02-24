@@ -48,7 +48,7 @@ jobs:
         name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
-          name: shioriko-${{ env.PLATFORM }}
+          name: phoebe-${{ env.PLATFORM }}
           path: ./output
           retention-days: 7
       -
@@ -59,7 +59,7 @@ jobs:
         with:
           push: true
           platforms: ${{ matrix.platform }}
-          tags: damillora/shioriko:main
+          tags: damillora/phoebe:main
       -
         name: Build and push (Tagged)
         if: env.IS_LINUX == 'true' && env.IS_RELEASE == 'true'
@@ -68,7 +68,7 @@ jobs:
         with:
           push: true
           platforms: ${{ matrix.platform }}
-          tags: damillora/shioriko:${{ env.GIT_TAG }}, damillora/shioriko:latest
+          tags: damillora/phoebe:${{ env.GIT_TAG }}, damillora/phoebe:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
