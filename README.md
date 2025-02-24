@@ -1,6 +1,10 @@
 # phoebe
 
-![project logo](./phoebe-logo.svg)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Damillora/phoebe/dev.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Damillora/phoebe)](https://goreportcard.com/report/github.com/Damillora/phoebe)
+![GitHub License](https://img.shields.io/github/license/Damillora/phoebe)
+
+<img src="./phoebe-logo.svg " alt="project logo" width="300" height="200">
 
 a booru-style image gallery and organizer.
 
