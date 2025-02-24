@@ -123,6 +123,28 @@ export async function uploadBlob({ file, onProgress }) {
     return response.data;
 }
 
+export async function searchBlob({ file, onProgress }) {
+    var formData = new FormData();
+    formData.append("file", file);
+    const endpoint = url + "/api/blob/search";
+    const response = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: {
+            'Authorization': 'Bearer ' + current_token,
+            'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+        data: formData,
+        onUploadProgress: e => {
+            if (onProgress) {
+                onProgress(e)
+            }
+        }
+    })
+    return response.data;
+}
+
 export async function postCreate({ blob_id, source_url, tags }) {
     const endpoint = url + "/api/post/create";
     const response = await axios({

@@ -29,6 +29,10 @@ func InitializeBlobRoutes(g *gin.Engine) {
 	{
 		protected.POST("/upload", uploadBlob)
 	}
+	unprotected := g.Group("/api/blob")
+	{
+		unprotected.POST("/search", searchBlob)
+	}
 
 }
 
@@ -36,14 +40,6 @@ func uploadBlob(c *gin.Context) {
 	dataDir := config.CurrentConfig.DataDirectory
 	// Source
 	file, err := c.FormFile("file")
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
-		})
-		return
-	}
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -204,4 +200,49 @@ func uploadBlob(c *gin.Context) {
 		})
 	}
 	return
+}
+
+func searchBlob(c *gin.Context) {
+	// Source
+	file, err := c.FormFile("file")
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	fileObj, _ := file.Open()
+	originalImage, _, err := image.Decode(fileObj)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+	}
+
+	hash, err := goimagehash.PerceptionHash(originalImage)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
+		return
+	}
+	hashInt := hash.GetHash()
+
+	similarPosts, err := services.SimilaritySearch(hashInt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK,
+		models.SimilarResponse{
+			Similar: similarPosts,
+		})
 }

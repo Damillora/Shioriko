@@ -28,6 +28,11 @@ type BlobSimilarResponse struct {
 	PreviewUrl string                   `json:"previewUrl"`
 	Similar    []PostSimilarityListItem `json:"similar"`
 }
+
+type SimilarResponse struct {
+	Similar    []PostSimilarityListItem `json:"similar"`
+}
+
 type PostPaginationResponse struct {
 	CurrentPage int            `json:"currentPage"`
 	TotalPage   int            `json:"totalPage"`

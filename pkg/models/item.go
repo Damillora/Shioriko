@@ -24,5 +24,7 @@ type PostListItem struct {
 
 type PostSimilarityListItem struct {
 	ID       string `json:"id"`
+	ImagePath          string `json:"image_path"`
+	ImageThumbnailPath string `json:"thumbnail_path"`
 	Distance int    `json:"distance"`
 }

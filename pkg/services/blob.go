@@ -38,8 +38,10 @@ func SimilaritySearch(originalHashInt uint64) ([]models.PostSimilarityListItem, 
 			var post database.Post
 			database.DB.Where("blob_id = ?", blob.ID).Find(&post)
 			posts = append(posts, models.PostSimilarityListItem{
-				ID:       post.ID,
-				Distance: distance,
+				ID:                 post.ID,
+				ImageThumbnailPath: "/data/" + blob.ThumbnailFilePath,
+				ImagePath:          "/data/" + blob.FilePath,
+				Distance:           distance,
 			})
 		}
 	}

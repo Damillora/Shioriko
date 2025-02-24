@@ -41,6 +41,7 @@
         <div class="navbar-start">
             <a class="navbar-item" href="/posts">Posts</a>
             <a class="navbar-item" href="/tags">Tags</a>
+            <a class="navbar-item" href="/imagesearch">Image Search</a>
             {#if loggedIn}
                 <a class="navbar-item" href="/upload">Upload</a>
             {/if}
