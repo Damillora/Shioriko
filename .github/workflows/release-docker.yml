@@ -9,9 +9,6 @@ jobs:
     strategy:
       matrix:
         platform: [linux/amd64,linux/arm64]
-    env:
-      IS_LINUX: ${{ startsWith(matrix.platform, 'linux/') && 'true' || 'false' }}
-      GIT_TAG: ${{ needs.git-version.outputs.git_tag }}
     steps:
       -
         name: Set up QEMU
