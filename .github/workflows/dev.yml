@@ -32,23 +32,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build Binaries
-        id: docker_build_bin
-        uses: docker/build-push-action@v6
-        with:
-          platforms: ${{ matrix.platform }}
-          target: runtime
-          outputs: |
-            type=local,dest=./output/${{ env.PLATFORM }}
-      - 
-        name: Upload Binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: phoebe-${{ env.PLATFORM }}
-          path: ./output
-          retention-days: 7
-      -
-        name: Build and push (No tag)
+        name: Build and push
         id: docker_build_git
         uses: docker/build-push-action@v6
         with:

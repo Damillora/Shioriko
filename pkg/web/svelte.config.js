@@ -2,8 +2,6 @@ import adapter from "@sveltejs/adapter-static";
 import { execSync } from "child_process";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
-const commit = execSync('git rev-parse HEAD').toString().trim().substring(0, 7);
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
@@ -18,9 +16,7 @@ const config = {
       fallback: 'app.html', // may differ from host to host
     }),
     version: {
-      
-      name: `${process.env.npm_package_version}-${commit}`,
-      
+      name: `${process.env.npm_package_version}`,
     }
   },
 };
