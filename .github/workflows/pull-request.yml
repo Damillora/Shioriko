@@ -1,4 +1,4 @@
-name: pull requests - docker image build
+name: pull requests - build check
 on:
   pull_request:
     branches:
@@ -6,9 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux/amd64,linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
