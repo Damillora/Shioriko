@@ -119,12 +119,14 @@ func uploadBlob(c *gin.Context) {
 	previewFactor := float32(previewWidth) / float32(width)
 	previewHeight := int(float32(height) * previewFactor)
 	if width <= previewWidth {
+		previewWidth = width
 		previewHeight = height
 	}
 	thumbnailWidth := 300
 	thumbnailFactor := float32(thumbnailWidth) / float32(width)
 	thumbnailHeight := int(float32(height) * thumbnailFactor)
 	if width <= thumbnailWidth {
+		thumbnailWidth = width
 		thumbnailHeight = height
 	}
 
