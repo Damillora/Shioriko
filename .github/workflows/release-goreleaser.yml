@@ -1,4 +1,4 @@
-name: CI
+name: releases - other platforms
 on:
   push:
     tags:

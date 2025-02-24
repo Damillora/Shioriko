@@ -1,4 +1,4 @@
-name: CI
+name: releases - docker image
 on:
   push:
     tags:
