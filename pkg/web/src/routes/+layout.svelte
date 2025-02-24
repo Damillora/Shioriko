@@ -6,8 +6,6 @@
     }
 
     let { children }: Props = $props();
-
-    export const ssr = false;
 </script>
 
 <svelte:head>
