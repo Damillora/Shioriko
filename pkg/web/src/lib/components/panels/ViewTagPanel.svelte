@@ -8,6 +8,12 @@
 
     let { tag, data, toggleRenameMenu } = $props();
     let related_tags = $state([]);
+
+    let tabPage = $state(1);
+
+    const changeTab = (tab) => {
+        tabPage = tab;
+    };
     const getData = async () => {
         related_tags = await getRelatedTags({ tag });
         related_tags = related_tags
@@ -21,52 +27,45 @@
 
 <div class="panel is-primary">
     <p class="panel-heading">Tag</p>
-    <div class="panel-block column">
-        <div class="row">
-            <strong>Name:</strong>
-        </div>
-        <div class="row">{data.tagName}</div>
+    <div class="panel-tabs">
+        <a
+            href={"#"}
+            class:is-active={tabPage == 1}
+            onclick={() => changeTab(1)}>Information</a
+        >
+        <a
+            href={"#"}
+            class:is-active={tabPage == 2}
+            onclick={() => changeTab(2)}>Related Tags</a
+        >
     </div>
-    <div class="panel-block column">
-        <div class="row">
-            <strong>Category:</strong>
+    {#if tabPage === 1}
+        <div class="panel-block column">
+            <div class="row">
+                <strong>Name:</strong>
+            </div>
+            <div class="row">{data.tagName}</div>
         </div>
-        <div class="row"><TagTypeIndicator tagType={data.tagType} /></div>
-    </div>
-    <div class="panel-block column">
-        <div class="row">
-            <strong>Posts:</strong>
+        <div class="panel-block column">
+            <div class="row">
+                <strong>Category:</strong>
+            </div>
+            <div class="row"><TagTypeIndicator tagType={data.tagType} /></div>
         </div>
-        <div class="row">
-            {data.postCount} (<a href="/posts?tags={tag}">Browse</a>)
-        </div>
-    </div>
-    <div class="panel-block column">
-        <div class="row">
-            <strong>Related Tags:</strong>
-        </div>
-        <div class="row">
-            <div class="menu">
-                <ul class="menu-list">
-                    {#each related_tags as tag (tag)}
-                        <li>
-                            <TagLinkNumbered
-                                class=""
-                                tag={tag.tagType + ":" + tag.tagName}
-                                num={tag.postCount}
-                            />
-                        </li>
-                    {/each}
-                </ul>
+        <div class="panel-block column">
+            <div class="row">
+                <strong>Posts:</strong>
+            </div>
+            <div class="row">
+                {data.postCount}
             </div>
         </div>
-    </div>
-    <AuthCheck>
-        <div class="panel-block column">
-            <button
-                onclick={toggleRenameMenu}
-                class="button is-primary">Rename</button
-            >
-        </div>
-    </AuthCheck>
+    {:else if tabPage === 2}
+        {#each related_tags as tag (tag)}
+            <TagLinkNumbered
+                tag={tag.tagType + ":" + tag.tagName}
+                num={tag.postCount}
+            />
+        {/each}
+    {/if}
 </div>

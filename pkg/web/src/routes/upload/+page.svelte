@@ -10,6 +10,7 @@
     let fileName = $state("");
     let similar = $state([]);
     let previewUrl = $state("");
+    let loading = $state(false);
 
     let form = $state({
         blob_id: "",
@@ -23,6 +24,7 @@
     };
 
     const onFileChange = async (e) => {
+        loading = true;
         var file = e.target.files[0];
         fileName = "";
         previewUrl = "";
@@ -38,6 +40,7 @@
             fileName = file.name;
             previewUrl = response.previewUrl;
         }
+        loading = false;
     };
 
     const onTagChange = (value) => {
@@ -94,6 +97,17 @@
                                 </div>
                             </div>
                         </div>
+                        {#if currentProgress > 0 && currentProgress < 100}
+                            <div class="panel-block column">
+                                <progress
+                                    class="progress is-primary is-small"
+                                    value={currentProgress}
+                                    max="100"
+                                >
+                                    {currentProgress}%
+                                </progress>
+                            </div>
+                        {/if}
                         <div class="panel-block column">
                             <div class="row">
                                 <label for="source" class="label"
@@ -143,7 +157,7 @@
                 </div>
             </div>
             <div class="column is-two-thirds">
-                <div class="box">
+                <div class="block">
                     {#if fileName}
                         {#if similar.length > 0}
                             <div class="notification is-warning">
@@ -157,21 +171,11 @@
                                 {/each}
                             </div>
                         {:else}
-                            <div class="notification is-primary">
+                            <div class="notification is-success">
                                 {fileName} has been succesfully uploaded.
                             </div>
                         {/if}
-                        <figure class="image">
-                            <ShiorikoImage alt={fileName} src={previewUrl} />
-                        </figure>
                     {:else if currentProgress > 0 && currentProgress < 100}
-                        <progress
-                            class="progress is-primary"
-                            value={currentProgress}
-                            max="100"
-                        >
-                            {currentProgress}%
-                        </progress>
                         <div class="notification is-info">
                             Your image is currently uploading...
                         </div>
@@ -181,6 +185,15 @@
                         </div>
                     {/if}
                 </div>
+                {#if fileName}
+                    <div class="box">
+                        <figure class="image">
+                            <ShiorikoImage alt={fileName} src={previewUrl} />
+                        </figure>
+                    </div>
+                {:else if loading && !(currentProgress > 0 && currentProgress < 100)}
+                    <div class="skeleton-block"></div>
+                {/if}
             </div>
         </div>
     </div>

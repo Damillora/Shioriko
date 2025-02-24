@@ -11,6 +11,8 @@
 
     let { isActive = $bindable(false), post, onSubmit }: Props = $props();
 
+    let editLoading = $state(false);
+
     const toggleEditModal = (e) => {
         e.preventDefault();
         isActive = !isActive;
@@ -37,9 +39,10 @@
 
     const onFormSubmit = async (e) => {
         e.preventDefault();
+        editLoading = true;
         const response = await postUpdate(post.id, form);
-        toggleEditModal();
-
+        editLoading = false;
+        toggleEditModal(e);
         onSubmit();
     };
 
@@ -51,6 +54,7 @@
 <form onsubmit={onFormSubmit}>
     <div class="panel is-warning">
         <p class="panel-heading">Edit Post</p>
+        {#if !editLoading}
         <div class="panel-block column">
             <div class="row">
                 <strong>Uploader:</strong>
@@ -115,5 +119,10 @@
                 >Cancel</button
             >
         </div>
+        {:else}
+        <div class="panel-block column">
+            <progress class="progress is-small is-warning" max="100"></progress>
+        </div>
+        {/if}
     </div>
 </form>

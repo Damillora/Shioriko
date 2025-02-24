@@ -8,10 +8,10 @@
     let tagDisplay = tagName.split("_").join(" ");
 </script>
 
-<a href="/posts?tags={tagName}">
+<a class="panel-block is-block" href="/posts?tags={tagName}">
     <span>
         {tagDisplay}
     </span>
-    <TagTypeIndicator tagType={tagType}></TagTypeIndicator>
+    <TagTypeIndicator {tagType}></TagTypeIndicator>
     <span class="is-pulled-right">{num}</span>
 </a>

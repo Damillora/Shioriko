@@ -9,6 +9,7 @@
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
 
     import { page } from "$app/stores";
+    import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
     let { tag } = $state($page.params);
 
     let data = $state();
@@ -16,6 +17,7 @@
 
     const getData = async () => {
         if (tag) {
+            data = null;
             data = await getTag({ tag });
             const response = await getPosts({
                 page: 1,
@@ -40,6 +42,7 @@
 
     const onTagSubmit = (newName) => {
         tag = newName;
+        toggleEditMenu();
         getData();
     };
 
@@ -53,15 +56,28 @@
         <div class="columns">
             <div class="column is-one-third">
                 {#if data}
+                    <div class="block">
+                        <ViewTagPanel {tag} {data} />
+                    </div>
                     {#if renameMenuShown}
+                    <div class="block">
                         <EditTagPanel
                             {tag}
                             {data}
                             {toggleRenameMenu}
                             onSubmit={onTagSubmit}
                         />
+                    </div>
                     {:else}
-                        <ViewTagPanel {tag} {data} {toggleRenameMenu} />
+                    <AuthCheck>
+                        <div class="panel is-info">
+                            <div class="panel-heading">Tag Actions</div>
+                            <a class="panel-block" href="/posts?tags={tag}">Browse Posts</a>
+                            <a onclick={toggleRenameMenu} class="panel-block"
+                                >Rename</a
+                            >
+                        </div>
+                    </AuthCheck>
                     {/if}
                 {:else}
                     <div class="skeleton-block"></div>

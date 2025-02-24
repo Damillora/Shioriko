@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type PostReadModel struct {
 	ID               string        `json:"id"`
 	ImagePreviewPath string        `json:"preview_path"`
@@ -9,6 +11,7 @@ type PostReadModel struct {
 	Width            int           `json:"width"`
 	Height           int           `json:"height"`
 	Uploader         string        `json:"uploader"`
+	UploadDate       time.Time     `json:"upload_date"`
 }
 
 type TagReadModel struct {

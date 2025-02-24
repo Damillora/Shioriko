@@ -112,6 +112,7 @@ func postGetOne(c *gin.Context) {
 		Width:            post.Blob.Width,
 		Height:           post.Blob.Height,
 		Uploader:         post.User.Username,
+		UploadDate:       post.CreatedAt,
 	})
 }
 

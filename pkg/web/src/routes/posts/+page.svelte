@@ -127,32 +127,17 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="panel-block column">
-                            {#if !loading}
-                                <div class="row">
-                                    <strong>Tags:</strong>
-                                </div>
-                                <div class="row">
-                                    <div class="menu">
-                                        <ul class="menu-list">
-                                            {#each tags as tag (tag)}
-                                                <li>
-                                                    <TagLinkNumbered
-                                                        class=""
-                                                        tag={tag.tagType +
-                                                            ":" +
-                                                            tag.tagName}
-                                                        num={tag.postCount}
-                                                    />
-                                                </li>
-                                            {/each}
-                                        </ul>
-                                    </div>
-                                </div>
-                            {:else}
-                                <div class="skeleton-block"></div>
-                            {/if}
-                        </div>
+                        {#if !loading}
+                            {#each tags as tag (tag)}
+                                <TagLinkNumbered
+                                    class=""
+                                    tag={tag.tagType + ":" + tag.tagName}
+                                    num={tag.postCount}
+                                />
+                            {/each}
+                        {:else}
+                            <div class="skeleton-block"></div>
+                        {/if}
                     </div>
                     {#if tagInfo}
                         <div class="panel is-info">
