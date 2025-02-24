@@ -1,5 +1,5 @@
 # Web client
-FROM node:20-alpine AS node_build
+FROM node:23-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/pkg/web
