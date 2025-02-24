@@ -6,7 +6,7 @@ WORKDIR /src/pkg/web
 RUN npm ci && npm run build
 
 # Go application
-FROM golang:1.23-alpine AS build
+FROM golang:1.24-alpine AS build
 WORKDIR /go/src/phoebe
 COPY . .
 COPY --from=node_build /src/pkg/web/build/ /go/src/phoebe/pkg/web/build/
