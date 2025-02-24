@@ -3,6 +3,7 @@ FROM node:20-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/pkg/web
+RUN apk update && apk add git
 RUN npm ci && npm run build
 
 # Go application
