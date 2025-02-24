@@ -24,5 +24,5 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_CODENAME: ${{ env.RELEASE_CODENAME }}
-          RELEASE_SUBTITLE: ${{ env.RELEASE_SUBTITLE }}
+          RELEASE_CODENAME: ${{ vars.RELEASE_CODENAME }}
+          RELEASE_SUBTITLE: ${{ vars.RELEASE_SUBTITLE }}
