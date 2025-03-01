@@ -32,6 +32,6 @@
     "bulma": "^1.0.3",
     "child_process": "^1.0.2",
     "date-fns": "^4.1.0",
-    "query-string": "^8.1.0"
+    "query-string": "^9.1.1"
   }
 }
