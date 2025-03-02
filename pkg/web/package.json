@@ -23,7 +23,7 @@
     "svelte-check": "^4.0.0",
     "svelte-tags-input": "^6.0.2",
     "tslib": "^2.4.1",
-    "typescript": "^5.5.0",
+    "typescript": "^5.8.2",
     "vite": "^6.1.1"
   },
   "type": "module",
